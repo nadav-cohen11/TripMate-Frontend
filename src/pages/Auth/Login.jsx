@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { login } from "../../api/userApi";
 import TextInput from '@/components/ui/textInput';
+import LoginButton from '@/components/ui/loginButton';
+
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -26,7 +29,7 @@ const Login = () => {
         onSubmit={handleSubmit}
         className=" p-8 rounded-xl shadow-md w-full max-w-sm space-y-4"
       >
-        <h2 className="text-2xl font-bold text-center pb-40 mb-20 pt-25 text-black">Trip Mate</h2>
+        <h2 className="text-[#00aaff] text-2xl font-bold text-center pb-[150px]  pt-[100px] ">Welcome Back!</h2>
 
         <div className='pb-15'>
           <TextInput
@@ -51,13 +54,9 @@ const Login = () => {
         </div>
 
         <div>
-          <button
-            type="submit"
-            className="w-full  hover:cursor-pointer text-white p-2 rounded-md"
-          >
-            Log In
-            <i className="bi bi-arrow-right ms-2"></i>
-          </button>
+          <LoginButton type="submit" className='text-white'>
+            Log In <i className="bi bi-arrow-right ms-2"></i>
+          </LoginButton>
         </div>
 
         {errorMsg && <p className="text-red-500 text-sm">{errorMsg}</p>}
