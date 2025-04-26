@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";  
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -8,12 +9,21 @@ export default function Register() {
     password: "",
   });
 
+  const navigate = useNavigate();               
+
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: send `form` to your backend
+
+    /* ------------------------------------------
+       1) send `form` to your backend here,
+          await its response / error handling
+    ------------------------------------------- */
+
+    /* 2) once registration succeeds → go on   */
+    navigate("/profile");                       
   };
 
   return (

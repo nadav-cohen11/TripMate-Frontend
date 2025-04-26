@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
+import ProfileSetup from "./pages/ProfileSetup";
 import { getUser } from "./api/userApi";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/profile"  element={<ProfileSetup />} /> 
       </Routes>
     </Router>
   );
