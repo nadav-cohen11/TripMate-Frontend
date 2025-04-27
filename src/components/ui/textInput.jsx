@@ -7,7 +7,7 @@ const TextInput = ({ type = "text", placeholder, value, onChange, className = ""
       placeholder={placeholder}
       value={value}
       onChange={onChange}
-      className={`w-full bg-transparent border-b border-white text-white placeholder:text-white/90 focus:outline-none focus:border-b-2 ${className}`}
+      className={`w-full pl-10 pr-4 py-3 bg-[#7f99a5a0] text-[#2D4A53] placeholder-[#2D4A53] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D4A53] ${className}`}
       {...props}
     />
   );

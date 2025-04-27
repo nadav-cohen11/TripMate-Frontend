@@ -22,16 +22,16 @@ const Login = () => {
 
   return (
     <div
-      className="min-h-screen bg-cover bg-center relative px-4 py-8"
-      style={{ backgroundImage: "url('/assets/images/login-background.jpg')" }}
+      className="h-[300px] bg-cover bg-center relative px-4 py-40"
+      style={{ backgroundImage: "url('/assets/images/newBackground.jpg')" }}
     >
       <form
         onSubmit={handleSubmit}
-        className=" p-8 rounded-xl shadow-md w-full max-w-sm space-y-4"
-      >
-        <h2 className="text-[#00aaff] text-2xl font-bold text-center pb-[150px]  pt-[100px] ">Welcome Back!</h2>
+        className=" text-[#2D4A53] p-7 w-full space-y-4">
 
-        <div className='pb-15'>
+        <p className="text-[#2D4A53] text-4xl font-bold text-center pb-20 pt-33">Welcome Back!</p>
+
+        <div className='pb-1'>
           <TextInput
             type="email"
             placeholder="Email"
@@ -42,7 +42,7 @@ const Login = () => {
           />
         </div>
 
-        <div className='pb-80'>
+        <div className='pb-50'>
           <TextInput
             type="password"
             placeholder="Password"
@@ -52,6 +52,14 @@ const Login = () => {
             required
           />
         </div>
+
+        <div className="text-center text-sm text-[#2D4A53] ">
+          Don't have an account?{" "}
+          <a href="/register" className="font-semibold underline hover:text-[#2D4A53]">
+            Sign up
+          </a>
+        </div>
+
 
         <div>
           <LoginButton type="submit" className='text-white'>
