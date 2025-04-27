@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Auth/Login";
-import { getUser } from "./api/userApi";
+import Home from "./pages/Dashboard/Home";
 
 function App() {
 
@@ -10,6 +10,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Home />} />
       </Routes>
     </Router>
   );
