@@ -32,3 +32,7 @@ export const updateUser = (userId, userData) => {
 export const deleteUser = (userId) => {
     return api.delete("/deleteUser", { data: { userId } });
 };
+
+export const getAllUsers = async() => {
+    return await api.get("/getAllUsers");
+};
