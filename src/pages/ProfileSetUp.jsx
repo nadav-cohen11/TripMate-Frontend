@@ -11,8 +11,7 @@ export default function ProfileSetup() {
     location: "",
     languages: "",
     lookingFor: "",
-    mates: "",
-    bio: "",
+    mates: 0,
   });
 
   const handleChange = (e) =>
