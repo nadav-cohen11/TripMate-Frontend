@@ -2,8 +2,27 @@ import React, { useState, useEffect } from 'react';
 import TinderCard from 'react-tinder-card';
 import Navbar from '@/components/ui/NavBar';
 import ProfileCard from '@/components/ui/ProfileCard';
-import {getAllUsers} from "../../api/userApi.js";
+import { getAllUsers } from "../../api/userApi.js";
 
+
+
+// פונקציה שמחשבת גיל מתאריך לידה
+const calculateAge = (birthDateString) => {
+  const today = new Date();
+  const birthDate = new Date(birthDateString);
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDifference = today.getMonth() - birthDate.getMonth();
+
+
+  if (
+    monthDifference < 0 ||
+    (monthDifference === 0 && today.getDate() < birthDate.getDate())
+  ) {
+    age--;
+  }
+
+  return age;
+};
 
 const Home = () => {
   const [users, setUsers] = useState([]);
@@ -44,8 +63,9 @@ const Home = () => {
             className="absolute"
           >
             <ProfileCard
-              name={user.name}
-            //   location={user.location}
+              name={user.fullName}
+              age={calculateAge(user.birthDate)}
+              location={user.location}
               bio={user.bio}
               imageUrl={user.photos[0]}
             />
