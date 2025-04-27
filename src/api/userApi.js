@@ -3,11 +3,9 @@ import api from "./axios";
 
 export const login = async(email, password) => {
     try{
-        console.log("DSFSDF")
-        const response = await api.post("/login", { email, password });
-        console.log(response)
+        await api.post("/login", { email, password });
     }catch(error){
-
+        throw error
     }
 };
 
@@ -31,4 +29,8 @@ export const updateUser = (userId, userData) => {
 
 export const deleteUser = (userId) => {
     return api.delete("/deleteUser", { data: { userId } });
+};
+
+export const getAllUsers = () => {
+    return api.get("/getAllUsers");
 };
