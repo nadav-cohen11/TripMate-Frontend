@@ -15,14 +15,7 @@ export default function Register() {
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    /* ------------------------------------------
-       1) send `form` to your backend here,
-          await its response / error handling
-    ------------------------------------------- */
-
-    /* 2) once registration succeeds → go on   */
+    e.preventDefault(); 
     navigate("/profile");                       
   };
 

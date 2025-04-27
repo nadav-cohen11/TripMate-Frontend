@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
-import ProfileSetup from "./pages/ProfileSetup";
+import ProfileSetup from "./pages/ProfileSetUp";
 import { getUser } from "./api/userApi";
 
 function App() {
