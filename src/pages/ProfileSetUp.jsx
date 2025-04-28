@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 
-const genders = ["Female", "Male", "Other"];
-const lookingOptions = ["Hiking", "Trekking",  "Cycling", "Mountain Biking",
-   "Climbing", "Camping", "Fishing", "Rafting", "Surfing",
-     "Snorkeling", "Skiing", "Snowboarding", "Horseback Riding",
-      "Photography", "Yoga Retreat", "Beach Relaxation", "Volunteering"];
+const genders = ["Female", "Male"];
+
+const lookingOptions = [
+  "Hiking", "Trekking",  "Cycling", "Mountain Biking",
+  "Climbing", "Camping", "Fishing", "Rafting", "Surfing",
+  "Snorkeling", "Skiing", "Snowboarding", "Horseback Riding",
+  "Photography", "Yoga Retreat", "Beach Relaxation", "Volunteering"
+].map(opt => ({ value: opt, label: opt }));
 
 export default function ProfileSetup() {
   const [languageOptions, setLanguageOptions] = useState([]);
@@ -15,7 +18,7 @@ export default function ProfileSetup() {
     gender: "",
     location: "",
     languages: "",
-    lookingFor: "",
+    lookingFor: [],
     mates: 0,
     bio: ""
   });
@@ -59,7 +62,11 @@ export default function ProfileSetup() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.table({ ...form, imgURL });
+    console.table({
+      ...form,
+      imgURL,
+      lookingFor: form.lookingFor.map(opt => opt.value)
+    });
     // send to backend
   };
 
@@ -121,30 +128,32 @@ export default function ProfileSetup() {
           required
         />
 
-<Select
-  name="languages"
-  options={languageOptions}
-  value={selectedLanguage}
-  onChange={opt => setForm(f => ({ ...f, languages: opt?.value || "" }))}
-  placeholder="Type to search languages..."
-  isSearchable={true}
-  filterOption={(option, inputValue) =>
-    option.label.toLowerCase().startsWith(inputValue.toLowerCase())
-  }
-  className="input-basic"
-  classNamePrefix="react-select"
-/>
-
-        <select
-          name="lookingFor"
-          value={form.lookingFor}
-          onChange={handleChange}
+        <Select
+          name="languages"
+          options={languageOptions}
+          value={selectedLanguage}
+          onChange={opt => setForm(f => ({ ...f, languages: opt?.value || "" }))}
+          placeholder="Type to search languages..."
+          isSearchable={true}
+          filterOption={(option, inputValue) =>
+            option.label.toLowerCase().startsWith(inputValue.toLowerCase())
+          }
           className="input-basic"
-          required
-        >
-          <option value="">Looking for?</option>
-          {lookingOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-        </select>
+          classNamePrefix="react-select"
+        />
+
+        <Select
+          isMulti
+          name="lookingFor"
+          options={lookingOptions}
+          value={form.lookingFor}
+          onChange={(selectedOptions) => 
+            setForm(f => ({ ...f, lookingFor: selectedOptions }))
+          }
+          placeholder="Looking for?"
+          className="input-basic"
+          classNamePrefix="react-select"
+        />
 
         <div className="flex items-center justify-center gap-3">
           <span>Seeking</span>
