@@ -32,6 +32,6 @@ export const deleteUser = (userId) => {
     return api.delete("/deleteUser", { data: { userId } });
 };
 
-export const getAllUsers = () => {
-    return api.get("/getAllUsers");
+export const getAllUsers = async() => {
+    return await api.get("/getAllUsers");
 };
