@@ -10,7 +10,7 @@ const lookingOptions = [
   "Photography", "Yoga Retreat", "Beach Relaxation", "Volunteering"
 ].map(opt => ({ value: opt, label: opt }));
 
-export default function ProfileSetup() {
+const ProfileSetup = () => {
   const [languageOptions, setLanguageOptions] = useState([]);
   const [imgURL, setImgURL] = useState(null);
   const [form, setForm] = useState({
@@ -191,3 +191,5 @@ export default function ProfileSetup() {
     </div>
   );
 }
+
+export default ProfileSetup;

@@ -22,7 +22,6 @@ function App() {
         <Route path="/favorites" element={<Favorites/>}/>
         <Route path="/profile" element={<Profile/>}/>
         <Route path="/register" element={<Register />} />
-        <Route path="/profileSetUp" element={<ProfileSetup />} />
       </Routes>
     </Router>
   );
