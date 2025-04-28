@@ -6,7 +6,7 @@ import { getAllUsers } from "../../api/userApi.js";
 
 
 
-// פונקציה שמחשבת גיל מתאריך לידה
+
 const calculateAge = (birthDateString) => {
   const today = new Date();
   const birthDate = new Date(birthDateString);
