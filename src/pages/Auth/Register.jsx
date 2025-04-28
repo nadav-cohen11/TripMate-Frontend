@@ -31,7 +31,7 @@ export default function Register() {
         <input
           name="fullName"
           placeholder="Full Name"
-          value={form.firstName}
+          value={form.fullName}
           onChange={handleChange}
           required
           className="w-full border border-gray-400 rounded-lg p-3
