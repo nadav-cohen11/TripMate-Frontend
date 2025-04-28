@@ -1,19 +1,21 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";  
 
 export default function Register() {
   const [form, setForm] = useState({
-    firstName: "",
-    lastName: "",
+    fullName: "",
     email: "",
     password: "",
   });
 
+  const navigate = useNavigate();               
+
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // TODO: send `form` to your backend
+  const handleSubmit = async (e) => {
+    e.preventDefault(); 
+    navigate("/profile");                       
   };
 
   return (
@@ -27,19 +29,9 @@ export default function Register() {
         <h1 className="text-center text-3xl font-bold">Register</h1>
 
         <input
-          name="firstName"
-          placeholder="First Name"
-          value={form.firstName}
-          onChange={handleChange}
-          required
-          className="w-full border border-gray-400 rounded-lg p-3
-                     focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        />
-
-        <input
-          name="lastName"
-          placeholder="Last Name"
-          value={form.lastName}
+          name="fullName"
+          placeholder="Full Name"
+          value={form.fullName}
           onChange={handleChange}
           required
           className="w-full border border-gray-400 rounded-lg p-3
