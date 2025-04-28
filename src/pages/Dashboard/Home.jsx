@@ -56,9 +56,9 @@ const Home = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#182b31] pt-10">
       <div className="h-[500px] w-full max-w-sm relative flex items-center justify-center">
-        {users.map((user, index) => (
+        {users.map((user) => (
           <TinderCard
-            key={index}
+            key={user.id}
             preventSwipe={['up', 'down']}
             className="absolute"
           >
