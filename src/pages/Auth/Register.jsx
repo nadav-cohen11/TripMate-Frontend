@@ -15,7 +15,7 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault(); 
-    navigate("/profile");                       
+    navigate("/profileSetUp");                       
   };
 
   return (

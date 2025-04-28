@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import ProfileSetup from "./pages/ProfileSetUp";
-import { getUser } from "./api/userApi";
 import Home from "./pages/Dashboard/Home";
 import Chat from "./pages/Dashboard/Chat";
 import Map from "./pages/Dashboard/Map";
@@ -23,6 +22,7 @@ function App() {
         <Route path="/favorites" element={<Favorites/>}/>
         <Route path="/profile" element={<Profile/>}/>
         <Route path="/register" element={<Register />} />
+        <Route path="/profileSetUp" element={<ProfileSetup />} />
       </Routes>
     </Router>
   );
