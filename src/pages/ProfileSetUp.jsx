@@ -4,7 +4,7 @@ import Select from "react-select";
 const genders = ["Female", "Male"];
 
 const lookingOptions = [
-  "Hiking", "Trekking",  "Cycling", "Mountain Biking",
+  "Hiking", "Trekking", "Cycling", "Mountain Biking",
   "Climbing", "Camping", "Fishing", "Rafting", "Surfing",
   "Snorkeling", "Skiing", "Snowboarding", "Horseback Riding",
   "Photography", "Yoga Retreat", "Beach Relaxation", "Volunteering"
@@ -52,12 +52,7 @@ const ProfileSetup = () => {
   const handleMates = (delta) =>
     setForm(f => ({
       ...f,
-      mates:
-        f.mates === ""
-          ? delta > 0
-            ? 1
-            : ""
-          : Math.max(0, +f.mates + delta)
+      mates: f.mates === "" ? delta > 0 ? 1 : "" : Math.max(0, +f.mates + delta)
     }));
 
   const handleSubmit = (e) => {
@@ -74,21 +69,23 @@ const ProfileSetup = () => {
     languageOptions.find(o => o.value === form.languages) || null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-100">
+    <div
+      className="min-h-screen flex items-center justify-center bg-cover bg-center px-4"
+      style={{ backgroundImage: "url('/assets/images/newBackground.jpg')" }}
+    >
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-xs bg-white rounded-2xl shadow-lg px-6 py-8 flex flex-col gap-5"
+        className="bg-white bg-opacity-50 backdrop-blur-md text-[#2D4A53] p-8 w-full max-w-md rounded-3xl shadow-xl flex flex-col gap-6"
       >
-        <div>
-          <p className="text-sm text-gray-500">Welcome,</p>
-          <h2 className="text-xl font-semibold">Traveller</h2>
-        </div>
+        <p className="text-[#2D4A53] text-4xl font-bold text-center">
+          Create Your Profile
+        </p>
 
-        <div className="flex flex-col items-center gap-2">
-          <div className="h-24 w-24 rounded-full bg-gray-200 flex items-center justify-center text-3xl overflow-hidden">
-            {imgURL && <img src={imgURL} alt="preview" className="h-full w-full object-cover" />}
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-28 w-28 rounded-full bg-gray-300 flex items-center justify-center text-3xl overflow-hidden shadow-md">
+            {imgURL && <img src={imgURL} alt="preview" className="h-full w-full object-cover rounded-full" />}
           </div>
-          <label className="text-xs text-indigo-600 underline cursor-pointer">
+          <label className="text-sm text-indigo-600 underline cursor-pointer">
             Upload profile picture
             <input
               type="file"
@@ -104,7 +101,7 @@ const ProfileSetup = () => {
           name="dob"
           value={form.dob}
           onChange={handleChange}
-          className="input-basic"
+          className="w-full input-basic border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
           required
         />
 
@@ -112,7 +109,7 @@ const ProfileSetup = () => {
           name="gender"
           value={form.gender}
           onChange={handleChange}
-          className="input-basic"
+          className="w-full input-basic border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
           required
         >
           <option value="">Gender</option>
@@ -124,7 +121,7 @@ const ProfileSetup = () => {
           name="location"
           value={form.location}
           onChange={handleChange}
-          className="input-basic"
+          className="w-full input-basic border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
           required
         />
 
@@ -138,7 +135,7 @@ const ProfileSetup = () => {
           filterOption={(option, inputValue) =>
             option.label.toLowerCase().startsWith(inputValue.toLowerCase())
           }
-          className="input-basic"
+          className="w-full input-basic"
           classNamePrefix="react-select"
         />
 
@@ -147,49 +144,32 @@ const ProfileSetup = () => {
           name="lookingFor"
           options={lookingOptions}
           value={form.lookingFor}
-          onChange={(selectedOptions) => 
+          onChange={(selectedOptions) =>
             setForm(f => ({ ...f, lookingFor: selectedOptions }))
           }
           placeholder="Looking for?"
-          className="input-basic"
+          className="w-full input-basic"
           classNamePrefix="react-select"
         />
-
-        <div className="flex items-center justify-center gap-3">
-          <span>Seeking</span>
-          <div className="flex border rounded-lg overflow-hidden">
-            <button type="button" className="px-2 select-none" onClick={() => handleMates(-1)}>–</button>
-            <input
-              type="number"
-              min="0"
-              value={form.mates}
-              placeholder="0"
-              onChange={e => setForm({ ...form, mates: e.target.value === "" ? "" : +e.target.value })}
-              className="w-10 text-center outline-none"
-            />
-            <button type="button" className="px-2 select-none" onClick={() => handleMates(1)}>+</button>
-          </div>
-          <span>Travel&nbsp;Mates</span>
-        </div>
 
         <textarea
           name="bio"
           placeholder="Bio (optional)"
-          rows={3}
+          rows={2} // Reduced height
           value={form.bio}
           onChange={handleChange}
-          className="input-basic resize-none"
+          className="w-full input-basic border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition resize-none"
         />
 
         <button
           type="submit"
-          className="mt-2 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg transition-colors"
+          className="mt-4 mb-6 w-full bg-amber bg-cyan-900 hover:bg-green-600 text-white font-semibold py-3 rounded-lg shadow-md transition-transform hover:scale-105"
         >
           SUBMIT
         </button>
       </form>
     </div>
   );
-}
+};
 
 export default ProfileSetup;
