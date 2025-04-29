@@ -1,5 +1,7 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";  
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import TextInput from '@/components/ui/textInput';
+import LoginButton from '@/components/ui/loginButton';
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -8,65 +10,65 @@ export default function Register() {
     password: "",
   });
 
-  const navigate = useNavigate();               
+  const navigate = useNavigate();
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
-    navigate("/profile");                       
+    e.preventDefault();
+    navigate("/profile");
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100
-                    bg-[url('/assets/bg.svg')] bg-top bg-no-repeat">
+    <div
+      className="h-[300px] bg-cover bg-center relative px-4 pt-[380px] pb-20"
+      style={{ backgroundImage: "url('/assets/images/newBackground.jpg')" }}
+    >
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-xs sm:max-w-sm bg-white rounded-2xl
-                   shadow-lg px-6 py-8 flex flex-col gap-4"
+        className="text-[#2D4A53] p-7 w-full max-w-md mx-auto bg-white bg-opacity-90 rounded-2xl shadow-lg"
       >
-        <h1 className="text-center text-3xl font-bold">Register</h1>
+        <p className="text-[#2D4A53] text-4xl font-bold text-center mb-8">
+          Create Your Account
+        </p>
+        <div className="space-y-20">
 
-        <input
+        <TextInput
           name="fullName"
           placeholder="Full Name"
           value={form.fullName}
           onChange={handleChange}
           required
-          className="w-full border border-gray-400 rounded-lg p-3
-                     focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="mb-20"
         />
 
-        <input
+        <TextInput
           type="email"
           name="email"
           placeholder="Email"
           value={form.email}
           onChange={handleChange}
           required
-          className="w-full border border-gray-400 rounded-lg p-3
-                     focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="mb-20" 
         />
 
-        <input
+        <TextInput
           type="password"
           name="password"
           placeholder="Password"
           value={form.password}
           onChange={handleChange}
           required
-          className="w-full border border-gray-400 rounded-lg p-3
-                     focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="mb-20"
         />
+</div>
 
-        <button
-          type="submit"
-          className="mt-2 w-full bg-indigo-600 hover:bg-indigo-700
-                     text-white font-medium py-3 rounded-lg transition-colors"
-        >
-          Let’s create your profile!
-        </button>
+        <div className="pt-6">
+          <LoginButton type="submit" className="text-white w-full">
+            Create Account <i className="bi bi-arrow-right ms-2"></i>
+          </LoginButton>
+        </div>
       </form>
     </div>
   );
