@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import Navbar from '@/components/ui/NavBar';
 import { useState } from 'react';
 import io from 'socket.io-client';
-import { jwtDecode } from 'jwt-decode';
 
 const mockChats = [
   {
@@ -31,24 +30,28 @@ const Chat = () => {
   const [socketInstance, setSocketInstance] = useState(null);
   const [selectedChatId, setSelectedChatId] = useState();
   const [userId, setUserId] = useState('68120233d9050d1d2e0a64ba');
+  const [receiverId, setReceiverId] = useState();
 
-  const selectedChat = chats.find((chat) => chat.id === selectedChatId);
+  const handleSelectedChatId = (id) => {
+    const chat = chats.find((chat) => chat._id === id);
+    setSelectedChatId(id);
+    const reciever =
+      chat.participants.filter((p) => p._id !== userId)[0]?._id || '';
+    setReceiverId(reciever);
+  };
 
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    if (socketInstance && message.trim() && selectedChatId) {
+      const msg = {
+        sender: userId,
+        receiver: receiverId,
+        content: message,
+        sentAt: new Date(),
+      };
+      socketInstance.emit('sendMessage', { chatId: selectedChatId, msg });
 
-  const handleSendMessage = async () => {
-    if (socketInstance && message.trim()) {
-      socketInstance.emit('chat message', message);
       setMessage('');
-      setChats((prevChats) =>
-        prevChats.map((chat) =>
-          chat.id === selectedChatId
-            ? {
-                ...chat,
-                messages: [...chat.messages, { text: message, sender: 'user' }],
-              }
-            : chat,
-        ),
-      );
     }
   };
 
@@ -60,6 +63,24 @@ const Chat = () => {
       console.log(`User connected with id: ${socket.id}`);
     });
 
+    if (selectedChatId) {
+      socket.emit('joinChat', { chatId: selectedChatId });
+    }
+
+    socket.on('messageReceived', (msg) => {
+      setChats((prev) => {
+        return prev.map((chat) => {
+          if (chat._id === selectedChatId) {
+            return {
+              ...chat,
+              messages: [...chat.messages, msg],
+            };
+          }
+          return chat;
+        });
+      });
+    });
+
     socket.emit('getChats', { userId }, (chats) => {
       console.log(chats);
       setChats(chats);
@@ -68,7 +89,7 @@ const Chat = () => {
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [selectedChatId]);
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
@@ -86,7 +107,7 @@ const Chat = () => {
           chats.map((chat) => (
             <div
               key={chat._id}
-              onClick={() => setSelectedChatId(chat._id)}
+              onClick={() => handleSelectedChatId(chat._id)}
               style={{
                 padding: '8px 12px',
                 marginBottom: 8,
@@ -104,31 +125,87 @@ const Chat = () => {
           ))}
         <h4 style={{ marginTop: 24 }}>Groups</h4>
       </div>
-      <div style={{ flex: 1, maxWidth: 500, margin: '40px auto', padding: 16 }}>
-        <div style={{ minHeight: 200, marginBottom: 16 }}>
-          {/* {selectedChat.messages.map((msg, idx) => (
-            <div
-              key={idx}
-              style={{
-                textAlign: msg.sender === 'user' ? 'right' : 'left',
-                margin: '8px 0',
-              }}
-            >
-              <span
-                style={{
-                  display: 'inline-block',
-                  background: msg.sender === 'user' ? '#DCF8C6' : '#F1F0F0',
-                  padding: '8px 12px',
-                  borderRadius: 16,
-                }}
-              >
-                {msg.text}
-              </span>
-            </div>
-          ))} */}
+      <div
+        style={{
+          flex: 1,
+          maxWidth: 500,
+          margin: '40px auto',
+          padding: 16,
+          display: 'flex',
+          flexDirection: 'column',
+          height: '80vh',
+          minHeight: 400,
+          background: '#fff',
+          borderRadius: 12,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+        }}
+      >
+        <div
+          style={{
+            flex: 1,
+            minHeight: 0,
+            marginBottom: 16,
+            overflowY: 'auto',
+          }}
+        >
+          {selectedChatId && chats&&
+            chats.find(c => c._id === selectedChatId).messages.map((msg, idx) => {
+              let time = '';
+              if (msg.sentAt) {
+                const date = new Date(msg.sentAt);
+                time = date.toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  hour12: false,
+                });
+              }
+              return (
+                <div
+                  key={idx}
+                  style={{
+                    textAlign: msg.sender === userId ? 'right' : 'left',
+                    margin: '8px 0',
+                  }}
+                >
+                  <span
+                    style={{
+                      display: 'inline-block',
+                      background: msg.sender === userId ? '#DCF8C6' : '#F1F0F0',
+                      padding: '8px 12px',
+                      borderRadius: 16,
+                      position: 'relative',
+                      minWidth: 40,
+                    }}
+                  >
+                    {msg.content}
+                    {time && (
+                      <div
+                        style={{
+                          fontSize: 12,
+                          color: '#888',
+                          marginTop: 4,
+                          textAlign: 'right',
+                        }}
+                      >
+                        {time}
+                      </div>
+                    )}
+                  </span>
+                </div>
+              );
+            })}
         </div>
         {selectedChatId && (
-          <form style={{ display: 'flex' }}>
+          <form
+            onSubmit={handleSendMessage}
+            style={{
+              display: 'flex',
+              marginTop: 'auto',
+              paddingTop: 8,
+              borderTop: '1px solid #eee',
+              background: '#fff',
+            }}
+          >
             <input
               type='text'
               value={message}
@@ -142,8 +219,7 @@ const Chat = () => {
               }}
             />
             <button
-              type='button'
-              onClick={handleSendMessage}
+              type='submit'
               style={{
                 marginLeft: 8,
                 padding: '8px 16px',
