@@ -2,97 +2,94 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 
 const genders = ["Female", "Male"];
-
 const lookingOptions = [
-  "Hiking", "Trekking", "Cycling", "Mountain Biking",
-  "Climbing", "Camping", "Fishing", "Rafting", "Surfing",
-  "Snorkeling", "Skiing", "Snowboarding", "Horseback Riding",
-  "Photography", "Yoga Retreat", "Beach Relaxation", "Volunteering"
-].map(opt => ({ value: opt, label: opt }));
+  "Hiking","Trekking","Cycling","Mountain Biking","Climbing","Camping",
+  "Fishing","Rafting","Surfing","Snorkeling","Skiing","Snowboarding",
+  "Horseback Riding","Photography","Yoga Retreat","Beach Relaxation","Volunteering",
+].map(v => ({ value: v, label: v }));
 
-const ProfileSetup = () => {
+export default function ProfileSetup() {
+
+  const [countryOptions, setCountryOptions] = useState([]);
+  const [cityOptions, setCityOptions]       = useState([]);
   const [languageOptions, setLanguageOptions] = useState([]);
-  const [imgURL, setImgURL] = useState(null);
+  const [loadingCities, setLoadingCities]   = useState(false);
+  const [imgURL, setImgURL]                 = useState(null);
+
   const [form, setForm] = useState({
-    dob: "",
-    gender: "",
-    location: "",
-    languages: "",
-    lookingFor: [],
-    mates: 0,
-    bio: ""
+    dob:"", gender:"", country:"", location:"",
+    languages: [], lookingFor: [], mates: 0, bio:""
   });
 
   useEffect(() => {
-    fetch("https://restcountries.com/v3.1/all")
-      .then(res => res.json())
-      .then(data => {
-        const langSet = new Set();
-        data.forEach(country => {
-          if (country.languages) {
-            Object.values(country.languages).forEach(name => langSet.add(name));
-          }
-        });
-        const opts = Array.from(langSet)
-          .sort((a, b) => a.localeCompare(b))
-          .map(name => ({ value: name, label: name }));
-        setLanguageOptions(opts);
-      })
-      .catch(err => console.error("Error fetching languages:", err));
+    fetch("https://countriesnow.space/api/v0.1/countries/positions")
+      .then(r => r.json())
+      .then(({data}) =>
+        setCountryOptions(
+          data.map(c => ({ value:c.name, label:c.name }))
+              .sort((a,b)=>a.label.localeCompare(b.label))
+        )
+      ).catch(console.error);
   }, []);
 
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+  useEffect(() => {
+    fetch("https://restcountries.com/v3.1/all")
+      .then(r => r.json())
+      .then(arr => {
+        const set = new Set();
+        arr.forEach(c => c.languages && Object.values(c.languages).forEach(l => set.add(l)));
+        setLanguageOptions([...set].sort().map(l => ({ value:l, label:l })));
+      }).catch(console.error);
+  }, []);
 
-  const handleFile = (e) => {
-    const file = e.target.files[0];
-    if (file) setImgURL(URL.createObjectURL(file));
+  const loadCities = async country => {
+    if (!country) return setCityOptions([]);
+    setLoadingCities(true);
+    try {
+      const res = await fetch(
+        "https://countriesnow.space/api/v0.1/countries/cities",
+        {
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ country })
+        }
+      );
+      const { data=[] } = await res.json();
+      setCityOptions(
+        data.sort((a,b)=>a.localeCompare(b))
+            .map(n => ({ value:n, label:n }))
+      );
+    } catch(err) {
+      console.error(err); setCityOptions([]);
+    } finally { setLoadingCities(false); }
   };
 
-  const handleMates = (delta) =>
-    setForm(f => ({
-      ...f,
-      mates: f.mates === "" ? delta > 0 ? 1 : "" : Math.max(0, +f.mates + delta)
-    }));
-
-  const handleSubmit = (e) => {
+  const onInput  = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+  const onFile   = e => { const f=e.target.files[0]; f && setImgURL(URL.createObjectURL(f)); };
+  const onSubmit = e => {
     e.preventDefault();
     console.table({
       ...form,
       imgURL,
-      lookingFor: form.lookingFor.map(opt => opt.value)
+      languages:  form.languages.map(o=>o.value),
+      lookingFor: form.lookingFor.map(o=>o.value)
     });
-    // send to backend
   };
 
-  const selectedLanguage =
-    languageOptions.find(o => o.value === form.languages) || null;
-
   return (
-    <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center px-4"
-      style={{ backgroundImage: "url('/assets/images/newBackground.jpg')" }}
-    >
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white bg-opacity-50 backdrop-blur-md text-[#2D4A53] p-8 w-full max-w-md rounded-3xl shadow-xl flex flex-col gap-6"
-      >
-        <p className="text-[#2D4A53] text-4xl font-bold text-center">
-          Create Your Profile
-        </p>
+    <div className="min-h-screen flex items-center justify-center bg-cover bg-center px-4"
+         style={{ backgroundImage:"url('/assets/images/newBackground.jpg')" }}>
+
+      <form onSubmit={onSubmit}
+            className="bg-white/10 backdrop-blur-md text-[#2D4A53] p-8 w-full max-w-md rounded-3xl shadow-xl flex flex-col gap-6">
 
         <div className="flex flex-col items-center gap-4">
-          <div className="h-28 w-28 rounded-full bg-gray-300 flex items-center justify-center text-3xl overflow-hidden shadow-md">
-            {imgURL && <img src={imgURL} alt="preview" className="h-full w-full object-cover rounded-full" />}
+          <div className="h-28 w-28 rounded-full bg-gray-300 overflow-hidden shadow-md">
+            {imgURL && <img src={imgURL} alt="avatar" className="h-full w-full object-cover"/>}
           </div>
           <label className="text-sm text-indigo-600 underline cursor-pointer">
             Upload profile picture
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFile}
-              className="sr-only"
-            />
+            <input type="file" accept="image/*" onChange={onFile} className="sr-only"/>
           </label>
         </div>
 
@@ -100,76 +97,75 @@ const ProfileSetup = () => {
           type="date"
           name="dob"
           value={form.dob}
-          onChange={handleChange}
-          className="w-full input-basic border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+          onChange={onInput}
           required
+          className="input-white"
         />
 
         <select
           name="gender"
           value={form.gender}
-          onChange={handleChange}
-          className="w-full input-basic border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+          onChange={onInput}
           required
+          className="input-white"
         >
           <option value="">Gender</option>
-          {genders.map(g => <option key={g} value={g}>{g}</option>)}
+          {genders.map(g => <option key={g}>{g}</option>)}
         </select>
 
-        <input
-          placeholder="Location"
-          name="location"
-          value={form.location}
-          onChange={handleChange}
-          className="w-full input-basic border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
-          required
+        <Select
+          placeholder="Country"
+          options={countryOptions}
+          value={countryOptions.find(o=>o.value===form.country)||null}
+          onChange={o=>{
+            setForm(f=>({...f,country:o?.value||"", location:""}));
+            loadCities(o?.value);
+          }}
+          isSearchable
+          classNamePrefix="rs"
         />
 
         <Select
-          name="languages"
+          placeholder={loadingCities ? "Loading cities…" : "City"}
+          options={cityOptions}
+          value={cityOptions.find(o=>o.value===form.location)||null}
+          onChange={o=>setForm(f=>({...f, location:o?.value||""}))}
+          isSearchable
+          isDisabled={!form.country||loadingCities}
+          classNamePrefix="rs"
+        />
+
+        <Select
+          placeholder="Select languages…"
           options={languageOptions}
-          value={selectedLanguage}
-          onChange={opt => setForm(f => ({ ...f, languages: opt?.value || "" }))}
-          placeholder="Type to search languages..."
-          isSearchable={true}
-          filterOption={(option, inputValue) =>
-            option.label.toLowerCase().startsWith(inputValue.toLowerCase())
-          }
-          className="w-full input-basic"
-          classNamePrefix="react-select"
+          isMulti
+          value={form.languages}
+          onChange={sel=>setForm(f=>({...f,languages:sel||[]}))}
+          isSearchable
+          classNamePrefix="rs"
         />
 
         <Select
-          isMulti
-          name="lookingFor"
           options={lookingOptions}
-          value={form.lookingFor}
-          onChange={(selectedOptions) =>
-            setForm(f => ({ ...f, lookingFor: selectedOptions }))
-          }
+          isMulti
           placeholder="Looking for?"
-          className="w-full input-basic"
-          classNamePrefix="react-select"
+          value={form.lookingFor}
+          onChange={sel=>setForm(f=>({...f, lookingFor: sel}))}
+          classNamePrefix="rs"
         />
 
+        
         <textarea
           name="bio"
+          rows={2}
           placeholder="Bio (optional)"
-          rows={2} // Reduced height
           value={form.bio}
-          onChange={handleChange}
-          className="w-full input-basic border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition resize-none"
+          onChange={onInput}
+          className="input-white resize-none"
         />
 
-        <button
-          type="submit"
-          className="mt-4 mb-6 w-full bg-amber bg-cyan-900 hover:bg-green-600 text-white font-semibold py-3 rounded-lg shadow-md transition-transform hover:scale-105"
-        >
-          SUBMIT
-        </button>
+        <button type="submit" className="btn-primary mt-4 rounded-xl">SUBMIT</button>
       </form>
     </div>
   );
-};
-
-export default ProfileSetup;
+}
