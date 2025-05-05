@@ -4,7 +4,7 @@ import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import ProfileSetup from "./pages/ProfileSetUp";
 import Home from "./pages/Dashboard/Home";
-import Chat from "./pages/Dashboard/Chat";
+import Chat from "./pages/Dashboard/Chats/Chat";
 import Map from "./pages/Dashboard/Map";
 import Profile from "./pages/Dashboard/Profile";
 import Favorites from "./pages/Dashboard/Favorites";
