@@ -55,7 +55,7 @@ export const deleteUser = async (userId) => {
 
 export const getAllUsers = async () => {
     try {
-        const data = await api.get("users/");
+        const data = await api.get("/users/");
         return data;
     } catch (error) {
         handleApiError(error, "Failed to load users");
