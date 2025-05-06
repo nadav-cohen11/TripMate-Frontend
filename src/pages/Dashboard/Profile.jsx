@@ -7,7 +7,6 @@ const Profile = () => {
     <div>
 
         <ProfileSetup/>
-        <Navbar/>
     </div>
   )
 }
