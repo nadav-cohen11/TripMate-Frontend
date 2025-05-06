@@ -6,7 +6,7 @@ const containerStyle = {
   height: "80vh",
 };
 
-const centerDefault = { lat: 32.0853, lng: 34.7818 }; // תל אביב כברירת מחדל
+const centerDefault = { lat: 32.0853, lng: 34.7818 }; 
 
 export default function MapView({ users = [] }) {
   const [currentLocation, setCurrentLocation] = useState(null);

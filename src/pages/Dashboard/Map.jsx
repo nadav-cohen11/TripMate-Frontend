@@ -12,7 +12,7 @@ const Map = () => {
     <div>
       <Navbar />
       <div className="p-4">
-        <h2 className="text-xl font-semibold mb-4">מפת המשתמשים</h2>
+        <h2 className="text-xl font-semibold mb-4">let's check who is near to you ..</h2>
         <MapView users={mockUsers} />
       </div>
     </div>
