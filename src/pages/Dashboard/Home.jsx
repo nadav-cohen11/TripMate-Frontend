@@ -33,7 +33,6 @@ const Home = () => {
     const fetchUsers = async () => {
       try {
         const response = await getAllUsers();
-        console.log(response.data, "nadav");
         setUsers(response.data);
       } catch (err) {
         setError('Failed to fetch users');
