@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
+import { toast } from "sonner";
 
 const genders = ["Female", "Male"];
 const lookingOptions = [
@@ -29,7 +30,10 @@ export default function ProfileSetup() {
           data.map(c => ({ value:c.name, label:c.name }))
               .sort((a,b)=>a.label.localeCompare(b.label))
         )
-      ).catch(console.error);
+      ).catch(err=>{
+        console.error(err);
+        toast.error("failed to load countries");
+      });
   }, []);
 
   useEffect(() => {
@@ -39,7 +43,10 @@ export default function ProfileSetup() {
         const set = new Set();
         arr.forEach(c => c.languages && Object.values(c.languages).forEach(l => set.add(l)));
         setLanguageOptions([...set].sort().map(l => ({ value:l, label:l })));
-      }).catch(console.error);
+      }).catch(err=>{
+        console.error(err);
+        toast.error("Failed to load languages");
+      });
   }, []);
 
   const loadCities = async country => {
