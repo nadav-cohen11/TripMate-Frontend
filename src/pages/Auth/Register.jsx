@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { z } from 'zod';
+import { toast } from 'sonner';
 import TextInput from '@/components/ui/textInput';
 import LoginButton from '@/components/ui/loginButton';
+
+const schema = z.object({
+  fullName: z.string().min(2, "Full name is required"),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -9,7 +17,7 @@ export default function Register() {
     email: "",
     password: "",
   });
-
+  const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) =>
@@ -17,13 +25,29 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate("/profile");
+
+    try {
+      schema.parse(form);
+      const isValid = form.email === "test@email.com" && form.password === "123456";
+      if (!isValid) {
+        setErrorMsg("Invalid email or password"); 
+        return;
+      }
+      setErrorMsg("");
+      navigate("/profile");
+    } catch (err) {
+      if (err.errors) {
+        setErrorMsg("");
+        err.errors.forEach(error => {
+          toast.error(error.message);
+        });
+      }
+    }
   };
 
   return (
     <div
-      className="h-[300px] bg-cover bg-center relative px-4 pt-[380px] pb-20"
-      style={{ backgroundImage: "url('/assets/images/newBackground.jpg')" }}
+      className="h-[300px] bg-[url('/assets/images/newBackground.jpg')] bg-cover bg-center relative px-4 pt-[380px] pb-20"
     >
       <form
         onSubmit={handleSubmit}
@@ -32,7 +56,7 @@ export default function Register() {
         <p className="text-[#2D4A53] text-4xl font-bold text-center mb-8">
           Create Your Account
         </p>
-        <div className="space-y-20">
+        <div className="flex flex-col gap-4">
 
         <TextInput
           name="fullName"
@@ -40,7 +64,6 @@ export default function Register() {
           value={form.fullName}
           onChange={handleChange}
           required
-          className="mb-20"
         />
 
         <TextInput
@@ -50,7 +73,6 @@ export default function Register() {
           value={form.email}
           onChange={handleChange}
           required
-          className="mb-20" 
         />
 
         <TextInput
@@ -60,13 +82,17 @@ export default function Register() {
           value={form.password}
           onChange={handleChange}
           required
-          className="mb-20"
         />
+        {errorMsg && (
+  <div className="text-red-600 text-sm text-center mt-2">
+    {errorMsg}
+  </div>
+)}
 </div>
 
         <div className="pt-6">
-          <LoginButton type="submit" className="text-white w-full">
-            Create Account <i className="bi bi-arrow-right ms-2"></i>
+          <LoginButton type="submit">
+            Create Account<i className="bi bi-arrow-right ms-2"></i>
           </LoginButton>
         </div>
       </form>
