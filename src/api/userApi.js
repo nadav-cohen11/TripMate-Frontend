@@ -24,18 +24,25 @@ export const getUser = async (userId) => {
         const response = await api.get(`/users/getUser/${userId}`);
         return response.data
     } catch (error) {
-
+        throw error;
     }
 };
 
-export const updateUser = (userId, userData) => {
-    return api.put("/users/updateUser", { userId, userData });
+export const updateUser = async(userId, userData) => {
+    try {
+        const response = await api.put("/users/updateUser", { userId, userData });
+        return response.data
+    } catch (error) {
+        throw error;
+    }
 };
 
-export const deleteUser = (userId) => {
-    return api.delete("/users/deleteUser", { data: { userId } });
+export const deleteUser = async(userId) => {
+    try {
+        const response = await api.delete("/users/deleteUser", { data: { userId } });
+        return response.data
+    } catch (error) {
+        throw error;
+    }
 };
-
-export const getAllUsers = async () => {
-    return await api.get("/users/");
-};
+``
