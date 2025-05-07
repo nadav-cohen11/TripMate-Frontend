@@ -1,5 +1,8 @@
+import { register } from "@/api/userApi";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";  
+import { toast } from 'react-toastify';
+import { extractBackendError } from '../../utils/errorUtils'
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -14,9 +17,15 @@ export default function Register() {
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
-    navigate("/profileSetUp");                       
-  };
+      e.preventDefault();
+      try {
+        await register(form);
+        navigate('/profile');
+      } catch (err) {
+        const message = extractBackendError(err);
+        toast.error(message);
+      }
+    };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100

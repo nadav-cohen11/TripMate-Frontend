@@ -1,22 +1,24 @@
 import React, { useState } from 'react';
 import { login } from "../../api/userApi";
+import { toast } from 'react-toastify';
 import TextInput from '@/components/ui/textInput';
 import LoginButton from '@/components/ui/loginButton';
-
-
+import { useNavigate } from 'react-router-dom'
+import { extractBackendError } from '../../utils/errorUtils'
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await login(email, password);
-      window.location.href = "/home";
-    } catch (error) {
-      setErrorMsg("Email or password incorrect");
+      navigate('/home');
+    } catch (err) {
+      const message = extractBackendError(err);
+      toast.error(message || "Email or password incorrect");
     }
   };
 
@@ -66,8 +68,6 @@ const Login = () => {
             Log In <i className="bi bi-arrow-right ms-2"></i>
           </LoginButton>
         </div>
-
-        {errorMsg && <p className="text-red-500 text-sm">{errorMsg}</p>}
       </form>
     </div>
   );
