@@ -1,4 +1,5 @@
-import api from "./axios";
+import api from "/src/api/axios.js";
+import { handleApiError } from "../utils/errorUtils";
 
 export const login = async (email, password) => {
     try {
@@ -17,7 +18,6 @@ export const register = (userData) => {
         throw error;
     }
 };
-
 
 export const getUser = async (userId) => {
     try {
@@ -45,4 +45,3 @@ export const deleteUser = async(userId) => {
         throw error;
     }
 };
-``

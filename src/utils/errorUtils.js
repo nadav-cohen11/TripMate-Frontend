@@ -7,4 +7,3 @@ export const extractBackendError = (err) => {
     }
     return 'An unknown error occurred';
   };
-  
