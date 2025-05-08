@@ -62,15 +62,15 @@ export default function Settings() {
     f && setImgURL(URL.createObjectURL(f));
   };
 
-  const onSubmit = e => {
+  const onSubmit = async(e)  => {
     e.preventDefault();
-    console.table({
-      ...form,
-      imgURL,
-      languages:  form.languages.map(o => o.value),
-      lookingFor: form.lookingFor.map(o => o.value),
-    });
-    toast.success("Settings saved!");
+    try {
+        await updateUser(form);
+      } catch (error) {
+        setErrorMsg("Email or password incorrect");
+      }
+   toast.success("Settings saved!");
+
   };
 
   useEffect(() => {
