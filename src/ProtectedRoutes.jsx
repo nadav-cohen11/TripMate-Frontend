@@ -10,7 +10,7 @@ import ProtectedRoute from './components/ui/ProtectedRoute';
 
 const protectedRoutes = [
   { path: '/home', component: <Home /> },
-  // { path: '/chat', component: <Chat /> },
+  { path: '/chat', component: <Chat /> },
   { path: '/map', component: <Map /> },
   { path: '/profile', component: <Profile /> },
   { path: '/favorites', component: <Favorites /> },
