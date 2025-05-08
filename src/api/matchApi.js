@@ -25,5 +25,5 @@ export const unmatchUsers = async ({ user2Id }) => {
 
 export const NonMatchedUsers = async () => {
     const response = await api.get('/matches/home/NonMatchedUsers');
-    return response;
+    return response.data;
 };
