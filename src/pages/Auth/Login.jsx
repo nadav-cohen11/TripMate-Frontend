@@ -11,6 +11,7 @@ const Login = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const { setUserId } = useGlobalContext();
   const navigate = useNavigate();
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -19,6 +20,7 @@ const Login = () => {
       localStorage.setItem('userId', userId);
       navigate('/home');
     } catch (error) {
+      localStorage.removeItem('userId');
       setErrorMsg('Email or password incorrect');
     }
   };

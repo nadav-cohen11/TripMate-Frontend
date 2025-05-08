@@ -1,21 +1,40 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { FriendsList } from './FriendsList';
+import { CreateTrip } from './CreateTrip';
 const ChatList = ({
   chats,
-  setChats,
-  handleSelectedChatId,
   selectedChatId,
   userId,
   socket,
+  handleSelectedChatId,
+  setChats,
 }) => {
   const [directChats, setDirectChats] = useState([]);
   const [groupChats, setGroupChats] = useState([]);
   const [matches, setMatches] = useState([]);
+  const [matchesWithoutChat, setMatchesWithoutChat] = useState([]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on('newTripCreated', ({ chats }) => {
+      setChats(chats);
+    });
+
+    socket.on('newChatCreated', ({ chats }) => {
+      setChats(chats);
+    });
+
+    return () => {
+      socket.off('newTripCreated');
+    };
+  }, [socket]);
 
   useEffect(() => {
     if (socket && userId) {
       socket.emit('getConfirmedMatchesByUserId', { userId }, (matches) => {
+        setMatches(matches);
         const newMatches = matches.filter((match) => {
           const otherUserId =
             match.user1Id._id === userId ? match.user2Id : match.user1Id;
@@ -30,7 +49,7 @@ const ChatList = ({
 
           return !alreadyInChat;
         });
-        setMatches(newMatches);
+        setMatchesWithoutChat(newMatches);
       });
     }
   }, [socket, chats]);
@@ -44,6 +63,13 @@ const ChatList = ({
     <div className='p-4 bg-gray-50 w-56 border-r border-gray-300 relative'>
       <div className='mb-6'>
         <FriendsList
+          matches={matchesWithoutChat}
+          userId={userId}
+          socket={socket}
+          setChats={setChats}
+        />
+
+        <CreateTrip
           matches={matches}
           userId={userId}
           socket={socket}
@@ -60,9 +86,15 @@ const ChatList = ({
               selectedChatId === chat._id ? 'bg-blue-100' : 'hover:bg-gray-100'
             }`}
           >
-            {(chat.participants &&
-              chat.participants.filter((p) => p._id !== userId)[0]?.fullName) ||
-              ''}
+            <div className='font-medium truncate'>
+              {(chat.participants &&
+                chat.participants.filter((p) => p._id !== userId)[0]
+                  ?.fullName) ||
+                ''}
+            </div>
+            <div className='text-xs text-gray-500 truncate'>
+              {chat.lastMessagePreview}
+            </div>
           </div>
         ))}
       <h4 className='font-semibold text-gray-700 mt-6'>Groups</h4>
@@ -75,7 +107,12 @@ const ChatList = ({
               selectedChatId === chat._id ? 'bg-blue-100' : 'hover:bg-gray-100'
             }`}
           >
-            {chat.chatName || 'Group'}
+            <div className='font-medium truncate'>
+              {chat.chatName || 'Group'}
+            </div>
+            <div className='text-xs text-gray-500 truncate'>
+              {chat.lastMessagePreview}
+            </div>
           </div>
         ))}
     </div>

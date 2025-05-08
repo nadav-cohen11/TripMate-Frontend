@@ -4,7 +4,7 @@ const GlobalContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
   const [userId, setUserId] = useState(() => localStorage.getItem('userId'));
-
+  
   return (
     <GlobalContext.Provider value={{ userId, setUserId }}>
       {children}

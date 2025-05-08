@@ -31,6 +31,7 @@ export function FriendsList({ userId, socket, setChats, matches }) {
                 match={match}
                 socket={socket}
                 setChats={setChats}
+                buttonContent='Chat'
               />
             ))
           ) : (

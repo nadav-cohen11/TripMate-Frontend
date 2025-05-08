@@ -1,7 +1,16 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-const Match = ({ userId, match, socket, setChats }) => {
+const Match = ({
+  userId,
+  match,
+  socket,
+  setChats,
+  buttonContent,
+  addFriendToTrip,
+  removeFriendFromTrip,
+}) => {
   const [secondMatch, setSecondMatch] = useState(null);
+  const [added, setAdded] = useState(false);
   useEffect(() => {
     setSecondMatch(() => {
       if (match.user1Id._id === userId) {
@@ -39,9 +48,35 @@ const Match = ({ userId, match, socket, setChats }) => {
             <p className='font-medium text-gray-900'>{secondMatch.fullName}</p>
             <p className='text-xs text-gray-500'>{secondMatch.email}</p>
           </div>
-          <Button size='sm' variant='secondary' onClick={handleAddFriend}>
-            Chat
-          </Button>
+          {buttonContent === 'Chat' ? (
+            <Button type='button' size='sm' variant='secondary' onClick={handleAddFriend}>
+              {buttonContent}
+            </Button>
+          ) : added ? (
+            <Button
+              type='button'
+              size='sm'
+              variant='secondary'
+              onClick={() => {
+                setAdded(false);
+                removeFriendFromTrip(secondMatch);
+              }}
+            >
+              {'Remove'}
+            </Button>
+          ) : (
+            <Button
+              type='button'
+              size='sm'
+              variant='secondary'
+              onClick={() => {
+                setAdded(true);
+                addFriendToTrip(secondMatch);
+              }}
+            >
+              {buttonContent}
+            </Button>
+          )}
         </div>
       )}
     </>

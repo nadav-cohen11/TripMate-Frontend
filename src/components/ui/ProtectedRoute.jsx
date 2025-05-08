@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import Login from '../../pages/Auth/Login';
 import { useGlobalContext } from '@/context/GlobalContext';
+import { useNavigate } from 'react-router-dom'; 
 
 const ProtectedRoute = ({ children }) => {
   const { userId, setUserId } = useGlobalContext();
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const checkAuth = async () => {

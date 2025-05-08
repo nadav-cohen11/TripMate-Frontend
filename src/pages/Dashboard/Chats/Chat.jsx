@@ -13,7 +13,6 @@ const Chats = () => {
   const { userId } = useGlobalContext();
   const socketInstance = useChatSocket(userId, setChats);
 
-
   useEffect(() => {
     if (chats.length > 0) {
       const directChat = chats.find((chat) => !chat.isGroupChat);
@@ -23,7 +22,7 @@ const Chats = () => {
         setSelectedChatId(chats[0]._id);
       }
     }
-  }, [chats]);
+  }, []);
 
   useEffect(() => {
     if (socketInstance && selectedChatId) {
@@ -36,6 +35,7 @@ const Chats = () => {
       socketInstance.on('messageReceived', handleMessageReceived);
   }, [socketInstance]);
 
+ 
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (socketInstance && message.trim() && selectedChatId) {
@@ -48,7 +48,6 @@ const Chats = () => {
         sender: userId,
         msg,
       });
-
       setMessage('');
     }
   };
@@ -64,6 +63,7 @@ const Chats = () => {
           return {
             ...chat,
             messages: [...(chat.messages || []), msg],
+            lastMessagePreview: msg.content,
           };
         }
         return chat;
@@ -76,26 +76,29 @@ const Chats = () => {
       <Navbar />
       <ChatList
         chats={chats}
-        setChats={setChats}
-        handleSelectedChatId={handleSelectedChatId}
         selectedChatId={selectedChatId}
         userId={userId}
         socket={socketInstance}
+        setChats={setChats}
+        handleSelectedChatId={handleSelectedChatId}
       />
 
       <ChatWindow
         selectedChat={
           selectedChatId ? chats.find((c) => c._id === selectedChatId) : null
         }
-        message={message}
-        setMessage={setMessage}
-        handleSendMessage={handleSendMessage}
-        userId={userId}
         isGroupChat={
           selectedChatId
             ? chats.find((c) => c._id === selectedChatId).isGroupChat
             : false
         }
+        message={message}
+        socket={socketInstance}
+        userId={userId}
+        setMessage={setMessage}
+        handleSendMessage={handleSendMessage}
+        setChats={setChats}
+        setSelectedChatId={setSelectedChatId}
       />
     </div>
   );
