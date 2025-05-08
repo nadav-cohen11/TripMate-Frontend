@@ -10,6 +10,7 @@ import Chat from "./pages/Dashboard/Chat";
 import Map from "./pages/Dashboard/Map";
 import Profile from "./pages/Dashboard/Profile";
 import Favorites from "./pages/Dashboard/Favorites";
+import Settings from "./pages/Dashboard/Settings";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/register" element={<Register />} />
         <Route path="/setup" element={<ProfileSetup />} />
+        <Route path="/Settings" element={<Settings/>} />
       </Routes>
     </Router>
   );
