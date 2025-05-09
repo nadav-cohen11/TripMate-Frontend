@@ -35,6 +35,27 @@ const whiteSelect = {
   }),
 };
 
+const Modal = ({ isOpen, onClose, title, children }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-2xl p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold text-[#2D4A53]">{title}</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700"
+          >
+            <i className="bi bi-x text-2xl"></i>
+          </button>
+        </div>
+        <div className="text-[#2D4A53]">{children}</div>
+      </div>
+    </div>
+  );
+};
+
 export default function Settings() {
   const [countryOptions,  setCountryOptions]  = useState([]);
   const [cityOptions,     setCityOptions]     = useState([]);
@@ -42,6 +63,7 @@ export default function Settings() {
   const [loadingCities,   setLoadingCities]   = useState(false);
   const [imgURL,          setImgURL]          = useState(null);
   const [errors,          setErrors]          = useState({});
+  const [activeModal,     setActiveModal]     = useState(null);
 
   const [form, setForm] = useState({
     country: "", location: "",
@@ -204,6 +226,14 @@ export default function Settings() {
 
   const whiteBox = "bg-white border border-gray-300 rounded-lg shadow-sm";
 
+  const openModal = (modalName) => {
+    setActiveModal(modalName);
+  };
+
+  const closeModal = () => {
+    setActiveModal(null);
+  };
+
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center px-4"
@@ -351,15 +381,127 @@ export default function Settings() {
         </section>
 
         <section className="flex flex-col gap-1 text-sm pt-2 border-t border-gray-300/30">
-          <NavLink to="/help"    className="text-indigo-600 hover:underline self-start">Help &amp; Support</NavLink>
-          <NavLink to="/privacy" className="text-indigo-600 hover:underline self-start">Privacy Center</NavLink>
-          <NavLink to="/about"   className="text-indigo-600 hover:underline self-start">About TripMate</NavLink>
+          <button
+            type="button"
+            onClick={() => openModal('help')}
+            className="text-indigo-600 hover:underline self-start text-left"
+          >
+            Help &amp; Support
+          </button>
+          <button
+            type="button"
+            onClick={() => openModal('privacy')}
+            className="text-indigo-600 hover:underline self-start text-left"
+          >
+            Privacy Center
+          </button>
+          <button
+            type="button"
+            onClick={() => openModal('about')}
+            className="text-indigo-600 hover:underline self-start text-left"
+          >
+            About TripMate
+          </button>
         </section>
 
         <button type="submit" className="btn-primary mt-4 rounded-xl">
           SAVE
         </button>
       </form>
+
+      {/* Help & Support Modal */}
+      <Modal
+        isOpen={activeModal === 'help'}
+        onClose={closeModal}
+        title="Help & Support"
+      >
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold">How can we help you?</h3>
+          <div className="space-y-2">
+            <p>Need assistance? Here are some ways to get help:</p>
+            <ul className="list-disc pl-5 space-y-2">
+              <li>Email us at support@tripmate.com</li>
+              <li>Check our FAQ section for common questions</li>
+              <li>Join our community forum</li>
+              <li>Contact us through social media</li>
+            </ul>
+          </div>
+          <div className="mt-6">
+            <h4 className="font-semibold mb-2">Common Issues</h4>
+            <ul className="list-disc pl-5 space-y-2">
+              <li>Account settings and preferences</li>
+              <li>Profile customization</li>
+              <li>Matching and connections</li>
+              <li>Safety and security</li>
+            </ul>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Privacy Center Modal */}
+      <Modal
+        isOpen={activeModal === 'privacy'}
+        onClose={closeModal}
+        title="Privacy Center"
+      >
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold">Your Privacy Matters</h3>
+          <div className="space-y-2">
+            <p>At TripMate, we take your privacy seriously. Here's how we protect your data:</p>
+            <ul className="list-disc pl-5 space-y-2">
+              <li>Your personal information is encrypted and secure</li>
+              <li>You control who sees your profile and information</li>
+              <li>We never share your data with third parties without consent</li>
+              <li>You can delete your account and data at any time</li>
+            </ul>
+          </div>
+          <div className="mt-6">
+            <h4 className="font-semibold mb-2">Privacy Settings</h4>
+            <ul className="list-disc pl-5 space-y-2">
+              <li>Profile visibility controls</li>
+              <li>Location sharing preferences</li>
+              <li>Data usage and storage</li>
+              <li>Communication preferences</li>
+            </ul>
+          </div>
+        </div>
+      </Modal>
+
+      {/* About TripMate Modal */}
+      <Modal
+        isOpen={activeModal === 'about'}
+        onClose={closeModal}
+        title="About TripMate"
+      >
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold">Connecting Solo Travelers Worldwide</h3>
+          <div className="space-y-2">
+            <p>
+              TripMate is a platform designed to help solo travelers connect, share experiences,
+              and create meaningful connections around the world. Our mission is to make solo
+              travel more enjoyable and safer by connecting like-minded travelers.
+            </p>
+          </div>
+          <div className="mt-6">
+            <h4 className="font-semibold mb-2">Our Features</h4>
+            <ul className="list-disc pl-5 space-y-2">
+              <li>Smart matching with compatible travelers</li>
+              <li>Safe and verified user profiles</li>
+              <li>Travel planning and coordination tools</li>
+              <li>Community-driven travel tips and recommendations</li>
+            </ul>
+          </div>
+          <div className="mt-6">
+            <h4 className="font-semibold mb-2">Our Values</h4>
+            <ul className="list-disc pl-5 space-y-2">
+              <li>Safety and security for all users</li>
+              <li>Authentic travel experiences</li>
+              <li>Community building and support</li>
+              <li>Cultural exchange and understanding</li>
+            </ul>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
