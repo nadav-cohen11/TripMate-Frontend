@@ -41,6 +41,7 @@ export default function Settings() {
   const [languageOptions, setLanguageOptions] = useState([]);
   const [loadingCities,   setLoadingCities]   = useState(false);
   const [imgURL,          setImgURL]          = useState(null);
+  const [errors,          setErrors]          = useState({});
 
   const [form, setForm] = useState({
     country: "", location: "",
@@ -48,29 +49,101 @@ export default function Settings() {
     notifications: { messages: true, newFriends: true },
   });
 
-  const onInput = e =>
-    setForm(f => ({ ...f, [e.target.name]: e.target.value }));
-
-  const toggleNotif = k =>
-    setForm(f => ({
-      ...f,
-      notifications: { ...f.notifications, [k]: !f.notifications[k] },
-    }));
-
-  const onFile = e => {
-    const f = e.target.files[0];
-    f && setImgURL(URL.createObjectURL(f));
+  const validateForm = () => {
+    const newErrors = {};
+    
+    try {
+      if (!form.country) {
+        newErrors.country = "Country is required";
+      }
+      
+      if (!form.location) {
+        newErrors.location = "City is required";
+      }
+      
+      if (form.languages.length === 0) {
+        newErrors.languages = "At least one language is required";
+      }
+      
+      if (form.lookingFor.length === 0) {
+        newErrors.lookingFor = "Please select what you're looking for";
+      }
+      
+      if (form.mates < 0) {
+        newErrors.mates = "Number of mates cannot be negative";
+      }
+      
+      if (form.bio && form.bio.length > 500) {
+        newErrors.bio = "Bio cannot exceed 500 characters";
+      }
+      
+      setErrors(newErrors);
+      return Object.keys(newErrors).length === 0;
+    } catch (error) {
+      console.error("Validation error:", error);
+      toast.error("An error occurred during validation");
+      return false;
+    }
   };
 
-  const onSubmit = async(e)  => {
+  const onInput = e => {
+    try {
+      setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+      // Clear error when user starts typing
+      if (errors[e.target.name]) {
+        setErrors(prev => ({ ...prev, [e.target.name]: null }));
+      }
+    } catch (error) {
+      console.error("Input error:", error);
+      toast.error("An error occurred while updating input");
+    }
+  };
+
+  const toggleNotif = k => {
+    try {
+      setForm(f => ({
+        ...f,
+        notifications: { ...f.notifications, [k]: !f.notifications[k] },
+      }));
+    } catch (error) {
+      console.error("Notification toggle error:", error);
+      toast.error("An error occurred while updating notifications");
+    }
+  };
+
+  const onFile = e => {
+    try {
+      const f = e.target.files[0];
+      if (f) {
+        if (f.size > 5 * 1024 * 1024) { // 5MB limit
+          toast.error("File size should be less than 5MB");
+          return;
+        }
+        if (!f.type.startsWith('image/')) {
+          toast.error("Please upload an image file");
+          return;
+        }
+        setImgURL(URL.createObjectURL(f));
+      }
+    } catch (error) {
+      console.error("File upload error:", error);
+      toast.error("An error occurred while uploading the file");
+    }
+  };
+
+  const onSubmit = async(e) => {
     e.preventDefault();
     try {
-        await updateUser(form);
-      } catch (error) {
-        setErrorMsg("Email or password incorrect");
+      if (!validateForm()) {
+        toast.error("Please fix the errors in the form");
+        return;
       }
-   toast.success("Settings saved!");
-
+      await updateUser(form);
+      toast.success("Settings saved!");
+    } catch (error) {
+      console.error("Form submission error:", error);
+      toast.error("Failed to save settings");
+    }
   };
 
   useEffect(() => {
@@ -112,6 +185,9 @@ export default function Settings() {
           body: JSON.stringify({ country }),
         }
       );
+      if (!res.ok) {
+        throw new Error("Failed to fetch cities");
+      }
       const { data = [] } = await res.json();
       setCityOptions(
         data.sort((a, b) => a.localeCompare(b))
@@ -120,6 +196,7 @@ export default function Settings() {
     } catch (err) {
       console.error(err);
       setCityOptions([]);
+      toast.error("Failed to load cities");
     } finally {
       setLoadingCities(false);
     }
@@ -158,21 +235,42 @@ export default function Settings() {
             options={countryOptions}
             value={countryOptions.find(o => o.value === form.country) || null}
             onChange={o => {
-              setForm(f => ({ ...f, country: o?.value || "", location: "" }));
-              loadCities(o?.value);
+              try {
+                setForm(f => ({ ...f, country: o?.value || "", location: "" }));
+                loadCities(o?.value);
+                if (errors.country) {
+                  setErrors(prev => ({ ...prev, country: null }));
+                }
+              } catch (error) {
+                console.error("Country selection error:", error);
+                toast.error("An error occurred while selecting country");
+              }
             }}
             isSearchable
             styles={whiteSelect}
           />
+          {errors.country && <p className="text-red-500 text-sm">{errors.country}</p>}
+
           <Select
             placeholder={loadingCities ? "Loading cities…" : "City"}
             options={cityOptions}
             value={cityOptions.find(o => o.value === form.location) || null}
-            onChange={o => setForm(f => ({ ...f, location: o?.value || "" }))}
+            onChange={o => {
+              try {
+                setForm(f => ({ ...f, location: o?.value || "" }));
+                if (errors.location) {
+                  setErrors(prev => ({ ...prev, location: null }));
+                }
+              } catch (error) {
+                console.error("City selection error:", error);
+                toast.error("An error occurred while selecting city");
+              }
+            }}
             isSearchable
             isDisabled={!form.country || loadingCities}
             styles={whiteSelect}
           />
+          {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
         </section>
 
         <section className="flex flex-col gap-4">
@@ -181,18 +279,42 @@ export default function Settings() {
             options={languageOptions}
             isMulti
             value={form.languages}
-            onChange={sel => setForm(f => ({ ...f, languages: sel || [] }))}
+            onChange={sel => {
+              try {
+                setForm(f => ({ ...f, languages: sel || [] }));
+                if (errors.languages) {
+                  setErrors(prev => ({ ...prev, languages: null }));
+                }
+              } catch (error) {
+                console.error("Language selection error:", error);
+                toast.error("An error occurred while selecting languages");
+              }
+            }}
             isSearchable
             styles={whiteSelect}
           />
+          {errors.languages && <p className="text-red-500 text-sm">{errors.languages}</p>}
+
           <Select
             options={lookingOptions}
             isMulti
             placeholder="Looking for?"
             value={form.lookingFor}
-            onChange={sel => setForm(f => ({ ...f, lookingFor: sel }))}
+            onChange={sel => {
+              try {
+                setForm(f => ({ ...f, lookingFor: sel }));
+                if (errors.lookingFor) {
+                  setErrors(prev => ({ ...prev, lookingFor: null }));
+                }
+              } catch (error) {
+                console.error("Looking for selection error:", error);
+                toast.error("An error occurred while selecting preferences");
+              }
+            }}
             styles={whiteSelect}
           />
+          {errors.lookingFor && <p className="text-red-500 text-sm">{errors.lookingFor}</p>}
+
           <textarea
             name="bio"
             rows={2}
@@ -201,6 +323,7 @@ export default function Settings() {
             onChange={onInput}
             className={`w-full px-3 py-2 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${whiteBox} resize-none`}
           />
+          {errors.bio && <p className="text-red-500 text-sm">{errors.bio}</p>}
         </section>
 
         <section className="flex flex-col gap-2">
