@@ -14,15 +14,23 @@ const Home = () => {
   const loadUsers = useCallback(async () => {
     setLoading(true);
     try {
-      const enrichedUsers = await NonMatchedUsers();
-      setUsers(enrichedUsers);
+      const displayUsers = await NonMatchedUsers();
+      const usersWithAI = displayUsers.map((user) => {
+        const compatibilityScore = Math.floor(Math.random() * 101);
+        return {
+          ...user,
+          compatibilityScore,
+          aiSuggested: compatibilityScore >= 50,
+        };
+      });
+      setUsers(usersWithAI);
     } catch (err) {
       toast.error(extractBackendError(err));
     } finally {
       setLoading(false);
     }
   }, []);
-
+  
   useEffect(() => {
     loadUsers();
   }, [loadUsers]);
@@ -55,25 +63,25 @@ const Home = () => {
         </div>
 
         {users.map((user, index) => (
-         <TinderCard
-         key={user._id}
-         preventSwipe={['up', 'down']}
-         className="absolute w-full h-full"
-         onSwipe={(dir) => {
-           handleCardSwipe(dir, user._id);
-           setSwipeInfo({ id: user._id, direction: dir });
-           setTimeout(() => setSwipeInfo({ id: null, direction: null }), 1000);
-         }}
-       >
-         <div className="tinder-card-wrapper w-full h-full">
-           <div
-             className="pointer-events-auto w-full h-full flex justify-center items-center px-4"
-             style={{ zIndex: users.length - index }}
-           >
-             <ProfileCard user={user} swipeInfo={swipeInfo} />
-           </div>
-         </div>
-       </TinderCard>       
+          <TinderCard
+            key={user._id}
+            preventSwipe={['up', 'down']}
+            className="absolute w-full h-full"
+            onSwipe={(dir) => {
+              handleCardSwipe(dir, user._id);
+              setSwipeInfo({ id: user._id, direction: dir });
+              setTimeout(() => setSwipeInfo({ id: null, direction: null }), 1000);
+            }}
+          >
+            <div className="tinder-card-wrapper w-full h-full">
+              <div
+                className="pointer-events-auto w-full h-full flex justify-center items-center px-4"
+                style={{ zIndex: users.length - index }}
+              >
+                <ProfileCard user={user} swipeInfo={swipeInfo} />
+              </div>
+            </div>
+          </TinderCard>       
         ))}
       </div>
     </div>

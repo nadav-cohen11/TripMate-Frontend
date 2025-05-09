@@ -1,30 +1,17 @@
-import React, { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Sparkles, Globe2, CalendarDays, Users } from 'lucide-react';
-import { useEffect } from 'react';
-import { getLocationName } from '../utils/geocodeUtils';
 
 const ProfileCard = ({ user, age, swipeInfo }) => {
   const [photoIndex, setPhotoIndex] = useState(0);
-  const [locationName, setLocationName] = useState('');
 
   const nextPhoto = () => setPhotoIndex((prev) => (prev + 1) % (user.photos.length || 1));
   const prevPhoto = () => setPhotoIndex((prev) => (prev - 1 + (user.photos.length || 1)) % (user.photos.length || 1));
 
   const travel = user.travelPreferences || {};
-  const languages = user.languagesSpoken.join(', ') || 'Not specified';
-  const coordinates = user.location?.coordinates;
+  const languages = user.languagesSpoken.join(', ');
+  const coordinates = user.location.coordinates;
   const photo = user.photos[photoIndex] || '/assets/images/Annonymos_picture.jpg';
-
-  useEffect(() => {
-    const fetchLocation = async () => {
-      if (coordinates?.length === 2) {
-        const name = await getLocationName(coordinates[1], coordinates[0]);
-        setLocationName(name);
-      }
-    };
-    fetchLocation();
-  }, [coordinates]);
 
   return (
     <div className="flex flex-col bg-white text-gray-900 rounded-lg overflow-hidden w-[90vw] h-[80vh] mx-auto my-6 relative border border-gray-200">
@@ -33,13 +20,13 @@ const ProfileCard = ({ user, age, swipeInfo }) => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          className={`absolute top-8 left-8 text-4xl font-bold ${
-            swipeInfo.direction === 'left' ? 'text-red-500' : 'text-green-500'
-          }`}
+          transition={{ duration: 0.3 }}
+          className={`absolute top-8 left-8 text-4xl font-bold ${swipeInfo.direction === 'left' ? 'text-red-500' : 'text-green-500'}`}
         >
           {swipeInfo.direction === 'left' ? 'NOPE' : 'LIKE'}
         </motion.div>
       )}
+
 
       <div className="relative w-full h-[60%]">
         <AnimatePresence mode="wait">
@@ -57,11 +44,19 @@ const ProfileCard = ({ user, age, swipeInfo }) => {
 
         {user.photos.length > 1 && (
           <>
-            <button onClick={prevPhoto} className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black/30 p-2 rounded-full hover:bg-black/60">
-              <ChevronLeft className="text-white" />
+            <button
+              onClick={prevPhoto}
+              className="absolute top-0 left-0 h-full transform bg-black/30 p-2 rounded-full hover:bg-black/60 opacity-0"
+              aria-label="Previous Photo"
+            >
+              <ChevronLeft className="absolute top-0 left-0 h-full w-40 transform bg-black/30 p-2 rounded-full hover:bg-black/60 opacity-0" />
             </button>
-            <button onClick={nextPhoto} className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black/30 p-2 rounded-full hover:bg-black/60">
-              <ChevronRight className="text-white" />
+            <button
+              onClick={nextPhoto}
+              className="absolute top-0 right-0 h-full transform bg-black/30 p-2 rounded-full hover:bg-black/60 opacity-0"
+              aria-label="Next Photo"
+            >
+              <ChevronRight className="absolute top-0 right-0 h-full w-40 transform bg-black/30 p-2 rounded-full hover:bg-black/60 opacity-0" />
             </button>
           </>
         )}
@@ -76,7 +71,7 @@ const ProfileCard = ({ user, age, swipeInfo }) => {
 
       <div className="flex-1 overflow-y-auto bg-white px-6 py-4 space-y-3 text-gray-800">
         <h1 className="text-2xl font-semibold">{user.fullName}{age ? `, ${age}` : ''}</h1>
-        <p className="text-sm text-gray-500">{coordinates ? `📍 ${locationName}` : ''}</p>
+        <p className="text-sm text-gray-500">📍 {`${coordinates[0]}, ${coordinates[1]}`}</p>
         <p className="text-md">{user.bio}</p>
 
         <div className="space-y-1 text-sm">
