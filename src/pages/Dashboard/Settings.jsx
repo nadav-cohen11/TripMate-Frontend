@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Select      from "react-select";
 import { toast }   from "sonner";
+import { updateUser } from "../../api/userApi";
 
 const lookingOptions = [
   "Hiking", "Trekking", "Cycling", "Mountain Biking",
@@ -40,14 +41,28 @@ const Modal = ({ isOpen, onClose, title, children }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+      <div className="bg-white rounded-2xl p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto relative">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-[#2D4A53]">{title}</h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
+            className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors duration-200"
+            aria-label="Close modal"
           >
-            <i className="bi bi-x text-2xl"></i>
+            <svg
+              className="w-6 h-6 text-gray-500 hover:text-gray-700"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
           </button>
         </div>
         <div className="text-[#2D4A53]">{children}</div>
@@ -57,6 +72,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
 };
 
 export default function Settings() {
+  const navigate = useNavigate();
   const [countryOptions,  setCountryOptions]  = useState([]);
   const [cityOptions,     setCityOptions]     = useState([]);
   const [languageOptions, setLanguageOptions] = useState([]);
@@ -64,6 +80,7 @@ export default function Settings() {
   const [imgURL,          setImgURL]          = useState(null);
   const [errors,          setErrors]          = useState({});
   const [activeModal,     setActiveModal]     = useState(null);
+  const [isSubmitting,    setIsSubmitting]    = useState(false);
 
   const [form, setForm] = useState({
     country: "", location: "",
@@ -155,16 +172,57 @@ export default function Settings() {
 
   const onSubmit = async(e) => {
     e.preventDefault();
+    if (isSubmitting) return; // Prevent double submission
+
     try {
+      setIsSubmitting(true);
+      
       if (!validateForm()) {
         toast.error("Please fix the errors in the form");
         return;
       }
-      await updateUser(form);
-      toast.success("Settings saved!");
+
+      // Prepare the data for submission
+      const userData = {
+        ...form,
+        languages: form.languages.map(lang => lang.value),
+        lookingFor: form.lookingFor.map(item => item.value),
+        profilePicture: imgURL
+      };
+
+      console.log('Submitting user data:', userData); // Debug log
+
+      const response = await updateUser(userData);
+      console.log('Update response:', response); // Debug log
+      
+      toast.success("Settings saved successfully!");
+      
     } catch (error) {
       console.error("Form submission error:", error);
-      toast.error("Failed to save settings");
+      console.error("Error details:", {
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message
+      });
+      
+      // Handle specific error cases
+      if (error.response?.status === 401) {
+        toast.error("Please log in again to continue");
+        navigate('/login');
+      } else if (error.response?.status === 403) {
+        toast.error("You don't have permission to update these settings");
+      } else if (error.response?.status === 404) {
+        toast.error("User not found. Please try logging in again.");
+        navigate('/login');
+      } else if (error.response?.status === 500) {
+        toast.error("Server error. Please try again later.");
+      } else if (!error.response) {
+        toast.error("Network error. Please check your internet connection.");
+      } else {
+        toast.error(error.response?.data?.message || "Failed to save settings. Please try again.");
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -404,8 +462,12 @@ export default function Settings() {
           </button>
         </section>
 
-        <button type="submit" className="btn-primary mt-4 rounded-xl">
-          SAVE
+        <button 
+          type="submit" 
+          className={`btn-primary mt-4 rounded-xl ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? 'SAVING...' : 'SAVE'}
         </button>
       </form>
 
