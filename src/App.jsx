@@ -21,7 +21,7 @@ function App() {
         <Route path="/chat" element={<Chat />} />
         <Route path="/map" element={<Map />} />
         <Route path="/favorites" element={<Favorites />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/:userId" element={<Profile />} />
         <Route path="/register" element={<Register />} />
         <Route path="/setup" element={<ProfileSetup />} />
       </Routes>
