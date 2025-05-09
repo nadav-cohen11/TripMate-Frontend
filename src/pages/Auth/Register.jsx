@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import TextInput from '@/components/ui/textInput';
@@ -6,6 +6,14 @@ import LoginButton from '@/components/ui/loginButton';
 import { registerSchema } from '@/schemas/registerSchema';
 
 export default function Register() {
+  useEffect(() => {
+    console.log('=== ENVIRONMENT VARIABLES CHECK ===');
+    console.log('Mode:', import.meta.env.VITE_MODE);
+    console.log('Test Email:', import.meta.env.VITE_TEST_EMAIL);
+    console.log('Test Password:', import.meta.env.VITE_TEST_PASSWORD);
+    console.log('================================');
+  }, []);
+
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -43,10 +51,13 @@ export default function Register() {
       
       const { confirmPassword, ...userData } = form;
       
-      const isValid = form.email === "test@email.com" && form.password === "123456";
-      if (!isValid) {
-        setErrorMsg("Invalid email or password"); 
-        return;
+      if (import.meta.env.VITE_MODE === 'dev') {
+        const isValid = form.email === import.meta.env.VITE_TEST_EMAIL && 
+                       form.password === import.meta.env.VITE_TEST_PASSWORD;
+        if (!isValid) {
+          setErrorMsg("Invalid email or password"); 
+          return;
+        }
       }
       
       navigate("/profile");
