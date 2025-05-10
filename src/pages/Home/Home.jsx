@@ -1,10 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import TinderCard from 'react-tinder-card';
-import ProfileCard from '../../components/ProfileCard';
+import ProfileCard from './ProfileCard';
 import { NonMatchedUsers } from '../../api/matchApi';
 import { extractBackendError } from '../../utils/errorUtils';
 import { handleCardSwipe } from '../../utils/matchHandlersUtils';
+import { getUserLocation } from '../../api/userApi'; 
+import { calculateDistance } from '../../utils/calculateDistanceUtils';
+
 
 const Home = () => {
   const [users, setUsers] = useState([]);
@@ -14,15 +17,31 @@ const Home = () => {
   const loadUsers = useCallback(async () => {
     setLoading(true);
     try {
-      const displayUsers = await NonMatchedUsers();
+      const [displayUsers, currentUserLocation] = await Promise.all([
+        NonMatchedUsers(),
+        getUserLocation()
+      ]);
       const usersWithAI = displayUsers.map((user) => {
         const compatibilityScore = Math.floor(Math.random() * 101);
+        const userLocation = user.location;
+
+        let distance = null;
+        if (
+          Array.isArray(userLocation?.coordinates) &&
+          Array.isArray(currentUserLocation?.location?.coordinates)
+        ) {
+          const [userLng, userLat] = userLocation.coordinates;
+          const [currLng, currLat] = currentUserLocation.location.coordinates;
+          distance = calculateDistance(currLat, currLng, userLat, userLng);
+        }         
         return {
           ...user,
+          distance: distance ? Math.round(distance) : null,
           compatibilityScore,
           aiSuggested: compatibilityScore >= 50,
         };
       });
+
       setUsers(usersWithAI);
     } catch (err) {
       toast.error(extractBackendError(err));
@@ -30,10 +49,11 @@ const Home = () => {
       setLoading(false);
     }
   }, []);
-  
+
   useEffect(() => {
     loadUsers();
   }, [loadUsers]);
+
 
   if (loading) {
     return (

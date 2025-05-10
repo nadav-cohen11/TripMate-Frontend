@@ -3,7 +3,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
 import ProfileSetup from "../pages/ProfileSetUp";
-import Home from "../pages/Dashboard/Home";
+import Home from "../pages/Home/Home";
 import Chat from "../pages/Dashboard/Chat";
 import Map from "../pages/Dashboard/Map";
 import Profile from "../pages/Dashboard/Profile";

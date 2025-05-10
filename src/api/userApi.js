@@ -1,15 +1,15 @@
 import api from "./axios";
 
-export const login = async (email, password) => {
+export const login = async (email, password, location) => {
     try {
-        const response = await api.post("/users/login", { email, password });
+        const response = await api.post("/users/login", { email, password, location });
         return response;
     } catch (error) {
         throw error
     }
 };
 
-export const register = async(userData) => {
+export const register = async (userData) => {
     try {
         const response = await api.post("/users/register", userData);
         return response;
@@ -28,7 +28,7 @@ export const getUser = async (userId) => {
     }
 };
 
-export const updateUser = async(userId, userData) => {
+export const updateUser = async (userId, userData) => {
     try {
         const response = await api.put("/users/updateUser", { userId, userData });
         return response.data
@@ -37,7 +37,7 @@ export const updateUser = async(userId, userData) => {
     }
 };
 
-export const deleteUser = async(userId) => {
+export const deleteUser = async (userId) => {
     try {
         const response = await api.delete("/users/deleteUser", { data: { userId } });
         return response.data
@@ -45,3 +45,8 @@ export const deleteUser = async(userId) => {
         throw error;
     }
 };
+
+export const getUserLocation = async () => {
+    const response = await api.get('/users/location');
+    return response.data;
+}
