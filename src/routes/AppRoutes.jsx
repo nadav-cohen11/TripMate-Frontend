@@ -5,15 +5,16 @@ import Register from "../pages/Auth/Register";
 import ProfileSetup from "../pages/ProfileSetUp";
 import Home from "../pages/Home/Home";
 import Chat from "../pages/Dashboard/Chat";
-import Map from "../pages/Dashboard/Map";
+import Map from "../pages/Map/Map";
 import Profile from "../pages/Dashboard/Profile";
 import Favorites from "../pages/Dashboard/Favorites";
 import Navbar from "../components/ui/NavBar";
 import 'react-toastify/dist/ReactToastify.css';
+import 'leaflet/dist/leaflet.css';
 
 const AppRoutes = () => {
   const location = useLocation();
-  const hideNavbar = location.pathname === "/login" || location.pathname === "/register";
+  const hideNavbar = location.pathname === "/login/" || location.pathname === "/register" || location.pathname === "/login";;
 
   return (
     <>

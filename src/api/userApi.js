@@ -50,3 +50,8 @@ export const getUserLocation = async () => {
     const response = await api.get('/users/location');
     return response.data;
 }
+
+export const getUsersLocations = async () => {
+    const response = await api.get('/users/usersLocations');
+    return response.data;
+}
