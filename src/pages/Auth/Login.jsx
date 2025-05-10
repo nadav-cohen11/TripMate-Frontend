@@ -5,7 +5,7 @@ import TextInput from '@/components/ui/textInput';
 import LoginButton from '@/components/ui/loginButton';
 import { useNavigate } from 'react-router-dom'
 import { extractBackendError } from '../../utils/errorUtils'
-import { getCurrentLocation } from '@/utils/getLocationUtiles';
+import { getCurrentLocation } from '@/utils/getLocationUtils';
 
 const Login = () => {
   const [email, setEmail] = useState("");
