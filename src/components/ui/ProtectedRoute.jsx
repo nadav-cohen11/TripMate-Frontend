@@ -29,7 +29,7 @@ const ProtectedRoute = ({ children }) => {
     };
 
     checkAuth();
-  }, []);
+  }, [navigate]);
 
   if (!userId) {
     return <Login />;

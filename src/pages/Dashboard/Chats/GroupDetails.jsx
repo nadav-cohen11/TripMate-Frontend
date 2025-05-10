@@ -14,6 +14,7 @@ const GroupDetails = ({ handleLeaveTrip, group, onBack, socket }) => {
   return (
     <>
       {trip && (
+        
         <div className='flex flex-col h-[80vh] min-h-[400px] max-w-[600px] mx-auto my-10 p-6 bg-white rounded-2xl shadow-xl'>
           <button
             onClick={onBack}

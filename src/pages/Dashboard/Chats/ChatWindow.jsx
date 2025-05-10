@@ -79,10 +79,10 @@ const ChatWindow = ({
 
   const handleBlockUser = () => {
     if (otherUser) {
-      const comfirmation = confirm(
+      const confirmation = confirm(
         `Are you sure you want to block ${otherUser.fullName}?`,
       );
-      if (!comfirmation) return;
+      if (!confirmation) return;
       socket.emit('blockUser', {
         chatId: selectedChat._id,
         user1Id: userId,
@@ -114,7 +114,7 @@ const ChatWindow = ({
   }
 
   return (
-    <div className='flex flex-col h-[80vh] min-h-[400px] max-w-[500px] mx-auto my-10 p-4 bg-white rounded-xl shadow-md'>
+    <div className='flex flex-col h-[80vh] min-h-[400px] w-full max-w-[500px] mx-auto my-4 p-2 sm:p-4 bg-white rounded-xl shadow-md'>
       {selectedChat && (
         <div
           className={`mb-4 border-b pb-2 relative cursor-pointer transition`}
@@ -123,7 +123,7 @@ const ChatWindow = ({
           role='button'
         >
           <div className='flex items-center justify-center'>
-            <div className='text-lg font-bold text-gray-800 text-center flex-1'>
+            <div className='text-base sm:text-lg font-bold text-gray-800 text-center flex-1'>
               {chatTitle}
             </div>
             {!isGroupChat && otherUser && (
@@ -137,12 +137,12 @@ const ChatWindow = ({
                 type='button'
               >
                 {utils.blockIcon}
-                Block
+                <span className='hidden sm:inline ml-1'>Block</span>
               </button>
             )}
           </div>
           {isGroupChat && (
-            <div className='text-xs text-gray-500 text-center mt-1'>
+            <div className='text-xs text-gray-500 text-center mt-1 truncate'>
               {participantsList}
             </div>
           )}
@@ -156,7 +156,7 @@ const ChatWindow = ({
             ([dateKey, msgs]) => (
               <div key={dateKey}>
                 <div className='flex justify-center my-4'>
-                  <span className='bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded-full'>
+                  <span className='bg-gray-200 text-gray-700 text-xs px-2 sm:px-3 py-1 rounded-full'>
                     {utils.formatDateHeader(dateKey)}
                   </span>
                 </div>
@@ -178,7 +178,7 @@ const ChatWindow = ({
                       }`}
                     >
                       <span
-                        className={`inline-block px-3 py-2 rounded-2xl min-w-[40px] relative ${
+                        className={`inline-block px-2 sm:px-3 py-2 rounded-2xl min-w-[40px] max-w-[80vw] sm:max-w-[70%] break-words relative ${
                           msg.sender._id === userId
                             ? 'bg-green-100'
                             : 'bg-gray-100'
@@ -206,18 +206,18 @@ const ChatWindow = ({
       {selectedChat && (
         <form
           onSubmit={handleSendMessage}
-          className='flex mt-auto pt-2 border-t border-gray-200 bg-white'
+          className='flex mt-auto pt-2 border-t border-gray-200 bg-white gap-2'
         >
           <input
             type='text'
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder='Type a message...'
-            className='flex-1 px-3 py-2 rounded-2xl border border-gray-300 focus:outline-none'
+            className='flex-1 px-2 sm:px-3 py-2 rounded-2xl border border-gray-300 focus:outline-none text-sm sm:text-base'
           />
           <button
             type='submit'
-            className='ml-2 px-4 py-2 rounded-2xl border-none bg-blue-600 text-white'
+            className='px-3 sm:px-4 py-2 rounded-2xl border-none bg-blue-600 text-white text-sm sm:text-base'
           >
             Send
           </button>

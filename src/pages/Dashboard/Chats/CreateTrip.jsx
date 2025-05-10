@@ -132,7 +132,11 @@ export function CreateTrip({ userId, socket, setChats, matches }) {
     <>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button variant='outline' onClick={() => setOpen(true)}>
+          <Button
+            className='w-full sm:w-auto'
+            variant='outline'
+            onClick={() => setOpen(true)}
+          >
             Create Your Trip
           </Button>
         </DialogTrigger>

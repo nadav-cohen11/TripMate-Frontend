@@ -13,16 +13,25 @@ export function FriendsList({ userId, socket, setChats, matches }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant='outline'>Add Your friends </Button>
+        <Button variant='outline' className="w-full sm:w-auto">
+          Add Your friends
+        </Button>
       </DialogTrigger>
-      <DialogContent className='sm:max-w-[425px]'>
+      <DialogContent className="w-full max-w-xs sm:max-w-[425px] px-2 sm:px-6">
         <DialogHeader>
-          <DialogTitle>Chat with your friends</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-base sm:text-lg">Chat with your friends</DialogTitle>
+          <DialogDescription className="text-sm sm:text-base">
             Add your friends and start chatting with them.
           </DialogDescription>
         </DialogHeader>
-        <div className='grid gap-4 py-4'>
+        <div
+          className="
+            grid gap-4 py-4
+            max-h-[60vh] sm:max-h-[70vh]
+            overflow-y-auto
+            scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent
+          "
+        >
           {matches && matches.length > 0 ? (
             matches.map((match) => (
               <Match
@@ -31,11 +40,11 @@ export function FriendsList({ userId, socket, setChats, matches }) {
                 match={match}
                 socket={socket}
                 setChats={setChats}
-                buttonContent='Chat'
+                buttonContent="Chat"
               />
             ))
           ) : (
-            <div className='text-center text-gray-500 py-8'>
+            <div className="text-center text-gray-500 py-8">
               No friends found.
             </div>
           )}
