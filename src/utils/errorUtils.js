@@ -6,5 +6,4 @@ export const extractBackendError = (err) => {
       return err.message;
     }
     return 'An unknown error occurred';
-  };
-  
+};

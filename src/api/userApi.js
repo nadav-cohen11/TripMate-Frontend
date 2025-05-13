@@ -1,4 +1,5 @@
-import api from "./axios";
+import api from "/src/api/axios.js";
+import { handleApiError } from "../utils/errorUtils";
 
 export const login = async (email, password, location) => {
     try {
@@ -17,7 +18,6 @@ export const register = async (userData) => {
         throw error;
     }
 };
-
 
 export const getUser = async (userId) => {
     try {
@@ -47,11 +47,20 @@ export const deleteUser = async (userId) => {
 };
 
 export const getUserLocation = async () => {
+    try {
     const response = await api.get('/users/location');
     return response.data;
+   }catch(error) {
+      throw error;
+   }
 }
 
 export const getUsersLocations = async () => {
+  try {
     const response = await api.get('/users/usersLocations');
     return response.data;
+  }catch(error) {
+    throw error;
+  }
 }
+
