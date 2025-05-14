@@ -1,5 +1,4 @@
-import api from "./axios";
-
+import api from "/src/api/axios.js";
 
 export const login = async (email, password) => {
     try {
@@ -11,16 +10,20 @@ export const login = async (email, password) => {
 };
 
 export const register = (userData) => {
-    return api.post("/register", userData);
+    try {
+        const response = api.post("/register", userData);
+        return response;
+    } catch (error) {
+        throw error;
+    }
 };
-
 
 export const getUser = async (userId) => {
     try {
         const response = await api.get(`/getUser/${userId}`);
         return response.data
     } catch (error) {
-
+        throw error
     }
 };
 
@@ -28,17 +31,34 @@ export const getUserLoggedIn = async () => {
     try {
         const response = await api.get(`/getUserLoggedIn`);
         return response.data
-    } catch (error) { }
+    } catch (error) {
+        throw error
+    }
 };
 
-export const updateUser = (userId, userData) => {
-    return api.put("/updateUser", { userId, userData });
-};
-
-export const deleteUser = (userId) => {
-    return api.delete("/deleteUser", { data: { userId } });
+export const updateUser = async (userId, userData) => {
+    try {
+        const response = await api.put("/updateUser", { userId, userData });
+        return response.data
+    } catch (error) {
+        throw error;
+    }
 };
 
 export const getAllUsers = async () => {
-    return await api.get("/getAllUsers");
+    try {
+        return await api.get("/getAllUsers");
+    } catch (error) {
+        throw error
+    }
+
+}
+
+export const deleteUser = async (userId) => {
+    try {
+        const response = await api.delete("/users/deleteUser", { data: { userId } });
+        return response.data
+    } catch (error) {
+        throw error;
+    }
 };

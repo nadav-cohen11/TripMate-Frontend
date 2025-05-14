@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { GlobalProvider } from './context/GlobalContext';
 import AppRoutes from './Router';
+import { ToastContainer } from 'react-toastify';
+import ToastConfig from './components/ui/ToastConfig';
 
 function App() {
   return (
@@ -9,6 +11,7 @@ function App() {
       <Router>
         <AppRoutes />
       </Router>
+      <ToastContainer {...ToastConfig} />
     </GlobalProvider>
   );
 }

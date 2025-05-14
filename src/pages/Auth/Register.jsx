@@ -1,5 +1,17 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";  
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { z } from 'zod';
+import { toast } from 'sonner';
+import { register } from "@/api/userApi";
+import TextInput from '@/components/ui/textInput';
+import LoginButton from '@/components/ui/loginButton';
+import { extractBackendError } from '../../utils/errorUtils'
+
+const schema = z.object({
+  fullName: z.string().min(2, "Full name is required"),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -7,66 +19,74 @@ export default function Register() {
     email: "",
     password: "",
   });
-
-  const navigate = useNavigate();               
+  const [errorMsg, setErrorMsg] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
-    navigate("/profile");                       
-  };
+      e.preventDefault();
+      try {
+        schema.parse(form);
+        await register(form);
+        navigate('/profile');
+      } catch (err) {
+        const message = extractBackendError(err);
+        toast.error(message);
+      }
+    };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100
-                    bg-[url('/assets/bg.svg')] bg-top bg-no-repeat">
+    <div
+      className="h-[300px] bg-[url('/assets/images/newBackground.jpg')] bg-cover bg-center relative px-4 pt-[380px] pb-20"
+    >
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-xs sm:max-w-sm bg-white rounded-2xl
-                   shadow-lg px-6 py-8 flex flex-col gap-4"
+        className="text-[#2D4A53] p-7 w-full max-w-md mx-auto bg-white bg-opacity-90 rounded-2xl shadow-lg"
       >
-        <h1 className="text-center text-3xl font-bold">Register</h1>
+        <p className="text-[#2D4A53] text-4xl font-bold text-center mb-8">
+          Create Your Account
+        </p>
+        <div className="flex flex-col gap-4">
 
-        <input
+        <TextInput
           name="fullName"
           placeholder="Full Name"
           value={form.fullName}
           onChange={handleChange}
           required
-          className="w-full border border-gray-400 rounded-lg p-3
-                     focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
 
-        <input
+        <TextInput
           type="email"
           name="email"
           placeholder="Email"
           value={form.email}
           onChange={handleChange}
           required
-          className="w-full border border-gray-400 rounded-lg p-3
-                     focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
 
-        <input
+        <TextInput
           type="password"
           name="password"
           placeholder="Password"
           value={form.password}
           onChange={handleChange}
           required
-          className="w-full border border-gray-400 rounded-lg p-3
-                     focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
+        {errorMsg && (
+  <div className="text-red-600 text-sm text-center mt-2">
+    {errorMsg}
+  </div>
+)}
+</div>
 
-        <button
-          type="submit"
-          className="mt-2 w-full bg-indigo-600 hover:bg-indigo-700
-                     text-white font-medium py-3 rounded-lg transition-colors"
-        >
-          Let’s create your profile!
-        </button>
+        <div className="pt-6">
+          <LoginButton type="submit">
+            Create Account<i className="bi bi-arrow-right ms-2"></i>
+          </LoginButton>
+        </div>
       </form>
     </div>
   );
