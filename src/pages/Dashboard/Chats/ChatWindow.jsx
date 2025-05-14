@@ -16,8 +16,6 @@ const ChatWindow = ({
   const [showGroupDetails, setShowGroupDetails] = useState(false);
   const messagesEndRef = React.useRef(null);
 
-
-
   useEffect(() => {
     if (socket) {
       socket.on('gotBlocked', ({ userId, chat }) => {

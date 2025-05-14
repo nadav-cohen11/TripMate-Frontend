@@ -22,7 +22,7 @@ const Chats = () => {
         setSelectedChatId(chats[0]._id);
       }
     }
-  }, []);
+  }, [chats]);
 
   useEffect(() => {
     if (socketInstance && selectedChatId) {
@@ -80,7 +80,7 @@ const Chats = () => {
         userId={userId}
         socket={socketInstance}
         setChats={setChats}
-        handleSelectedChatId={handleSelectedChatId}
+        setSelectedChatId={setSelectedChatId}
       />
 
       <ChatWindow

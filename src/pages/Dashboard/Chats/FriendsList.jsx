@@ -13,7 +13,7 @@ export function FriendsList({ userId, socket, setChats, matches }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant='outline' className="w-full sm:w-auto">
+        <Button  variant='outline' className="w-full sm:w-auto">
           Add Your friends
         </Button>
       </DialogTrigger>

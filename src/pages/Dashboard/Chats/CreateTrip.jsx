@@ -18,6 +18,7 @@ export function CreateTrip({ userId, socket, setChats, matches }) {
   const [form, setForm] = useState({
     tripName: '',
     country: '',
+    description: '',
     city: '',
     startDate: '',
     endDate: '',

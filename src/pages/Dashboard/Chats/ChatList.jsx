@@ -8,7 +8,7 @@ const ChatList = ({
   selectedChatId,
   userId,
   socket,
-  handleSelectedChatId,
+  setSelectedChatId,
   setChats,
 }) => {
   const [directChats, setDirectChats] = useState([]);
@@ -30,6 +30,7 @@ const ChatList = ({
 
     return () => {
       socket.off('newTripCreated');
+      socket.off('newChatCreated');
     };
   }, [socket]);
 
@@ -121,7 +122,7 @@ const ChatList = ({
             <div
               key={chat._id}
               onClick={() => {
-                handleSelectedChatId(chat._id);
+                setSelectedChatId(chat._id);
                 if (window.innerWidth < 640) setShowSidebar(false);
               }}
               className={`px-3 py-2 mb-2 rounded-lg cursor-pointer transition-colors ${
@@ -131,9 +132,7 @@ const ChatList = ({
               }`}
             >
               <div className='font-medium truncate'>
-                {(chat.participants &&
-                  chat.participants.filter((p) => p._id !== userId)[0]
-                    ?.fullName) ||
+                {chat.participants?.find((p) => p._id !== userId)?.fullName ||
                   ''}
               </div>
               <div className='text-xs text-gray-500 truncate'>
@@ -147,7 +146,7 @@ const ChatList = ({
             <div
               key={chat._id}
               onClick={() => {
-                handleSelectedChatId(chat._id);
+                setSelectedChatId(chat._id);
                 if (window.innerWidth < 640) setShowSidebar(false);
               }}
               className={`px-3 py-2 mb-2 rounded-lg cursor-pointer transition-colors ${

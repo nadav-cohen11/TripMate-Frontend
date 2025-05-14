@@ -22,7 +22,7 @@ const useChatSocket = (userId, setChats) => {
         socket.disconnect();
       };
     }
-  }, [userId, setChats]);
+  }, [userId]);
 
   return socketInstance;
 };

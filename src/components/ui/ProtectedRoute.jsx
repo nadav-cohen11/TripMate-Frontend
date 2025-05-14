@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import Login from '../../pages/Auth/Login';
 import { useGlobalContext } from '@/context/GlobalContext';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 
 const ProtectedRoute = ({ children }) => {
   const { userId, setUserId } = useGlobalContext();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -21,19 +21,28 @@ const ProtectedRoute = ({ children }) => {
 
         const data = await res.json();
         setUserId(data.userId);
-        return data;
       } catch (err) {
         setUserId(null);
         navigate('/login');
       }
     };
 
-    checkAuth();
-  }, [navigate]);
+    if (!userId) {
+      checkAuth();
+    } else {
+      fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/me`, {
+        credentials: 'include',
+      }).then((res) => {
+        if (!res.ok) {
+          setUserId(null);
+          navigate('/login');
+        }
+      });
+    }
+  }, [navigate, userId]);
+  
+  
 
-  if (!userId) {
-    return <Login />;
-  }
   return children;
 };
 
