@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { toast } from 'sonner';
+import { register } from "@/api/userApi";
 import TextInput from '@/components/ui/textInput';
 import LoginButton from '@/components/ui/loginButton';
+import { extractBackendError } from '../../utils/errorUtils'
 
 const schema = z.object({
   fullName: z.string().min(2, "Full name is required"),
@@ -24,26 +26,16 @@ export default function Register() {
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      schema.parse(form);
-      const isValid = form.email === "test@email.com" && form.password === "123456";
-      if (!isValid) {
-        setErrorMsg("Invalid email or password"); 
-        return;
+      e.preventDefault();
+      try {
+        schema.parse(form);
+        await register(form);
+        navigate('/profile');
+      } catch (err) {
+        const message = extractBackendError(err);
+        toast.error(message);
       }
-      setErrorMsg("");
-      navigate("/profile");
-    } catch (err) {
-      if (err.errors) {
-        setErrorMsg("");
-        err.errors.forEach(error => {
-          toast.error(error.message);
-        });
-      }
-    }
-  };
+    };
 
   return (
     <div

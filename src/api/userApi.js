@@ -3,62 +3,45 @@ import { handleApiError } from "../utils/errorUtils";
 
 export const login = async (email, password) => {
     try {
-        const { data } = await api.post("/users/login", { email, password });
-        return data;
+        const response = await api.post("/users/login", { email, password });
+        return response;
     } catch (error) {
-        handleApiError(error, "Login failed");
-        throw error;
+        throw error
     }
 };
 
-export const register = async (userData) => {
+export const register = (userData) => {
     try {
-        const { data } = await api.post("/users/register", userData);
-        return data;
+        const response = api.post("/users/register", userData);
+        return response;
     } catch (error) {
-        handleApiError(error, "Registration failed");
-        throw error;
-    }
-};
-
-export const updateUser = async (userData) => {
-    try {
-        const { data } = await api.put("/users/updateUser", userData);
-        return data;
-    } catch (error) {
-        handleApiError(error, "Update failed");
         throw error;
     }
 };
 
 export const getUser = async (userId) => {
     try {
-        const { data } = await api.get(`/users/getUser/${userId}`);
-        return data;
+        const response = await api.get(`/users/getUser/${userId}`);
+        return response.data
     } catch (error) {
-        handleApiError(error, "Failed to fetch user");
         throw error;
     }
 };
 
-export const deleteUser = async (userId) => {
+export const updateUser = async(userId, userData) => {
     try {
-        const { data } = await api.delete("/users/deleteUser", {
-            data: { userId },
-        });
-        return data;
+        const response = await api.put("/users/updateUser", { userId, userData });
+        return response.data
     } catch (error) {
-        handleApiError(error, "Delete user failed");
         throw error;
     }
 };
 
-export const getAllUsers = async () => {
+export const deleteUser = async(userId) => {
     try {
-        const data = await api.get("/users/");
-        return data;
+        const response = await api.delete("/users/deleteUser", { data: { userId } });
+        return response.data
     } catch (error) {
-        handleApiError(error, "Failed to load users");
         throw error;
     }
 };

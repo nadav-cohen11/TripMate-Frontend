@@ -1,56 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { toast } from 'react-toastify';
 import TinderCard from 'react-tinder-card';
 import Navbar from '@/components/ui/NavBar';
 import ProfileCard from '@/components/ui/ProfileCard';
-import { getAllUsers } from "../../api/userApi.js";
-
-
-
-
-const calculateAge = (birthDateString) => {
-  const today = new Date();
-  const birthDate = new Date(birthDateString);
-  let age = today.getFullYear() - birthDate.getFullYear();
-  const monthDifference = today.getMonth() - birthDate.getMonth();
-
-
-  if (
-    monthDifference < 0 ||
-    (monthDifference === 0 && today.getDate() < birthDate.getDate())
-  ) {
-    age--;
-  }
-
-  return age;
-};
+import { NonMatchedUsers } from '../../api/matchApi';
+import { calculateAge } from '../../utils/userUtils';
+import { handleSwipe } from '../../utils/matchHandlersUtils';
+import { extractBackendError } from '../../utils/errorUtils'
 
 const Home = () => {
   const [users, setUsers] = useState([]);
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await getAllUsers();
-        console.log(response.data, "nadav");
-        setUsers(response.data);
-      } catch (err) {
-        setError('Failed to fetch users');
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchUsers = useCallback(async () => {
+    setLoading(true);
 
-    fetchUsers();
+    try {
+      const { data } = await NonMatchedUsers();
+      setUsers(data);
+    } catch (err) {
+      const message = extractBackendError(err);
+      toast.error(message); 
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  if (loading) {
-    return <div className="min-h-screen flex items-center justify-center text-white">Loading...</div>;
-  }
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
 
-  if (error) {
-    return <div className="min-h-screen flex items-center justify-center text-red-500">{error}</div>;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-white">
+        Loading...
+      </div>
+    );
   }
 
   return (
@@ -58,16 +43,17 @@ const Home = () => {
       <div className="h-[500px] w-full max-w-sm relative flex items-center justify-center">
         {users.map((user) => (
           <TinderCard
-            key={user.id}
+            key={user._id}
             preventSwipe={['up', 'down']}
             className="absolute"
+            onSwipe={(dir) => handleSwipe(dir, user._id)}
           >
             <ProfileCard
               name={user.fullName}
               age={calculateAge(user.birthDate)}
               location={user.location}
               bio={user.bio}
-              imageUrl={user.photos[0]}
+              imageUrl={user.photos?.[0] ?? '/assets/images/logo2.jpg'}
             />
           </TinderCard>
         ))}
