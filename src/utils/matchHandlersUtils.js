@@ -1,6 +1,5 @@
 import { createOrAcceptMatch, unmatchUsers } from '../api/matchApi';
-
-export const handleSwipe = async (direction, userId) => {
+export const handleCardSwipe = async (direction, userId) => {
   try {
     if (direction === 'right') {
       await createOrAcceptMatch({
