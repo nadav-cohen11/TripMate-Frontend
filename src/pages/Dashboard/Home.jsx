@@ -5,6 +5,15 @@ import ProfileCard from '../../components/ProfileCard';
 import { NonMatchedUsers } from '../../api/matchApi';
 import { extractBackendError } from '../../utils/errorUtils';
 import { handleCardSwipe } from '../../utils/matchHandlersUtils';
+import React, { useState, useEffect, useCallback } from 'react';
+import { toast } from 'react-toastify';
+import TinderCard from 'react-tinder-card';
+import Navbar from '@/components/ui/NavBar';
+import ProfileCard from '@/components/ui/ProfileCard';
+import { NonMatchedUsers } from '../../api/matchApi';
+import { calculateAge } from '../../utils/userUtils';
+import { handleSwipe } from '../../utils/matchHandlersUtils';
+import { extractBackendError } from '../../utils/errorUtils'
 
 const Home = () => {
   const [users, setUsers] = useState([]);

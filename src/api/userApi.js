@@ -1,5 +1,4 @@
 import api from "/src/api/axios.js";
-import { handleApiError } from "../utils/errorUtils";
 
 export const login = async (email, password) => {
     try {
@@ -19,9 +18,16 @@ export const register = async(userData) => {
     }
 };
 
-
-
 export const getUser = async (userId) => {
+    try {
+        const response = await api.get(`users/getUser/${userId}`);
+        return response.data
+    } catch (error) {
+        throw error
+    }
+};
+
+export const getUserLoggedIn = async () => {
     try {
         const response = await api.get(`/users/getUser/${userId}`);
         return response.data
