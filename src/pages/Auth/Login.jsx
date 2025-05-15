@@ -1,20 +1,29 @@
 import React, { useState } from 'react';
 import { login } from "../../api/userApi";
+import { toast } from 'react-toastify';
 import TextInput from '@/components/ui/textInput';
 import LoginButton from '@/components/ui/loginButton';
+import { useNavigate } from 'react-router-dom'
+import { useGlobalContext } from '@/context/GlobalContext';
+import { extractBackendError } from '../../utils/errorUtils'
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+  const { setUserId } = useGlobalContext();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await login(email, password);
-      window.location.href = "/home";
-    } catch (error) {
-      setErrorMsg("Email or password incorrect");
+      const userId = await login(email, password);
+      setUserId(userId);
+      localStorage.setItem('userId', userId);
+      navigate('/home');
+    } catch (err) {
+      localStorage.removeItem('userId');
+      const message = extractBackendError(err);
+      toast.error(message || "Email or password incorrect");
     }
   };
 
@@ -33,8 +42,8 @@ const Login = () => {
 
         <div className='pb-1'>
           <TextInput
-            type="email"
-            placeholder="Email"
+            type='email'
+            placeholder='Email'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -43,8 +52,8 @@ const Login = () => {
 
         <div className='pb-1'>
           <TextInput
-            type="password"
-            placeholder="Password"
+            type='password'
+            placeholder='Password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -66,8 +75,11 @@ const Login = () => {
             Sign up
           </a>
         </div>
-
-        {errorMsg && <p className="text-red-500 text-sm">{errorMsg}</p>}
+        <div>
+          <LoginButton type="submit" className='text-white'>
+            Log In <i className="bi bi-arrow-right ms-2"></i>
+          </LoginButton>
+        </div>
       </form>
     </div>
   );

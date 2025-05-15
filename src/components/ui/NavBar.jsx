@@ -1,27 +1,37 @@
-import { Link } from "react-router-dom";
-import { Home as HomeIcon, Star, MapPin, User, MessageCircle } from "lucide-react";
+import { NavLink, useLocation } from "react-router-dom";
+import { Home, Star, MapPin, User, MessageCircle } from "lucide-react";
+
+const navItems = [
+  { to: "/chat", icon: MessageCircle },
+  { to: "/favorites", icon: Star },
+  { to: "/home", icon: Home },
+  { to: "/map", icon: MapPin },
+  { to: "/profile", icon: User },
+];
 
 const Navbar = () => {
+  const location = useLocation();
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-[#7f99a5a0] rounded-t-3xl shadow-md">
-      <div className="flex justify-between border-t border-[#2D4A53] rounded-t-3xl shadow-md" >
-        <Link to="/chat" className="flex-1 flex justify-center items-center py-3  border-r border-[#2D4A53]">
-          <MessageCircle className="h-6 w-6" color="#2D4A53" />
-        </Link>
-        <Link to="/favorites" className="flex-1 flex justify-center items-center py-3 border-r border-[#2D4A53]">
-          <Star className="h-6 w-6" color="#2D4A53" />
-        </Link>
-        <Link to="/home" className="flex-1 flex justify-center items-center py-3 border-r border-[#2D4A53]">
-          <HomeIcon className="h-6 w-6" color="#2D4A53" />
-        </Link>
-        <Link to="/map" className="flex-1 flex justify-center items-center py-3 border-r border-[#2D4A53]">
-          <MapPin className="h-6 w-6" color="#2D4A53" />
-        </Link>
-        <Link to="/profile" className="flex-1 flex justify-center items-center py-3 ">
-          <User className="h-6 w-6" color="#2D4A53" />
-        </Link>
-      </div>
-    </div>
+    <nav className="fixed bottom-4 left-1/2 transform -translate-x-1/2 px-6 py-3 flex items-center justify-between gap-4 z-50 max-w-md w-[95%] ">
+      {navItems.map(({ to, icon: Icon }) => {
+        const isActive = location.pathname === to;
+
+        return (
+          <NavLink
+            key={to}
+            to={to}
+            className="group flex flex-col items-center justify-center transition-all duration-200 ease-in-out"
+          >
+            <Icon
+              className="h-7 w-7 mb-0.5 transition-transform group-hover:scale-110"
+              strokeWidth={2.2}
+              color="black"
+              fill={isActive ? "black" : "none"}
+            />
+          </NavLink>
+        );
+      })}
+    </nav>
   );
 };
 
