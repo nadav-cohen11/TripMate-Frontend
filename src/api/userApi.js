@@ -1,37 +1,55 @@
-import api from "./axios";
+import api from "/src/api/axios.js";
 
-
-export const login = async(email, password) => {
-    try{
-        const response = await api.post("/login", { email, password });
+export const login = async (email, password) => {
+    try {
+        const response = await api.post("/users/login", { email, password });
         return response;
-    }catch(error){
+    } catch (error) {
         throw error
     }
 };
 
-export const register = (userData) => {
-    return api.post("/register", userData);
-};
-
-
-export const getUser = async(userId) => {
-    try{
-        const response = await api.get(`/getUser/${userId}`);
-        return response.data
-    }catch(error){
-
+export const register = async(userData) => {
+    try {
+        const response = await api.post("/users/register", userData);
+        return response;
+    } catch (error) {
+        throw error;
     }
 };
 
-export const updateUser = (userId, userData) => {
-    return api.put("/updateUser", { userId, userData });
+export const getUser = async (userId) => {
+    try {
+        const response = await api.get(`users/getUser/${userId}`);
+        return response.data
+    } catch (error) {
+        throw error
+    }
 };
 
-export const deleteUser = (userId) => {
-    return api.delete("/deleteUser", { data: { userId } });
+export const getUserLoggedIn = async () => {
+    try {
+        const response = await api.get(`/users/getUser/${userId}`);
+        return response.data
+    } catch (error) {
+        throw error;
+    }
 };
 
-export const getAllUsers = async() => {
-    return await api.get("/getAllUsers");
+export const updateUser = async(userId, userData) => {
+    try {
+        const response = await api.put("/users/updateUser", { userId, userData });
+        return response.data
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const deleteUser = async(userId) => {
+    try {
+        const response = await api.delete("/users/deleteUser", { data: { userId } });
+        return response.data
+    } catch (error) {
+        throw error;
+    }
 };
