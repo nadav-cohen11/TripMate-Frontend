@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Select      from "react-select";
 import { toast }   from "sonner";
 import { updateUser } from "../../api/userApi";
+import { whiteSelect } from '../../styles/selectStyles'; 
 
 const lookingOptions = [
   "Hiking", "Trekking", "Cycling", "Mountain Biking",
@@ -10,31 +11,6 @@ const lookingOptions = [
   "Snorkeling", "Skiing", "Snowboarding", "Horseback Riding",
   "Photography", "Yoga Retreat", "Beach Relaxation", "Volunteering",
 ].map(v => ({ value: v, label: v }));
-
-const whiteSelect = {
-  control: (base, state) => ({
-    ...base,
-    backgroundColor: "#ffffff",
-    borderColor: state.isFocused ? "#6366f1" : "#d1d5db",
-    boxShadow: state.isFocused ? "0 0 0 2px rgba(99,102,241,.5)" : undefined,
-    "&:hover": { borderColor: "#6366f1" },
-    minHeight: "2.5rem",
-  }),
-  placeholder: base => ({ ...base, color: "#6b7280" }),
-  singleValue: base => ({ ...base, color: "#1f2937" }),
-  option: (base, state) => ({
-    ...base,
-    backgroundColor: state.isFocused ? "#eef2ff" : "#ffffff",
-    color: "#1f2937",
-    "&:active": { backgroundColor: "#e0e7ff" },
-  }),
-  multiValue: base => ({ ...base, backgroundColor: "#e5e7eb" }),
-  multiValueLabel: base => ({ ...base, color: "#1f2937" }),
-  multiValueRemove: base => ({
-    ...base,
-    ":hover": { backgroundColor: "#f87171", color: "#fff" },
-  }),
-};
 
 const Modal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
@@ -73,15 +49,14 @@ const Modal = ({ isOpen, onClose, title, children }) => {
 
 export default function Settings() {
   const navigate = useNavigate();
-  const [countryOptions,  setCountryOptions]  = useState([]);
-  const [cityOptions,     setCityOptions]     = useState([]);
+  const [countryOptions, setCountryOptions]  = useState([]);
+  const [cityOptions, setCityOptions] = useState([]);
   const [languageOptions, setLanguageOptions] = useState([]);
-  const [loadingCities,   setLoadingCities]   = useState(false);
-  const [imgURL,          setImgURL]          = useState(null);
-  const [errors,          setErrors]          = useState({});
-  const [activeModal,     setActiveModal]     = useState(null);
-  const [isSubmitting,    setIsSubmitting]    = useState(false);
-
+  const [loadingCities, setLoadingCities] = useState(false);
+  const [imgURL, setImgURL] = useState(null);
+  const [errors, setErrors] = useState({});
+  const [activeModal, setActiveModal] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     country: "", location: "",
     languages: [], lookingFor: [], mates: 0, bio: "",
@@ -412,30 +387,6 @@ export default function Settings() {
             className={`w-full px-3 py-2 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${whiteBox} resize-none`}
           />
           {errors.bio && <p className="text-red-500 text-sm">{errors.bio}</p>}
-        </section>
-
-        <section className="flex flex-col gap-2">
-          <h2 className="font-semibold">Notifications</h2>
-
-          <label className={`flex items-center gap-3 px-3 py-2 cursor-pointer ${whiteBox}`}>
-            <input
-              type="checkbox"
-              checked={form.notifications.messages}
-              onChange={() => toggleNotif("messages")}
-              className="h-5 w-5 accent-indigo-600"
-            />
-            <span className="text-sm">Message alerts</span>
-          </label>
-
-          <label className={`flex items-center gap-3 px-3 py-2 cursor-pointer ${whiteBox}`}>
-            <input
-              type="checkbox"
-              checked={form.notifications.newFriends}
-              onChange={() => toggleNotif("newFriends")}
-              className="h-5 w-5 accent-indigo-600"
-            />
-            <span className="text-sm">Match with another traveler</span>
-          </label>
         </section>
 
         <section className="flex flex-col gap-1 text-sm pt-2 border-t border-gray-300/30">
