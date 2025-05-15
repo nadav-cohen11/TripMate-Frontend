@@ -1,5 +1,3 @@
-
-
 export const getAddressFromCoordinates = async (latitude, longitude) => {
   try {
     const response = await fetch(
