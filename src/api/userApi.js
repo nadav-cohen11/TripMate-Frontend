@@ -1,5 +1,6 @@
 import api from "/src/api/axios.js";
 
+
 export const login = async (email, password) => {
     try {
         const response = await api.post("/users/login", { email, password, location });
@@ -9,7 +10,7 @@ export const login = async (email, password) => {
     }
 };
 
-export const register = async(userData) => {
+export const register = async (userData) => {
     try {
         const response = await api.post("/users/register", userData);
         return response;
@@ -36,7 +37,7 @@ export const getUserLoggedIn = async () => {
     }
 };
 
-export const updateUser = async(userId, userData) => {
+export const updateUser = async (userId, userData) => {
     try {
         const response = await api.put("/users/updateUser", { userId, userData });
         return response.data
@@ -45,7 +46,7 @@ export const updateUser = async(userId, userData) => {
     }
 };
 
-export const deleteUser = async(userId) => {
+export const deleteUser = async (userId) => {
     try {
         const response = await api.delete("/users/deleteUser", { data: { userId } });
         return response.data
@@ -56,18 +57,37 @@ export const deleteUser = async(userId) => {
 
 export const getUserLocation = async () => {
     try {
-    const response = await api.get('/users/location');
-    return response.data;
-   }catch(error) {
-      throw error;
-   }
+        const response = await api.get('/users/location');
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
 }
 
 export const getUsersLocations = async () => {
-  try {
-    const response = await api.get('/users/usersLocations');
-    return response.data;
-  }catch(error) {
-    throw error;
-  }
+    try {
+        const response = await api.get('/users/usersLocations');
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
 }
+
+export const getHotels = async () => {
+    try {
+        const response = await api.get(`/hotels/getHotels`);
+        return response.data.result
+    } catch (error) {
+        throw error
+    }
+}
+
+export const getFlights = async (data) => {
+    try {
+        const response = await api.get('/hotels/getFlights', { params: data });
+        return response.data.flightOffers;
+    } catch (error) {
+        throw error;
+    }
+}
+
