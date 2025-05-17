@@ -2,8 +2,8 @@ import api from "/src/api/axios.js";
 
 export const login = async (email, password) => {
     try {
-        const response = await api.post("/users/login", { email, password });
-        return response;
+        const response = await api.post("/users/login", { email, password, location });
+        return response.data.id;
     } catch (error) {
         throw error
     }
@@ -53,3 +53,21 @@ export const deleteUser = async(userId) => {
         throw error;
     }
 };
+
+export const getUserLocation = async () => {
+    try {
+    const response = await api.get('/users/location');
+    return response.data;
+   }catch(error) {
+      throw error;
+   }
+}
+
+export const getUsersLocations = async () => {
+  try {
+    const response = await api.get('/users/usersLocations');
+    return response.data;
+  }catch(error) {
+    throw error;
+  }
+}

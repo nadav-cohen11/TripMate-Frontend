@@ -1,19 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import TinderCard from 'react-tinder-card';
-import ProfileCard from '../../components/ProfileCard';
+import ProfileCard from './ProfileCard';
 import { NonMatchedUsers } from '../../api/matchApi';
 import { extractBackendError } from '../../utils/errorUtils';
 import { handleCardSwipe } from '../../utils/matchHandlersUtils';
-import React, { useState, useEffect, useCallback } from 'react';
-import { toast } from 'react-toastify';
-import TinderCard from 'react-tinder-card';
-import Navbar from '@/components/ui/NavBar';
-import ProfileCard from '@/components/ui/ProfileCard';
-import { NonMatchedUsers } from '../../api/matchApi';
-import { calculateAge } from '../../utils/userUtils';
-import { handleSwipe } from '../../utils/matchHandlersUtils';
-import { extractBackendError } from '../../utils/errorUtils'
+import { getUserLocation } from '../../api/userApi'; 
+import { calculateDistance } from '../../utils/calculateDistanceUtils';
 
 const Home = () => {
   const [users, setUsers] = useState([]);
@@ -23,15 +16,31 @@ const Home = () => {
   const loadUsers = useCallback(async () => {
     setLoading(true);
     try {
-      const displayUsers = await NonMatchedUsers();
+      const [displayUsers, currentUserLocation] = await Promise.all([
+        NonMatchedUsers(),
+        getUserLocation()
+      ]);
       const usersWithAI = displayUsers.map((user) => {
         const compatibilityScore = Math.floor(Math.random() * 101);
+        const userLocation = user.location;
+
+        let distance = null;
+        if (
+          Array.isArray(userLocation?.coordinates) &&
+          Array.isArray(currentUserLocation?.location?.coordinates)
+        ) {
+          const [userLng, userLat] = userLocation.coordinates;
+          const [currLng, currLat] = currentUserLocation.location.coordinates;
+          distance = calculateDistance(currLat, currLng, userLat, userLng);
+        }         
         return {
           ...user,
+          distance: distance ? Math.round(distance) : null,
           compatibilityScore,
-          aiSuggested: compatibilityScore >= 50,
+          aiSuggested: compatibilityScore >= 1,
         };
       });
+
       setUsers(usersWithAI);
     } catch (err) {
       toast.error(extractBackendError(err));
@@ -39,14 +48,14 @@ const Home = () => {
       setLoading(false);
     }
   }, []);
-  
+
   useEffect(() => {
     loadUsers();
   }, [loadUsers]);
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen text-lg text-gray-800">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 text-lg text-gray-800">
         🔍 Searching for your next adventure...
       </div>
     );
@@ -54,7 +63,7 @@ const Home = () => {
 
   if (!users.length) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen text-lg text-gray-800">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 text-gray-800 text-center">
         <h1 className="text-2xl font-semibold">No more matches at the moment!</h1>
         <p className="mt-2">Check back later or adjust your preferences.</p>
       </div>
@@ -62,15 +71,11 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen w-full bg-white relative overflow-hidden">
-      <div className="absolute inset-0 flex items-center justify-center z-10">
-        <div
-          className="absolute top-1 left-1 text-4xl text-black p-6 tracking-wide"
-          style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}
-        >
-          TripMate
-        </div>
-
+    <div className="relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden">
+      <div className="absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}>
+        TripMate
+      </div>
+      <div className="flex items-center justify-center min-h-screen px-4 z-10">
         {users.map((user, index) => (
           <TinderCard
             key={user._id}
@@ -82,15 +87,10 @@ const Home = () => {
               setTimeout(() => setSwipeInfo({ id: null, direction: null }), 1000);
             }}
           >
-            <div className="tinder-card-wrapper w-full h-full">
-              <div
-                className="pointer-events-auto w-full h-full flex justify-center items-center px-4"
-                style={{ zIndex: users.length - index }}
-              >
-                <ProfileCard user={user} swipeInfo={swipeInfo} />
-              </div>
+            <div className="tinder-card-wrapper w-full h-full flex justify-center items-center px-4" style={{ zIndex: users.length - index }}>
+              <ProfileCard user={user} swipeInfo={swipeInfo} />
             </div>
-          </TinderCard>       
+          </TinderCard>
         ))}
       </div>
     </div>

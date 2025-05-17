@@ -11,8 +11,10 @@ const navItems = [
 
 const Navbar = () => {
   const location = useLocation();
+  const iconColor = "#334155";
+
   return (
-    <nav className="fixed bottom-4 left-1/2 transform -translate-x-1/2 px-6 py-3 flex items-center justify-between gap-4 z-50 max-w-md w-[95%] ">
+    <nav className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 w-[90%] max-w-md px-4 flex items-center justify-between">
       {navItems.map(({ to, icon: Icon }) => {
         const isActive = location.pathname === to;
 
@@ -20,13 +22,13 @@ const Navbar = () => {
           <NavLink
             key={to}
             to={to}
-            className="group flex flex-col items-center justify-center transition-all duration-200 ease-in-out"
+            className="group flex flex-col items-center justify-center transition-all duration-150"
           >
             <Icon
               className="h-7 w-7 mb-0.5 transition-transform group-hover:scale-110"
               strokeWidth={2.2}
-              color="black"
-              fill={isActive ? "black" : "none"}
+              color={iconColor}
+              fill={isActive ? iconColor : "none"}
             />
           </NavLink>
         );

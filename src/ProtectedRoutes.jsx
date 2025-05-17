@@ -1,34 +1,18 @@
-import React from 'react';
-import {Route} from 'react-router-dom';
-import ProfileSetup from './pages/ProfileSetUp';
-import Home from './pages/Dashboard/Home';
+import Home from './pages/Home/Home';
 import Chat from './pages/Dashboard/Chats/Chat';
-import Map from './pages/Dashboard/Map';
+import Map from './pages/Map/Map';
 import Profile from './pages/Dashboard/Profile';
 import Favorites from './pages/Dashboard/Favorites';
-import ProtectedRoute from './components/ui/ProtectedRoute';
+import ProfileSetup from './pages/ProfileSetUp';
+import ProtectedRoute from './components/ProtectedRoute'; 
 
-const protectedRoutes = [
-  { path: '/home', element: <Home /> },
-  { path: '/chat', element: <Chat /> },
-  { path: '/map', element: <Map /> },
-  { path: '/profile', element: <Profile /> },
-  { path: '/favorites', element: <Favorites /> },
-  { path: '/profileSetup', element: <ProfileSetup /> },
+const protectedRoutes = () => [
+  { path: '/home/*', element: <ProtectedRoute><Home /></ProtectedRoute> },
+  { path: '/chat', element: <ProtectedRoute><Chat /></ProtectedRoute> },
+  { path: '/map', element: <ProtectedRoute><Map /></ProtectedRoute> },
+  { path: '/profile/*', element: <ProtectedRoute><Profile /></ProtectedRoute> },
+  { path: '/favorites', element: <ProtectedRoute><Favorites /></ProtectedRoute> },
+  { path: '/setup', element: <ProtectedRoute><ProfileSetup /></ProtectedRoute> },
 ];
 
-const ProtectedRoutes = () => {
-  return (
-    <>
-      {protectedRoutes.map(({ path, element }) => (
-        <Route
-          key={path}
-          path={path}
-          element={<ProtectedRoute>{element}</ProtectedRoute>}
-        />
-      ))}
-    </>
-  );
-};
-
-export default ProtectedRoutes;
+export default protectedRoutes;

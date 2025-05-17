@@ -1,32 +1,38 @@
-import React, { useState } from 'react';
+import { useState, useContext } from 'react';
 import { login } from "../../api/userApi";
 import { toast } from 'react-toastify';
 import TextInput from '@/components/ui/textInput';
 import LoginButton from '@/components/ui/loginButton';
-import { useNavigate } from 'react-router-dom'
-import { useGlobalContext } from '@/context/GlobalContext';
-import { extractBackendError } from '../../utils/errorUtils'
+import { useNavigate, useLocation } from 'react-router-dom';
+import { extractBackendError } from '../../utils/errorUtils';
+import { getCurrentLocation } from '@/utils/getLocationUtiles';
+import { AuthContext } from '../../context/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setUserId } = useGlobalContext();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { checkAuth } = useContext(AuthContext); 
+
+  const from = location.state?.from?.pathname || '/home'; 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const userId = await login(email, password);
-      setUserId(userId);
-      localStorage.setItem('userId', userId);
-      navigate('/home');
+      let location = await getCurrentLocation();
+      if (!location) location = [];
+
+      await login(email, password, location); 
+      await checkAuth(); 
+
+      navigate(from, { replace: true });
     } catch (err) {
-      localStorage.removeItem('userId');
       const message = extractBackendError(err);
-      toast.error(message || "Email or password incorrect");
+      toast.error(message || err.message || "Login failed");
     }
   };
-
+  
   return (
     <div
       className="h-[300px] bg-cover bg-center relative px-4 pt-40 pb-60"
@@ -74,11 +80,6 @@ const Login = () => {
           <a href="/register" className="font-semibold underline hover:text-[#2D4A53]">
             Sign up
           </a>
-        </div>
-        <div>
-          <LoginButton type="submit" className='text-white'>
-            Log In <i className="bi bi-arrow-right ms-2"></i>
-          </LoginButton>
         </div>
       </form>
     </div>

@@ -78,7 +78,7 @@ const ChatList = ({
   return (
     <>
       <button
-        className='sm:hidden fixed top-4 left-4 z-30 bg-white border rounded-md p-2 shadow'
+        className='sm:hidden fixed top-4 right-4 z-30 bg-white border rounded-md p-2 shadow'
         onClick={() => setShowSidebar((prev) => !prev)}
         aria-label='Toggle chat list'
       >
