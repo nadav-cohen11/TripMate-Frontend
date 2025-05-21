@@ -1,6 +1,6 @@
 import api from "/src/api/axios.js";
 
-export const login = async (email, password) => {
+export const login = async (email, password, location) => {
     try {
         const response = await api.post("/users/login", { email, password, location });
         return response.data.id;
@@ -9,14 +9,14 @@ export const login = async (email, password) => {
     }
 };
 
-export const register = async(userData) => {
+export const register = async (userData) => {
     try {
-        const response = await api.post("/users/register", userData);
-        return response;
+      const response = await api.post("/users/register", userData);
+      return response;
     } catch (error) {
-        throw error;
+      throw error;
     }
-};
+  };
 
 export const getUser = async (userId) => {
     try {

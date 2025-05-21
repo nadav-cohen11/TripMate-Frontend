@@ -7,10 +7,10 @@ import ProfileSetup from './pages/ProfileSetUp';
 import ProtectedRoute from './components/ProtectedRoute'; 
 
 const protectedRoutes = () => [
-  { path: '/home/*', element: <ProtectedRoute><Home /></ProtectedRoute> },
+  { path: '/home/', element: <ProtectedRoute><Home /></ProtectedRoute> },
   { path: '/chat', element: <ProtectedRoute><Chat /></ProtectedRoute> },
   { path: '/map', element: <ProtectedRoute><Map /></ProtectedRoute> },
-  { path: '/profile/*', element: <ProtectedRoute><Profile /></ProtectedRoute> },
+  { path: '/profile/', element: <ProtectedRoute><Profile /></ProtectedRoute> },
   { path: '/favorites', element: <ProtectedRoute><Favorites /></ProtectedRoute> },
   { path: '/setup', element: <ProtectedRoute><ProfileSetup /></ProtectedRoute> },
 ];
