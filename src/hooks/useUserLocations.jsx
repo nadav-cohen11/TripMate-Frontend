@@ -28,7 +28,6 @@ export const useUserLocations = () => {
           setCoordinates([]);
         }
       } catch (error) {
-        setUserLocation([]);
         setUserLocation(null);
         setCoordinates([]);
       } finally {
