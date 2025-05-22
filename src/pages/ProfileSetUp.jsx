@@ -1,36 +1,37 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { toast } from "sonner";
+import { customStyles } from "../styles/reactSelectStyles"; 
 
 const genders = ["Female", "Male"];
 const lookingOptions = [
-  "Hiking","Trekking","Cycling","Mountain Biking","Climbing","Camping",
-  "Fishing","Rafting","Surfing","Snorkeling","Skiing","Snowboarding",
-  "Horseback Riding","Photography","Yoga Retreat","Beach Relaxation","Volunteering",
+  "Hiking", "Trekking", "Cycling", "Mountain Biking", "Climbing", "Camping",
+  "Fishing", "Rafting", "Surfing", "Snorkeling", "Skiing", "Snowboarding",
+  "Horseback Riding", "Photography", "Yoga Retreat", "Beach Relaxation", "Volunteering",
 ].map(v => ({ value: v, label: v }));
 
-export default function ProfileSetup() {
 
-  const [countryOptions,  setCountryOptions]  = useState([]);
-  const [cityOptions,     setCityOptions]     = useState([]);
+export default function ProfileSetup() {
+  const [countryOptions, setCountryOptions] = useState([]);
+  const [cityOptions, setCityOptions] = useState([]);
   const [languageOptions, setLanguageOptions] = useState([]);
-  const [loadingCities,   setLoadingCities]   = useState(false);
-  const [imgURL,          setImgURL]          = useState(null);
+  const [loadingCities, setLoadingCities] = useState(false);
+  const [imgURL, setImgURL] = useState(null);
 
   const [form, setForm] = useState({
-    dob:"", gender:"", country:"", location:"",
-    languages: [], lookingFor: [], mates: 0, bio:""
+    dob: "", gender: "", country: "", location: "",
+    languages: [], lookingFor: [], mates: 0, bio: ""
   });
 
   useEffect(() => {
     fetch("https://countriesnow.space/api/v0.1/countries/positions")
       .then(r => r.json())
-      .then(({data}) =>
+      .then(({ data }) =>
         setCountryOptions(
-          data.map(c => ({ value:c.name, label:c.name }))
-              .sort((a,b)=>a.label.localeCompare(b.label))
+          data.map(c => ({ value: c.name, label: c.name }))
+            .sort((a, b) => a.label.localeCompare(b.label))
         )
-      ).catch(err=>{
+      ).catch(err => {
         console.error(err);
         toast.error("Failed to load countries");
       });
@@ -42,8 +43,8 @@ export default function ProfileSetup() {
       .then(arr => {
         const set = new Set();
         arr.forEach(c => c.languages && Object.values(c.languages).forEach(l => set.add(l)));
-        setLanguageOptions([...set].sort().map(l => ({ value:l, label:l })));
-      }).catch(err=>{
+        setLanguageOptions([...set].sort().map(l => ({ value: l, label: l })));
+      }).catch(err => {
         console.error(err);
         toast.error("Failed to load languages");
       });
@@ -56,36 +57,36 @@ export default function ProfileSetup() {
       const res = await fetch(
         "https://countriesnow.space/api/v0.1/countries/cities",
         {
-          method:"POST",
-          headers:{ "Content-Type":"application/json" },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ country })
         }
       );
-      const { data=[] } = await res.json();
+      const { data = [] } = await res.json();
       setCityOptions(
-        data.sort((a,b)=>a.localeCompare(b))
-            .map(n => ({ value:n, label:n }))
+        data.sort((a, b) => a.localeCompare(b))
+          .map(n => ({ value: n, label: n }))
       );
-    } catch(err) {
-      console.error(err); setCityOptions([]);
+    } catch (err) {
+      console.error(err);
+      setCityOptions([]);
     } finally { setLoadingCities(false); }
   };
 
-  const onInput  = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
-  const onFile   = e => { const f=e.target.files[0]; f && setImgURL(URL.createObjectURL(f)); };
+  const onInput = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+  const onFile = e => { const f = e.target.files[0]; f && setImgURL(URL.createObjectURL(f)); };
   const onSubmit = e => {
     e.preventDefault();
     console.table({
       ...form,
       imgURL,
-      languages:  form.languages.map(o=>o.value),
-      lookingFor: form.lookingFor.map(o=>o.value)
+      languages: form.languages.map(o => o.value),
+      lookingFor: form.lookingFor.map(o => o.value)
     });
   };
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden flex items-center justify-center px-4">
-
       <div
         className="absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide"
         style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}
@@ -170,6 +171,7 @@ export default function ProfileSetup() {
           onChange={sel => setForm(f => ({ ...f, languages: sel || [] }))}
           isSearchable
           classNamePrefix="rs"
+          styles={customStyles}
         />
 
         <Select
@@ -179,6 +181,7 @@ export default function ProfileSetup() {
           value={form.lookingFor}
           onChange={sel => setForm(f => ({ ...f, lookingFor: sel }))}
           classNamePrefix="rs"
+          styles={customStyles}
         />
 
         <textarea
