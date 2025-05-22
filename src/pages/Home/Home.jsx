@@ -72,7 +72,7 @@ const Home = () => {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden">
-      <div className="absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}>
+      <div className="absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide">
         TripMate
       </div>
       <div className="flex items-center justify-center min-h-screen px-4 z-10">
