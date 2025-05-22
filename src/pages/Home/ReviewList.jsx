@@ -1,32 +1,29 @@
-import { useEffect, useState } from 'react';
 import { getUserReviews } from '@/api/reviewApi';
+import { useQuery } from '@tanstack/react-query';
 
+import { useState } from 'react';
 const ReviewList = ({ userId }) => {
-  const [reviews, setReviews] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
 
-  useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const res = await getUserReviews(userId);
-        if (Array.isArray(res) && res.length > 0) {
-          setReviews(res);
-        } else {
-          setReviews([]);
-        }
-      } catch (err) {
-        setError('Could not load reviews.');
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (userId) {
-      fetchReviews();
+  const [error, setError] = useState(null);
+
+  const fetchReviews = async () => {
+    const res = await getUserReviews(userId);
+    if (Array.isArray(res) && res.length > 0) {
+      return res;
+    } else {
+      return [];
     }
-  }, [userId]);
+  };
+
+  const { data: reviews = [], isLoading } = useQuery({
+    queryKey: ['reviews-list', userId],
+    queryFn: fetchReviews,
+    enabled: !!userId,
+    onError: () => setError('Could not load reviews.'),
+    staleTime: 5 * 60 * 1000,
+  });
   
-  if (loading) return <p className="mt-6 text-sm text-gray-500">Loading reviews...</p>;
+  if (isLoading) return <p className="mt-6 text-sm text-gray-500">Loading reviews...</p>;
   if (error) return <p className="mt-6 text-sm text-red-500">{error}</p>;
 
   if (!reviews || reviews.length === 0) {
@@ -41,7 +38,7 @@ const ReviewList = ({ userId }) => {
           return (
             <div key={review._id} className="flex items-start gap-3 border-b pb-3">
               <img
-                src={review.reviewerId.photos[0] || '/assets/images/Annonymos_picture.jpg'}
+                src={review.reviewerId?.photos?.[0] || '/assets/images/Annonymos_picture.jpg'}
                 alt={review.reviewerId?.fullName || 'Reviewer'}
                 className="w-10 h-10 rounded-full object-cover border bg-gray-100"
               />

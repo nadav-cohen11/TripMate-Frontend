@@ -7,6 +7,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { extractBackendError } from '../../utils/errorUtils';
 import { getCurrentLocation } from '@/utils/getLocationUtiles';
 import { AuthContext } from '../../context/AuthContext';
+import { useMutation } from '@tanstack/react-query';
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -17,20 +18,25 @@ const Login = () => {
 
   const from = location.state?.from?.pathname || '/home'; 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      let location = await getCurrentLocation();
-      if (!location) location = [];
-
-      await login(email, password, location); 
-      await checkAuth(); 
-
+  const mutation = useMutation({
+    mutationFn: async ({ email, password, location }) => {
+      await login(email, password, location);
+      await checkAuth();
+    },
+    onSuccess: () => {
       navigate(from, { replace: true });
-    } catch (err) {
+    },
+    onError: (err) => {
       const message = extractBackendError(err);
       toast.error(message || err.message || "Login failed");
     }
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let location = await getCurrentLocation();
+    if (!location) location = [];
+    mutation.mutate({ email, password, location });
   };
   
   return (
