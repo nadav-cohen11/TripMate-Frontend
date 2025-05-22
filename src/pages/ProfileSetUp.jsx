@@ -11,11 +11,11 @@ const lookingOptions = [
 
 export default function ProfileSetup() {
 
-  const [countryOptions, setCountryOptions] = useState([]);
-  const [cityOptions, setCityOptions]       = useState([]);
+  const [countryOptions,  setCountryOptions]  = useState([]);
+  const [cityOptions,     setCityOptions]     = useState([]);
   const [languageOptions, setLanguageOptions] = useState([]);
-  const [loadingCities, setLoadingCities]   = useState(false);
-  const [imgURL, setImgURL]                 = useState(null);
+  const [loadingCities,   setLoadingCities]   = useState(false);
+  const [imgURL,          setImgURL]          = useState(null);
 
   const [form, setForm] = useState({
     dob:"", gender:"", country:"", location:"",
@@ -32,7 +32,7 @@ export default function ProfileSetup() {
         )
       ).catch(err=>{
         console.error(err);
-        toast.error("failed to load countries");
+        toast.error("Failed to load countries");
       });
   }, []);
 
@@ -84,19 +84,37 @@ export default function ProfileSetup() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-cover bg-center px-4"
-         style={{ backgroundImage:"url('/assets/images/newBackground.jpg')" }}>
+    <div className="relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden flex items-center justify-center px-4">
 
-      <form onSubmit={onSubmit}
-            className="bg-white/10 backdrop-blur-md text-[#2D4A53] p-8 w-full max-w-md rounded-3xl shadow-xl flex flex-col gap-6">
+      <div
+        className="absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide"
+        style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}
+      >
+        TripMate
+      </div>
 
+      <form
+        onSubmit={onSubmit}
+        className="bg-white/10 backdrop-blur-md text-[#2D4A53] p-8 w-full max-w-md rounded-3xl shadow-xl flex flex-col gap-6 z-10"
+      >
         <div className="flex flex-col items-center gap-4">
           <div className="h-28 w-28 rounded-full bg-gray-300 overflow-hidden shadow-md">
-            {imgURL && <img src={imgURL} alt="avatar" className="h-full w-full object-cover"/>}
+            {imgURL && (
+              <img
+                src={imgURL}
+                alt="avatar"
+                className="h-full w-full object-cover"
+              />
+            )}
           </div>
           <label className="text-sm text-indigo-600 underline cursor-pointer">
             Upload profile picture
-            <input type="file" accept="image/*" onChange={onFile} className="sr-only"/>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={onFile}
+              className="sr-only"
+            />
           </label>
         </div>
 
@@ -117,15 +135,17 @@ export default function ProfileSetup() {
           className="input-white"
         >
           <option value="">Gender</option>
-          {genders.map(g => <option key={g}>{g}</option>)}
+          {genders.map(g => (
+            <option key={g}>{g}</option>
+          ))}
         </select>
 
         <Select
           placeholder="Country"
           options={countryOptions}
-          value={countryOptions.find(o=>o.value===form.country)||null}
-          onChange={o=>{
-            setForm(f=>({...f,country:o?.value||"", location:""}));
+          value={countryOptions.find(o => o.value === form.country) || null}
+          onChange={o => {
+            setForm(f => ({ ...f, country: o?.value || "", location: "" }));
             loadCities(o?.value);
           }}
           isSearchable
@@ -135,10 +155,10 @@ export default function ProfileSetup() {
         <Select
           placeholder={loadingCities ? "Loading cities…" : "City"}
           options={cityOptions}
-          value={cityOptions.find(o=>o.value===form.location)||null}
-          onChange={o=>setForm(f=>({...f, location:o?.value||""}))}
+          value={cityOptions.find(o => o.value === form.location) || null}
+          onChange={o => setForm(f => ({ ...f, location: o?.value || "" }))}
           isSearchable
-          isDisabled={!form.country||loadingCities}
+          isDisabled={!form.country || loadingCities}
           classNamePrefix="rs"
         />
 
@@ -147,7 +167,7 @@ export default function ProfileSetup() {
           options={languageOptions}
           isMulti
           value={form.languages}
-          onChange={sel=>setForm(f=>({...f,languages:sel||[]}))}
+          onChange={sel => setForm(f => ({ ...f, languages: sel || [] }))}
           isSearchable
           classNamePrefix="rs"
         />
@@ -157,11 +177,10 @@ export default function ProfileSetup() {
           isMulti
           placeholder="Looking for?"
           value={form.lookingFor}
-          onChange={sel=>setForm(f=>({...f, lookingFor: sel}))}
+          onChange={sel => setForm(f => ({ ...f, lookingFor: sel }))}
           classNamePrefix="rs"
         />
 
-        
         <textarea
           name="bio"
           rows={2}
@@ -171,7 +190,9 @@ export default function ProfileSetup() {
           className="input-white resize-none"
         />
 
-        <button type="submit" className="btn-primary mt-4 rounded-xl">SUBMIT</button>
+        <button type="submit" className="btn-primary mt-4 rounded-xl">
+          SUBMIT
+        </button>
       </form>
     </div>
   );
