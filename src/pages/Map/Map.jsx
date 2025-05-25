@@ -70,7 +70,7 @@ const Map = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 flex flex-col items-start py-8 px-4 space-y-8 max-w-6xl mx-auto w-full">
-      <div className="text-4xl text-black font-bold z-20 tracking-wide mb-6" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}>
+      <div className="text-4xl text-black font-bold z-20 tracking-wide mb-6">
         TripMate
       </div>
 
