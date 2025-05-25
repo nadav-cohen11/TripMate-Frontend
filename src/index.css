@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;300;400;500;600;700&display=swap');
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -113,6 +115,7 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    font-family: 'Raleway', sans-serif;
   }
   body {
     @apply bg-background text-foreground;
