@@ -8,6 +8,7 @@ import { extractBackendError } from '../../utils/errorUtils';
 import { getCurrentLocation } from '@/utils/getLocationUtiles';
 import { AuthContext } from '../../context/AuthContext';
 import { useMutation } from '@tanstack/react-query';
+import Typewriter from '@/components/Typewriter';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -39,13 +40,21 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#eaf4ff] to-[#dbeeff] px-4">
+    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-[#eaf4ff] to-[#dbeeff] px-4">
+      <div className="absolute top-6 left-6 z-20">
+        <Typewriter
+          text="TripMate"
+          className="text-4xl text-black font-bold tracking-wide"
+          style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}
+        />
+      </div>
+
       <form
         onSubmit={handleSubmit}
         className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 w-full max-w-md flex flex-col gap-6 text-[#2D4A53] transition-all duration-300"
       >
-        <p className="text-3xl font-bold text-center mb-2">
-          TripMate
+         <p className="text-3xl font-bold text-center mb-2">
+          Log in
         </p>
 
         <TextInput
