@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getUser } from '@/api/userApi';
 import { getCurrentLocation } from '@/utils/getLocationUtiles';
 
-export function useProfileSetupForm(formRegister) {
+const useProfileSetupForm = (formRegister) => {
   const [form, setForm] = useState({
     email: formRegister?.email || '',
     password: formRegister?.password || '',
@@ -39,7 +39,7 @@ export function useProfileSetupForm(formRegister) {
     queryKey: ['user'],
     queryFn: () => getUser(),
     staleTime: 5 * 60 * 1000,
-    enabled: !formRegister, 
+    enabled: !formRegister,
   });
 
   useEffect(() => {
@@ -102,4 +102,6 @@ export function useProfileSetupForm(formRegister) {
     handleAdventureStyleChange,
     handleImageUpload,
   };
-}
+};
+
+export default useProfileSetupForm;

@@ -12,6 +12,26 @@ export const createOrAcceptMatch = async ({ user2Id, scores }) => {
   }
 };
 
+export const getPendingMatches = async () => {
+  try {
+    const response = await api.get('/matches/pending/received');
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getConfirmedMatches = async () => {
+  try {
+    const response = await api.get('/matches/confirmed');
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
 export const unmatchUsers = async ({ user2Id }) => {
   try {
     const response = await api.post('/matches/unmatch', {

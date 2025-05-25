@@ -5,6 +5,7 @@ import protectedRoutes from './ProtectedRoutes';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import MultiStepFormRegister from './pages/Auth/MultiStepFormRegister';
 import Navbar from './components/ui/NavBar';
+import MyMatches from './pages/Matches/MyMatches';
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ const AppRoutes = () => (
     <Routes>
       <Route path='/login' element={<Login />} />
       <Route path='/register' element={<MultiStepFormRegister />} />
+
       <Route element={<ProtectedLayout />}>
         {protectedRoutes().map((route, index) => (
           <Route key={index} path={route.path} element={route.element} />

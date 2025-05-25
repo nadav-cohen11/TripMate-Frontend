@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import Match from './Match';
 
-export function CreateTrip({ userId, socket, setChats, matches }) {
+const CreateTrip = ({ userId, socket, setChats, matches }) => {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
     tripName: '',
@@ -307,3 +307,5 @@ export function CreateTrip({ userId, socket, setChats, matches }) {
     </>
   );
 }
+
+export default CreateTrip

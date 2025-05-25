@@ -14,7 +14,7 @@ const ProfileCard = ({ user, age, swipeInfo }) => {
   const languages = user.languagesSpoken.join(', ');
   const country = user.location.country;
   const city = user.location.city;
-  const photo = user.photos[photoIndex] || '/assets/images/Annonymos_picture.jpg';
+  const photo = user.photos?.[photoIndex] || '/assets/images/Annonymos_picture.jpg';
 
   return (
     <div className="relative flex flex-col bg-white/90 shadow-xl backdrop-blur-sm text-gray-900 rounded-3xl overflow-hidden w-[90vw] max-w-md h-[80vh] mx-auto my-4 border border-blue-100">
