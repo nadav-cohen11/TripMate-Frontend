@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { getUserReviews } from '@/api/reviewApi';
+import { getUserReviews } from "@/api/reviewApi";
+import { useEffect, useState } from "react";
 
 const ReviewList = ({ userId }) => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -16,7 +16,7 @@ const ReviewList = ({ userId }) => {
           setReviews([]);
         }
       } catch (err) {
-        setError('Could not load reviews.');
+        setError("Could not load reviews.");
       } finally {
         setLoading(false);
       }
@@ -25,12 +25,15 @@ const ReviewList = ({ userId }) => {
       fetchReviews();
     }
   }, [userId]);
-  
-  if (loading) return <p className="mt-6 text-sm text-gray-500">Loading reviews...</p>;
+
+  if (loading)
+    return <p className="mt-6 text-sm text-gray-500">Loading reviews...</p>;
   if (error) return <p className="mt-6 text-sm text-red-500">{error}</p>;
 
   if (!reviews || reviews.length === 0) {
-    return <div className="mt-6 text-sm text-gray-500 italic">No reviews yet.</div>;
+    return (
+      <div className="mt-6 text-sm text-gray-500 italic">No reviews yet.</div>
+    );
   }
 
   return (
@@ -39,26 +42,38 @@ const ReviewList = ({ userId }) => {
       <div className="space-y-4">
         {reviews.map((review) => {
           return (
-            <div key={review._id} className="flex items-start gap-3 border-b pb-3">
+            <div
+              key={review._id}
+              className="flex items-start gap-3 border-b pb-3"
+            >
               <img
-                src={review.reviewerId.photos[0] || '/assets/images/Annonymos_picture.jpg'}
-                alt={review.reviewerId?.fullName || 'Reviewer'}
+                src={
+                  review.reviewerId.photos[0] ||
+                  "/assets/images/Annonymos_picture.jpg"
+                }
+                alt={review.reviewerId?.fullName || "Reviewer"}
                 className="w-10 h-10 rounded-full object-cover border bg-gray-100"
               />
               <div>
                 <div className="flex items-center justify-between">
-                  <p className="font-medium">{review.reviewerId?.fullName || 'Anonymous'}</p>
+                  <p className="font-medium">
+                    {review.reviewerId?.fullName || "Anonymous"}
+                  </p>
                   <p className="text-xs text-gray-500">
                     {new Date(review.createdAt).toLocaleDateString()}
                   </p>
                 </div>
                 <div className="flex gap-1 text-yellow-500 text-sm">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <span key={i}>{i < review.rating ? '★' : '☆'}</span>
+                    <span key={i}>{i < review.rating ? "★" : "☆"}</span>
                   ))}
                 </div>
                 <p className="text-sm text-gray-700 mt-1">
-                  {review.comment || <span className="italic text-gray-400">No comment provided.</span>}
+                  {review.comment || (
+                    <span className="italic text-gray-400">
+                      No comment provided.
+                    </span>
+                  )}
                 </p>
               </div>
             </div>

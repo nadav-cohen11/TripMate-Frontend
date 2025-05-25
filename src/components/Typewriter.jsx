@@ -1,5 +1,4 @@
-import { motion } from 'framer-motion';
-import React from 'react';
+import { motion } from "framer-motion";
 
 const Typewriter = ({ text, className }) => {
   return (
@@ -12,7 +11,11 @@ const Typewriter = ({ text, className }) => {
         initial={{ width: 0 }}
         animate={{ width: "100%" }}
         transition={{ duration: 1, ease: "easeInOut" }}
-        style={{ display: "inline-block", overflow: "hidden", whiteSpace: "nowrap" }}
+        style={{
+          display: "inline-block",
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+        }}
       >
         {text}
       </motion.span>
@@ -20,4 +23,4 @@ const Typewriter = ({ text, className }) => {
   );
 };
 
-export default Typewriter; 
+export default Typewriter;

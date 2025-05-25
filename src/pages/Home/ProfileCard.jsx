@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PhotoNavigation from './PhotoNavigation';
-import ProfileImage from './ProfileImage';
 import ProfileDetails from './ProfileDetails';
+import ProfileImage from './ProfileImage';
 import SwipeStatus from './SwipeStatus';
 
 const ProfileCard = ({ user, age, swipeInfo }) => {

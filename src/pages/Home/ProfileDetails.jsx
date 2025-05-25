@@ -1,4 +1,4 @@
-import { Globe2, CalendarDays, Users, Sparkles } from 'lucide-react';
+import { CalendarDays, Globe2, Sparkles, Users } from 'lucide-react';
 import ReviewList from './ReviewList';
 
 const ProfileDetails = ({ user, age, city, country, languages, travel, distance, aiSuggested, compatibilityScore }) => {

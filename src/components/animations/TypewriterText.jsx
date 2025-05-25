@@ -1,23 +1,22 @@
-import { motion } from "motion/react";  
+import { motion } from "motion/react";
 
 const TypewriterText = ({ text, speed = 0.04 }) => {
   const letters = text.split("");
 
   const container = {
-    hidden:   { opacity: 0 },
-    visible:  {
+    hidden: { opacity: 0 },
+    visible: {
       opacity: 1,
-      transition: {                           
+      transition: {
         staggerChildren: speed,
-        delayChildren:   speed,
+        delayChildren: speed,
       },
     },
   };
 
- 
   const letter = {
-    hidden:  { clipPath: "inset(0 100% 0 0)" },    
-    visible: { clipPath: "inset(0 0% 0 0)" },        
+    hidden: { clipPath: "inset(0 100% 0 0)" },
+    visible: { clipPath: "inset(0 0% 0 0)" },
   };
 
   return (
@@ -29,11 +28,7 @@ const TypewriterText = ({ text, speed = 0.04 }) => {
       aria-label={text}
     >
       {letters.map((ch, i) => (
-        <motion.span
-          key={i}
-          variants={letter}
-          className="inline-block"
-        >
+        <motion.span key={i} variants={letter} className="inline-block">
           {ch === " " ? "\u00A0" : ch}
         </motion.span>
       ))}

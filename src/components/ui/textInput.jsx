@@ -1,6 +1,11 @@
-import React from "react";
-
-const TextInput = ({ type = "text", placeholder, value, onChange, className = "", ...props }) => {
+const TextInput = ({
+  type = "text",
+  placeholder,
+  value,
+  onChange,
+  className = "",
+  ...props
+}) => {
   return (
     <input
       type={type}

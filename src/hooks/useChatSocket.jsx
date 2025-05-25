@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import io from 'socket.io-client';
+import { useEffect, useState } from "react";
+import io from "socket.io-client";
 
 const useChatSocket = (userId, setChats) => {
   const [socketInstance, setSocketInstance] = useState(null);
@@ -8,13 +8,13 @@ const useChatSocket = (userId, setChats) => {
       const socket = io(import.meta.env.VITE_BACKEND_URL);
       setSocketInstance(socket);
 
-      socket.on('connect', () => {
+      socket.on("connect", () => {
         console.log(`User connected with id: ${socket.id}`);
       });
 
-      socket.emit('setup', userId);
+      socket.emit("setup", userId);
 
-      socket.emit('getChats', { userId }, (chats) => {
+      socket.emit("getChats", { userId }, (chats) => {
         setChats(chats);
       });
 

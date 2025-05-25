@@ -1,5 +1,5 @@
+import { Home, MapPin, MessageCircle, Star, User } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, Star, MapPin, User, MessageCircle } from "lucide-react";
 
 const navItems = [
   { to: "/chat", icon: MessageCircle },

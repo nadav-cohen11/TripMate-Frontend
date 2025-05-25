@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 
 const SwipeStatus = ({ swipeInfo, userId }) => {
   if (swipeInfo.id !== userId || !swipeInfo.direction) return null;
@@ -9,9 +9,11 @@ const SwipeStatus = ({ swipeInfo, userId }) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
-      className={`absolute top-8 left-8 text-4xl font-bold ${swipeInfo.direction === 'left' ? 'text-red-500' : 'text-green-500'}`}
+      className={`absolute top-8 left-8 text-4xl font-bold ${
+        swipeInfo.direction === "left" ? "text-red-500" : "text-green-500"
+      }`}
     >
-      {swipeInfo.direction === 'left' ? 'NOPE' : 'LIKE'}
+      {swipeInfo.direction === "left" ? "NOPE" : "LIKE"}
     </motion.div>
   );
 };
