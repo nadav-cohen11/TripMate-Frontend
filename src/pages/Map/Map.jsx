@@ -4,6 +4,7 @@ import { getUsersLocations } from '@/api/userApi';
 import { toast } from 'react-toastify';
 import { extractBackendError } from '@/utils/errorUtils';
 import { FaSpinner } from 'react-icons/fa';
+import Typewriter from '@/components/Typewriter';
 
 const DEFAULT_COORDINATES = [51.505, -0.09];
 const DEFAULT_PHOTO = '/assets/images/Annonymos_picture.jpg';
@@ -70,10 +71,13 @@ const Map = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 flex flex-col items-start py-8 px-4 space-y-8 max-w-6xl mx-auto w-full">
-      <div className="text-4xl text-black font-bold z-20 tracking-wide mb-6">
-        TripMate
+      <div className="mb-6">
+        <Typewriter 
+          text="TripMate" 
+          className="text-4xl text-black font-bold tracking-wide"
+          style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}
+        />
       </div>
-
 
       {loading ? (
         <div className="flex items-center justify-center w-full h-[60vh] text-lg text-gray-800">

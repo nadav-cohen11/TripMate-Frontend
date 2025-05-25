@@ -3,6 +3,7 @@ import ChatList from './ChatList';
 import ChatWindow from './ChatWindow';
 import useChatSocket from '@/hooks/useChatSocket';
 import { AuthContext } from '@/context/AuthContext';
+import Typewriter from '@/components/Typewriter';
 
 const Chats = () => {
   const [chats, setChats] = useState([]);
@@ -64,8 +65,12 @@ const Chats = () => {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden">
-      <div className="absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide">
-        TripMate
+      <div className="absolute top-6 left-6 z-20">
+        <Typewriter 
+          text="TripMate" 
+          className="text-4xl text-black font-bold tracking-wide"
+          style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}
+        />
       </div>
       <div className="flex flex-col lg:flex-row min-h-screen pt-24 px-4 lg:px-12 gap-6">
         <div className="w-full lg:w-1/3">
