@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 const PhotoNavigation = ({ user, photoIndex, nextPhoto, prevPhoto, setPhotoIndex }) => {
     return (
       <>
-        {user.photos.length > 1 && (
+        {user.photos?.length > 1 && (
           <>
             <div className="absolute top-3 left-1/2 transform -translate-x-1/2 flex gap-1 z-10">
               {user.photos.map((_, index) => (
