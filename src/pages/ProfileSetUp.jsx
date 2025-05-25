@@ -1,178 +1,195 @@
-import React, { useState, useEffect } from "react";
-import Select from "react-select";
-import { toast } from "sonner";
+import React from 'react';
+import Select from 'react-select';
+import { toast } from 'react-toastify';
+import { useMutation } from '@tanstack/react-query';
+import { register, updateUser } from '@/api/userApi';
+import { extractBackendError } from '@/utils/errorUtils';
+import { useNavigate } from 'react-router-dom';
+import { adventureStyles, genders } from './constants';
+import { useProfileSetupForm } from '@/hooks/useProfileSetupForm';
+import CreatableSelect from 'react-select/creatable';
 
-const genders = ["Female", "Male"];
-const lookingOptions = [
-  "Hiking","Trekking","Cycling","Mountain Biking","Climbing","Camping",
-  "Fishing","Rafting","Surfing","Snorkeling","Skiing","Snowboarding",
-  "Horseback Riding","Photography","Yoga Retreat","Beach Relaxation","Volunteering",
-].map(v => ({ value: v, label: v }));
+const ProfileSetup = ({ formRegister }) => {
+  const {
+    form,
+    imgURLs,
+    handleInputChange,
+    handleLanguagesChange,
+    handleAdventureStyleChange,
+    handleImageUpload,
+  } = useProfileSetupForm(formRegister);
 
-export default function ProfileSetup() {
 
-  const [countryOptions, setCountryOptions] = useState([]);
-  const [cityOptions, setCityOptions]       = useState([]);
-  const [languageOptions, setLanguageOptions] = useState([]);
-  const [loadingCities, setLoadingCities]   = useState(false);
-  const [imgURL, setImgURL]                 = useState(null);
 
-  const [form, setForm] = useState({
-    dob:"", gender:"", country:"", location:"",
-    languages: [], lookingFor: [], mates: 0, bio:""
+  const navigate = useNavigate();
+
+  const mutationRegister = useMutation({
+    mutationFn: register,
+    onSuccess: () => {
+      toast.success('User registered successfully');
+      navigate('/home');
+    },
+    onError: (err) => {
+      const message = extractBackendError(err);
+      toast.error(message);
+    },
   });
 
-  useEffect(() => {
-    fetch("https://countriesnow.space/api/v0.1/countries/positions")
-      .then(r => r.json())
-      .then(({data}) =>
-        setCountryOptions(
-          data.map(c => ({ value:c.name, label:c.name }))
-              .sort((a,b)=>a.label.localeCompare(b.label))
-        )
-      ).catch(err=>{
-        console.error(err);
-        toast.error("failed to load countries");
-      });
-  }, []);
+  const mutation = useMutation({
+    mutationFn: async (data) => updateUser(data, { method: 'PUT' }),
+    onSuccess: () => {
+      toast.success('Profile updated successfully');
+    },
+    onError: (error) => {
+      toast.error('Failed to update profile');
+      console.log(error);
+    },
+  });
 
-  useEffect(() => {
-    fetch("https://restcountries.com/v3.1/all")
-      .then(r => r.json())
-      .then(arr => {
-        const set = new Set();
-        arr.forEach(c => c.languages && Object.values(c.languages).forEach(l => set.add(l)));
-        setLanguageOptions([...set].sort().map(l => ({ value:l, label:l })));
-      }).catch(err=>{
-        console.error(err);
-        toast.error("Failed to load languages");
-      });
-  }, []);
-
-  const loadCities = async country => {
-    if (!country) return setCityOptions([]);
-    setLoadingCities(true);
-    try {
-      const res = await fetch(
-        "https://countriesnow.space/api/v0.1/countries/cities",
-        {
-          method:"POST",
-          headers:{ "Content-Type":"application/json" },
-          body: JSON.stringify({ country })
-        }
-      );
-      const { data=[] } = await res.json();
-      setCityOptions(
-        data.sort((a,b)=>a.localeCompare(b))
-            .map(n => ({ value:n, label:n }))
-      );
-    } catch(err) {
-      console.error(err); setCityOptions([]);
-    } finally { setLoadingCities(false); }
-  };
-
-  const onInput  = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
-  const onFile   = e => { const f=e.target.files[0]; f && setImgURL(URL.createObjectURL(f)); };
-  const onSubmit = e => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    console.table({
+    const payload = {
       ...form,
-      imgURL,
-      languages:  form.languages.map(o=>o.value),
-      lookingFor: form.lookingFor.map(o=>o.value)
-    });
+      photos: imgURLs,
+      languagesSpoken: form.languagesSpoken.map((o) => o.value),
+    };
+    if (!formRegister) mutation.mutate(payload);
+    else mutationRegister.mutate(payload);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-cover bg-center px-4"
-         style={{ backgroundImage:"url('/assets/images/newBackground.jpg')" }}>
-
-      <form onSubmit={onSubmit}
-            className="bg-white/10 backdrop-blur-md text-[#2D4A53] p-8 w-full max-w-md rounded-3xl shadow-xl flex flex-col gap-6">
-
-        <div className="flex flex-col items-center gap-4">
-          <div className="h-28 w-28 rounded-full bg-gray-300 overflow-hidden shadow-md">
-            {imgURL && <img src={imgURL} alt="avatar" className="h-full w-full object-cover"/>}
+    <div className='min-h-screen flex items-center justify-center bg-gradient-to-b from-[#eaf4ff] to-[#dbeeff] px-4'>
+      <form
+        onSubmit={onSubmit}
+        className='bg-white rounded-3xl shadow-xl p-6 sm:p-8 w-full max-w-md flex flex-col gap-6 text-[#2D4A53] transition-all duration-300'
+      >
+        <div className='flex flex-col items-center gap-3'>
+          <div className='flex gap-2'>
+            {imgURLs.length > 0 ? (
+              imgURLs.map((url, idx) => (
+                <div
+                  key={idx}
+                  className='h-20 w-20 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'
+                >
+                  <img
+                    src={url}
+                    alt='avatar'
+                    className='h-full w-full object-cover'
+                  />
+                </div>
+              ))
+            ) : (
+              <div className='h-28 w-28 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300' />
+            )}
           </div>
-          <label className="text-sm text-indigo-600 underline cursor-pointer">
-            Upload profile picture
-            <input type="file" accept="image/*" onChange={onFile} className="sr-only"/>
+          <label className='text-sm text-blue-600 underline cursor-pointer'>
+            Upload Profile Pictures
+            <input
+              type='file'
+              accept='image/*'
+              multiple
+              onChange={handleImageUpload}
+              className='sr-only'
+            />
           </label>
         </div>
 
         <input
-          type="date"
-          name="dob"
-          value={form.dob}
-          onChange={onInput}
+          type='text'
+          name='fullName'
+          value={form.fullName}
+          onChange={handleInputChange}
+          disabled={!formRegister}
+          placeholder='Full Name'
           required
-          className="input-white"
+          className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bgx-gray-400'
+        />
+
+        <input
+          type='date'
+          name='birthDate'
+          value={form.birthDate}
+          disabled={!formRegister}
+          onChange={handleInputChange}
+          required
+          className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200'
         />
 
         <select
-          name="gender"
+          name='gender'
           value={form.gender}
-          onChange={onInput}
+          disabled={!formRegister}
+          onChange={handleInputChange}
           required
-          className="input-white"
+          className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200'
         >
-          <option value="">Gender</option>
-          {genders.map(g => <option key={g}>{g}</option>)}
+          <option value=''>Gender</option>
+          {genders.map((g) => (
+            <option value={g.toLowerCase()} key={g}>
+              {g}
+            </option>
+          ))}
         </select>
 
-        <Select
-          placeholder="Country"
-          options={countryOptions}
-          value={countryOptions.find(o=>o.value===form.country)||null}
-          onChange={o=>{
-            setForm(f=>({...f,country:o?.value||"", location:""}));
-            loadCities(o?.value);
-          }}
-          isSearchable
-          classNamePrefix="rs"
+        <input
+          type='text'
+          placeholder='Country'
+          name='country'
+          value={form.location.country}
+          onChange={handleInputChange}
+          required
+          className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200'
         />
 
-        <Select
-          placeholder={loadingCities ? "Loading cities…" : "City"}
-          options={cityOptions}
-          value={cityOptions.find(o=>o.value===form.location)||null}
-          onChange={o=>setForm(f=>({...f, location:o?.value||""}))}
-          isSearchable
-          isDisabled={!form.country||loadingCities}
-          classNamePrefix="rs"
+        <input
+          type='text'
+          placeholder='City'
+          name='city'
+          value={form.location.city}
+          onChange={handleInputChange}
+          required
+          className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200'
         />
 
-        <Select
-          placeholder="Select languages…"
-          options={languageOptions}
+        <CreatableSelect
+          placeholder='Select languages…'
           isMulti
-          value={form.languages}
-          onChange={sel=>setForm(f=>({...f,languages:sel||[]}))}
+          value={form.languagesSpoken}
+          onChange={handleLanguagesChange}
           isSearchable
-          classNamePrefix="rs"
+          classNamePrefix='rs'
+          className='rounded-xl'
         />
 
         <Select
-          options={lookingOptions}
-          isMulti
-          placeholder="Looking for?"
-          value={form.lookingFor}
-          onChange={sel=>setForm(f=>({...f, lookingFor: sel}))}
-          classNamePrefix="rs"
+          options={adventureStyles}
+          placeholder='Adventure Style'
+          value={
+            adventureStyles.find((o) => o.value === form.adventureStyle) || null
+          }
+          onChange={handleAdventureStyleChange}
+          classNamePrefix='rs'
+          className='rounded-xl'
         />
 
-        
         <textarea
-          name="bio"
+          name='bio'
           rows={2}
-          placeholder="Bio (optional)"
+          placeholder='Bio (optional)'
           value={form.bio}
-          onChange={onInput}
-          className="input-white resize-none"
+          onChange={handleInputChange}
+          className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-300'
         />
 
-        <button type="submit" className="btn-primary mt-4 rounded-xl">SUBMIT</button>
+        <button
+          type='submit'
+          className='bg-blue-500 hover:bg-blue-600 text-white rounded-xl py-2 font-medium transition'
+        >
+          SUBMIT
+        </button>
       </form>
     </div>
   );
-}
+};
+
+export default ProfileSetup;
