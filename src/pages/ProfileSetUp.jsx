@@ -102,7 +102,7 @@ const ProfileSetup = ({ formRegister }) => {
           disabled={!formRegister}
           placeholder='Full Name'
           required
-          className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bgx-gray-400'
+          className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200'
         />
 
         <input
