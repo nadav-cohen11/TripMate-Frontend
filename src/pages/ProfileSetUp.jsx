@@ -7,27 +7,19 @@ import { extractBackendError } from '@/utils/errorUtils';
 import { useNavigate } from 'react-router-dom';
 import { adventureStyles, genders } from './constants';
 import { useProfileSetupForm } from '@/hooks/useProfileSetupForm';
-import { useProfileDataQueries } from '@/hooks/useProfileDataQueries';
+import CreatableSelect from 'react-select/creatable';
 
-export default function ProfileSetup({ formRegister }) {
+const ProfileSetup = ({ formRegister }) => {
   const {
     form,
     imgURLs,
     handleInputChange,
-    handleLocationChange,
     handleLanguagesChange,
     handleAdventureStyleChange,
     handleImageUpload,
   } = useProfileSetupForm(formRegister);
 
-  const {
-    countryOptions,
-    loadingCountries,
-    languageOptions,
-    loadingLanguages,
-    cityOptions,
-    loadingCities,
-  } = useProfileDataQueries(form.location?.country);
+
 
   const navigate = useNavigate();
 
@@ -139,47 +131,28 @@ export default function ProfileSetup({ formRegister }) {
           ))}
         </select>
 
-        <Select
-          placeholder={loadingCountries ? 'Loading countries…' : 'Country'}
-          options={countryOptions}
-          value={
-            countryOptions.find((o) => o.value === form.location?.country) ||
-            null
-          }
-          onChange={(o) => {
-            handleLocationChange({ country: o?.value || '', city: '' });
-          }}
-          isSearchable
-          classNamePrefix='rs'
-          className='rounded-xl'
+        <input
+          type='text'
+          placeholder='Country'
+          name='country'
+          value={form.location.country}
+          onChange={handleInputChange}
+          required
+          className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200'
         />
 
-        <Select
-          placeholder={
-            !form.location?.country
-              ? 'Select country first'
-              : loadingCities
-              ? 'Loading cities…'
-              : 'City'
-          }
-          options={cityOptions}
-          value={
-            form.location?.city
-              ? cityOptions.find((o) => o.value === form.location?.city) || null
-              : null
-          }
-          onChange={(o) => handleLocationChange({ city: o ? o.value : '' })}
-          isSearchable
-          isDisabled={!form.location?.country || loadingCities}
-          classNamePrefix='rs'
-          className='rounded-xl'
+        <input
+          type='text'
+          placeholder='City'
+          name='city'
+          value={form.location.city}
+          onChange={handleInputChange}
+          required
+          className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200'
         />
 
-        <Select
-          placeholder={
-            loadingLanguages ? 'Loading languages…' : 'Select languages…'
-          }
-          options={languageOptions}
+        <CreatableSelect
+          placeholder='Select languages…'
           isMulti
           value={form.languagesSpoken}
           onChange={handleLanguagesChange}
@@ -217,4 +190,6 @@ export default function ProfileSetup({ formRegister }) {
       </form>
     </div>
   );
-}
+};
+
+export default ProfileSetup;

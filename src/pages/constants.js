@@ -7,7 +7,9 @@ export const lookingOptions = [
 export const genders = ["Female", "Male"];
 
 export const adventureStyles = [
-  { value: 'Exploratory', label: 'Exploratory' },
   { value: 'Relaxed', label: 'Relaxed' },
+  { value: 'Exploratory', label: 'Exploratory' },
+  { value: 'Extreme', label: 'Extreme' },
+  { value: 'Photography', label: 'Photography' },
   { value: 'Cultural', label: 'Cultural' },
 ];

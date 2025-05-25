@@ -39,7 +39,7 @@ export function useProfileSetupForm(formRegister) {
     queryKey: ['user'],
     queryFn: () => getUser(),
     staleTime: 5 * 60 * 1000,
-    enabled: !formRegister, 
+    enabled: !formRegister,
   });
 
   useEffect(() => {
@@ -63,8 +63,19 @@ export function useProfileSetupForm(formRegister) {
     }
   }, [user, formRegister]);
 
-  const handleInputChange = (e) =>
-    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+  const handleInputChange = (e) => {
+    if (e.target.name === 'country' || e.target.name === 'city') {
+      setForm((f) => ({
+        ...f,
+        location: {
+          ...f.location,
+          [e.target.name]: e.target.value,
+        },
+      }));
+    } else {
+      setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+    }
+  };
 
   const handleLocationChange = (newLocation) => {
     setForm((prevForm) => ({
