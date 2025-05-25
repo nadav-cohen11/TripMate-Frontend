@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { login } from "../../api/userApi";
+import { login } from '../../api/userApi';
 import { toast } from 'react-toastify';
 import TextInput from '@/components/ui/textInput';
 import LoginButton from '@/components/ui/loginButton';
@@ -10,13 +10,12 @@ import { AuthContext } from '../../context/AuthContext';
 import { useMutation } from '@tanstack/react-query';
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
-  const { checkAuth } = useContext(AuthContext); 
-
-  const from = location.state?.from?.pathname || '/home'; 
+  const { checkAuth } = useContext(AuthContext);
+  const from = location.state?.from?.pathname || '/home';
 
   const mutation = useMutation({
     mutationFn: async ({ email, password, location }) => {
@@ -28,8 +27,8 @@ const Login = () => {
     },
     onError: (err) => {
       const message = extractBackendError(err);
-      toast.error(message || err.message || "Login failed");
-    }
+      toast.error(message || err.message || 'Login failed');
+    },
   });
 
   const handleSubmit = async (e) => {
@@ -38,52 +37,48 @@ const Login = () => {
     if (!location) location = [];
     mutation.mutate({ email, password, location });
   };
-  
+
   return (
-    <div
-      className="h-[300px] bg-cover bg-center relative px-4 pt-40 pb-60"
-      style={{ backgroundImage: "url('/assets/images/newBackground.jpg')" }}
-    >
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#eaf4ff] to-[#dbeeff] px-4">
       <form
         onSubmit={handleSubmit}
-        className="text-[#2D4A53] p-7 w-full space-y-4"
+        className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 w-full max-w-md flex flex-col gap-6 text-[#2D4A53] transition-all duration-300"
       >
-        <p className="text-[#2D4A53] text-4xl font-bold text-center pt-44 pb-20">
-          Welcome Back!
+        <p className="text-3xl font-bold text-center mb-2">
+          TripMate
         </p>
 
-        <div className='pb-1'>
-          <TextInput
-            type='email'
-            placeholder='Email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
+        <TextInput
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className="bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+        />
 
-        <div className='pb-1'>
-          <TextInput
-            type='password'
-            placeholder='Password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+        <TextInput
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          className="bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+        />
 
-        <div className='pt-1'>
-          <LoginButton
-            type="submit"
-            className="text-white w-full h-12 rounded-full"
-          >
-            Log In <i className="bi bi-arrow-right ms-2"></i>
-          </LoginButton>
-        </div>
+        <LoginButton
+          type="submit"
+          className="bg-blue-500 hover:bg-blue-600 text-white rounded-xl py-2 font-medium transition"
+        >
+          Log In <i className="bi bi-arrow-right ms-2"></i>
+        </LoginButton>
 
         <div className="text-center text-sm text-[#2D4A53] pt-4">
-          Don't have an account?{" "}
-          <a href="/register" className="font-semibold underline hover:text-[#2D4A53]">
+          Don't have an account?{' '}
+          <a
+            href="/register"
+            className="font-semibold underline hover:text-[#2D4A53]"
+          >
             Sign up
           </a>
         </div>
