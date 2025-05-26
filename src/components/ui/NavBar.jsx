@@ -1,17 +1,21 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { Home, Star, MapPin, User, MessageCircle } from "lucide-react";
-
-const navItems = [
-  { to: "/chat",      icon: MessageCircle },
-  { to: "/favorites", icon: Star         },
-  { to: "/home",      icon: Home         },
-  { to: "/map",       icon: MapPin       },
-  { to: "/profile",   icon: User         },
-];
+import { useAuth } from "@/context/AuthContext";
 
 const Navbar = () => {
-  const { pathname } = useLocation();
-  const iconColor    = "#334155";              
+  const location = useLocation();
+  const { user, loading } = useAuth();
+  const iconColor = "#334155";
+
+  const navItems = [
+    { to: "/chat", icon: MessageCircle },
+    { to: "/reels", icon: Star },
+    { to: "/home", icon: Home },
+    { to: "/map", icon: MapPin },
+    { to: `/profile/${user}`, icon: User },
+  ];
+
+  if (loading) return null;
 
   return (
     <nav

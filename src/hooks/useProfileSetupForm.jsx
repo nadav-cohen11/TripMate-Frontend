@@ -23,12 +23,11 @@ export function useProfileSetupForm(formRegister) {
 
   useEffect(() => {
     const getLocations = async () => {
-      const location = await getCurrentLocation();
+      const loc = await getCurrentLocation();
       setForm((prevForm) => ({
         ...prevForm,
         location: {
-          ...prevForm.location,
-          ...location,
+          coordinates: loc,
         },
       }));
     };
@@ -39,7 +38,7 @@ export function useProfileSetupForm(formRegister) {
     queryKey: ['user'],
     queryFn: () => getUser(),
     staleTime: 5 * 60 * 1000,
-    enabled: !formRegister,
+    enabled: !formRegister, 
   });
 
   useEffect(() => {
@@ -104,7 +103,6 @@ export function useProfileSetupForm(formRegister) {
   return {
     form,
     imgURLs,
-
     setForm,
     setImgURLs,
     handleInputChange,

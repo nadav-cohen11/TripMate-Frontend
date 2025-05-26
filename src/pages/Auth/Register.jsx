@@ -1,9 +1,23 @@
+import { z } from 'zod';
 import { toast } from 'react-toastify';
 import TextInput from '@/components/ui/textInput';
 import LoginButton from '@/components/ui/loginButton';
-import { schema } from '@/schemas/passwordSchema';
 
-const Register = ({ nextStep, form, setForm }) => {
+const schema = z.object({
+  email: z.string().email('Invalid email address'),
+  password: z
+    .string()
+    .min(6, 'Password must be at least 6 characters')
+    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+    .regex(/[0-9]/, 'Password must contain at least one number')
+    .regex(
+      /[^A-Za-z0-9]/,
+      'Password must contain at least one special character',
+    ),
+});
+
+export default function Register({ nextStep, form, setForm }) {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
