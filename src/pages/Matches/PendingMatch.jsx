@@ -1,20 +1,13 @@
-import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
+import { unmatchUsers, createOrAcceptMatch } from '@/api/matchApi';
 
 const PendingMatch = ({ match }) => {
   const user = match.user1Id;
   if (!user) return null;
 
-  // const acceptMutation = useMutation({
-  //   mutationFn:
-  // });
-
-  const handleAccept = () => {
-    
-  }
+  const handleAccept = () => {};
 
   const handleDecline = () => {
-
+    
   };
 
   return (
@@ -56,15 +49,15 @@ const PendingMatch = ({ match }) => {
             Compatibility: {match.compatibilityScore}%
           </div>
         </div>
-        <div className="flex flex-col space-y-2">
+        <div className='flex flex-col space-y-2'>
           <button
-            className="px-4 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+            className='px-4 py-1 bg-green-500 text-white rounded hover:bg-green-600'
             // onClick={handleAccept}
           >
             Accept
           </button>
           <button
-            className="px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+            className='px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600'
             // onClick={handleDecline}
           >
             Decline

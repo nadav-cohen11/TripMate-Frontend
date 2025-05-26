@@ -7,7 +7,6 @@ const ConfirmedMatch = ({
   openReviewId,
   setOpenReviewId,
 }) => {
-  console.log('sdasd');
   const friend = match.otherUser;
   const [review, setReview] = useState('');
   const [rating, setRating] = useState(0);

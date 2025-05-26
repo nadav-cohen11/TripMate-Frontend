@@ -18,15 +18,6 @@ const ProfileSetup = ({ formRegister }) => {
     handleImageUpload,
   } = useProfileSetupForm(formRegister);
 
-  // const {
-  //   countryOptions,
-  //   loadingCountries,
-  //   languageOptions,
-  //   loadingLanguages,
-  //   cityOptions,
-  //   loadingCities,
-  // } = useProfileDataQueries(form.location?.country);
-
   const navigate = useNavigate();
 
   const mutationRegister = useMutation({
