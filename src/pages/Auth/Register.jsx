@@ -17,7 +17,7 @@ const schema = z.object({
     ),
 });
 
-export default function Register({ nextStep, form, setForm }) {
+const Register = ({ nextStep, form, setForm }) => {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
