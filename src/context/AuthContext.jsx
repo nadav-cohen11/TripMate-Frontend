@@ -1,4 +1,3 @@
-// context/AuthContext.jsx
 import { createContext, useContext, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import api from '../api/axios';
@@ -34,5 +33,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// export hook for convenience
 export const useAuth = () => useContext(AuthContext);

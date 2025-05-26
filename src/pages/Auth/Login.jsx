@@ -1,43 +1,44 @@
 import { useState, useContext } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
+import { login } from "../../api/userApi";
 import { toast } from 'react-toastify';
-import { login } from '@/api/userApi';
-import { getCurrentLocation } from '@/utils/getLocationUtiles';
-import { extractBackendError } from '@/utils/errorUtils';
-import { AuthContext } from '@/context/AuthContext';
 import TextInput from '@/components/ui/textInput';
 import LoginButton from '@/components/ui/loginButton';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { extractBackendError } from '../../utils/errorUtils';
+import { getCurrentLocation } from '@/utils/getLocationUtiles';
+import { AuthContext } from '../../context/AuthContext';
+import { useMutation } from '@tanstack/react-query';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  const { checkAuth } = useContext(AuthContext);
+  const { checkAuth } = useContext(AuthContext); 
 
-  const from = location.state?.from?.pathname || '/home';
+  const from = location.state?.from?.pathname || '/home'; 
 
-  const loginMutation = useMutation({
-    mutationFn: async () => {
-      const coordinates = await getCurrentLocation();
-      return await login(email, password, coordinates);
-    },
-    onSuccess: async () => {
+  const mutation = useMutation({
+    mutationFn: async ({ email, password, location }) => {
+      await login(email, password, location);
       await checkAuth();
+    },
+    onSuccess: () => {
       navigate(from, { replace: true });
     },
     onError: (err) => {
       const message = extractBackendError(err);
-      toast.error(message || 'Login failed');
-    },
+      toast.error(message || err.message || "Login failed");
+    }
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    loginMutation.mutate();
+    let location = await getCurrentLocation();
+    if (!location) location = [];
+    mutation.mutate({ email, password, location });
   };
-
+  
   return (
     <div
       className="h-[300px] bg-cover bg-center relative px-4 pt-40 pb-60"
@@ -51,39 +52,38 @@ const Login = () => {
           Welcome Back!
         </p>
 
-        <div className="pb-1">
+        <div className='pb-1'>
           <TextInput
-            type="email"
-            placeholder="Email"
+            type='email'
+            placeholder='Email'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
 
-        <div className="pb-1">
+        <div className='pb-1'>
           <TextInput
-            type="password"
-            placeholder="Password"
+            type='password'
+            placeholder='Password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
         </div>
 
-        <div className="pt-6">
-          <LoginButton type="submit" disabled={loginMutation.isLoading}>
-            {loginMutation.isLoading ? 'Logging in...' : 'Login'}
-            <i className="bi bi-arrow-right ms-2"></i>
+        <div className='pt-1'>
+          <LoginButton
+            type="submit"
+            className="text-white w-full h-12 rounded-full"
+          >
+            Log In <i className="bi bi-arrow-right ms-2"></i>
           </LoginButton>
         </div>
 
         <div className="text-center text-sm text-[#2D4A53] pt-4">
-          Don't have an account?{' '}
-          <a
-            href="/register"
-            className="font-semibold underline hover:text-[#2D4A53]"
-          >
+          Don't have an account?{" "}
+          <a href="/register" className="font-semibold underline hover:text-[#2D4A53]">
             Sign up
           </a>
         </div>

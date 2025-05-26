@@ -41,7 +41,7 @@ const ReviewList = ({ userId }) => {
           return (
             <div key={review._id} className="flex items-start gap-3 border-b pb-3">
               <img
-                src={review.reviewerId.photos[0] || '/assets/images/Annonymos_picture.jpg'}
+                src={review.reviewerId.photos[0].url || '/assets/images/Annonymos_picture.jpg'}
                 alt={review.reviewerId?.fullName || 'Reviewer'}
                 className="w-10 h-10 rounded-full object-cover border bg-gray-100"
               />

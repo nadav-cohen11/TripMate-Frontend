@@ -3,15 +3,7 @@ import { motion } from 'framer-motion';
 import EventCard from './EventCard';
 import api from '../../api/axios';
 import { useState, useEffect } from 'react';
-
-const FILTER_OPTIONS = [
-  { label: 'Music', icon: '🎵' },
-  { label: 'Tech', icon: '💻' },
-  { label: 'Sports', icon: '⚽' },
-  { label: 'Theater', icon: '🎭' },
-  { label: 'Comedy', icon: '😂' },
-  { label: 'Food', icon: '🍔' },
-];
+import { FILTER_OPTIONS } from '@/utils/OptionsData';
 
 const containerVariants = {
   hidden: {},
@@ -50,6 +42,7 @@ export const EventList = ({ lat, lon, keyword: externalKeyword }) => {
     enabled: !!lat && !!lon,
     staleTime: 5 * 60 * 1000,
     cacheTime: 10 * 60 * 1000,
+    
   });
 
   return (

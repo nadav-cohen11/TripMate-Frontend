@@ -9,17 +9,22 @@ export const UserMarker = ({ user }) => {
   const [lat, lng] = location.coordinates;
 
   const userIcon = L.icon({
-    iconUrl: photos[0] || DEFAULT_PHOTO,
-    iconSize: [60, 60],
-    iconAnchor: [30, 60],
-    className: "rounded-full border-2 border-white shadow-lg",
+    iconUrl: photos?.[0]?.url || DEFAULT_PHOTO,
+    iconSize: [50, 50],
+    iconAnchor: [25, 50],
+    className: "rounded-full border-4 border-white shadow-xl",
   });
 
   return (
     <Marker position={[lat, lng]} icon={userIcon}>
-      <Popup className="p-4">
-        <div className="text-center space-y-2">
-          <h3 className="text-lg font-semibold text-indigo-800">{fullName || "Unnamed User"}</h3>
+      <Popup>
+        <div className="w-48 space-y-3 text-center font-sans">
+          <img
+            src={photos?.[0]?.url || DEFAULT_PHOTO}
+            alt={fullName || "User"}
+            className="mx-auto h-24 w-24 rounded-full object-cover border-2 border-gray-200 shadow-sm"
+          />
+          <h3 className="text-lg font-semibold text-gray-800">{fullName || "Unnamed User"}</h3>
 
           <div className="flex justify-center space-x-4 text-xl">
             {socialLinks.facebook && (
@@ -27,7 +32,7 @@ export const UserMarker = ({ user }) => {
                 href={socialLinks.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-800"
+                className="text-blue-600 hover:text-blue-800 transition"
                 title="Facebook"
               >
                 <FaFacebookSquare />
@@ -38,19 +43,13 @@ export const UserMarker = ({ user }) => {
                 href={socialLinks.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-pink-500 hover:text-pink-600"
+                className="text-pink-500 hover:text-pink-600 transition"
                 title="Instagram"
               >
                 <FaInstagram />
               </a>
             )}
           </div>
-
-          <img
-            src={photos[0] || DEFAULT_PHOTO}
-            alt={fullName}
-            className="w-[100px] h-[100px] rounded-lg object-cover mx-auto"
-          />
         </div>
       </Popup>
     </Marker>

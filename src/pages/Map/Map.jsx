@@ -7,11 +7,11 @@ import { MapContainerWrapper } from "./MapContainerWrapper";
 import { RadiusSlider } from "@/components/ui/slider";
 import { useDebounce } from "@/hooks/useDebounce";
 import { EventList } from "./EventList";
+import { FILTER_ICONS } from "@/constants/filters";
 
 export const Map = () => {
   const [filter, setFilter] = useState("Bars");
   const [radius, setRadius] = useState(500);
-  const [keyword, setKeyword] = useState('');
 
   const debouncedRadius = useDebounce(radius, 600);
   const debouncedFilter = useDebounce(filter, 600);
@@ -24,31 +24,36 @@ export const Map = () => {
   const isLoading = loadingUsers || loadingPlaces;
 
   return (
-    <div className="min-h-screen px-6 py-8 bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200">
-      <h1 className="text-4xl font-bold text-gray-800 mb-6">TripMate</h1>
-      <FilterSelector activeFilter={filter} setFilter={setFilter} />
-      <RadiusSlider radius={radius} setRadius={setRadius} />
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200">
+      <div className="absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}>
+      TripMate
+    </div>
 
-      {isLoading ? (
-        <div className="flex justify-center items-center h-[60vh]">
-          <Spinner />
-        </div>
-      ) : (
-        <>
+      <div className="z-10 relative flex flex-col gap-6 pt-28 px-6 md:px-12 max-w-screen-md mx-auto">
+        <FilterSelector activeFilter={filter} setFilter={setFilter} filterIcons={FILTER_ICONS}   />
+        <RadiusSlider radius={radius} setRadius={setRadius} />
+      </div>
+
+      <div className="relative z-0">
+        {isLoading ? (
+          <div className="flex justify-center items-center h-[60vh]">
+            <Spinner />
+          </div>
+        ) : (
           <MapContainerWrapper
             userLocations={userLocations}
             places={places}
             userLocation={coordinates}
             filter={filter}
           />
-        </>
-      )}
-    <EventList
-  lat={coordinates[1]}
-  lon={coordinates[0]}
-  keyword={debouncedFilter}
-/>
+        )}
+      </div>
 
+      <EventList
+        lat={coordinates?.[1]}
+        lon={coordinates?.[0]}
+        keyword={debouncedFilter}
+      />
     </div>
   );
 };

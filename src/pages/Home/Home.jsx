@@ -18,30 +18,29 @@ const Home = () => {
     try {
       const [displayUsers, currentUserLocation] = await Promise.all([
         NonMatchedUsers(),
-        getUserLocation()
+        getUserLocation(),
       ]);
-      const usersWithAI = displayUsers.map((user) => {
-        const compatibilityScore = Math.floor(Math.random() * 101);
-        const userLocation = user.location;
 
-        let distance = null;
-        if (
-          Array.isArray(userLocation?.coordinates) &&
-          Array.isArray(currentUserLocation?.location?.coordinates)
-        ) {
-          const [userLng, userLat] = userLocation.coordinates;
-          const [currLng, currLat] = currentUserLocation.location.coordinates;
-          distance = calculateDistance(currLat, currLng, userLat, userLng);
-        }         
+      const usersWithDetails = displayUsers.map((user) => {
+        const compatibilityScore = Math.floor(Math.random() * 101);
+
+        const userCoords = user.location?.coordinates;
+        const currentCoords = currentUserLocation?.location?.coordinates;
+
+        const distance =
+          Array.isArray(userCoords) && Array.isArray(currentCoords)
+            ? calculateDistance(currentCoords[1], currentCoords[0], userCoords[1], userCoords[0])
+            : null;
+
         return {
           ...user,
           distance: distance ? Math.round(distance) : null,
           compatibilityScore,
-          aiSuggested: compatibilityScore >= 1,
+          aiSuggested: compatibilityScore >= 70,
         };
       });
 
-      setUsers(usersWithAI);
+      setUsers(usersWithDetails);
     } catch (err) {
       toast.error(extractBackendError(err));
     } finally {
@@ -63,7 +62,7 @@ const Home = () => {
 
   if (!users.length) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 text-gray-800 text-center">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 text-center text-gray-800">
         <h1 className="text-2xl font-semibold">No more matches at the moment!</h1>
         <p className="mt-2">Check back later or adjust your preferences.</p>
       </div>
@@ -72,9 +71,10 @@ const Home = () => {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden">
-      <div className="absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}>
-        TripMate
-      </div>
+    <div className="absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}>
+      TripMate
+    </div>
+
       <div className="flex items-center justify-center min-h-screen px-4 z-10">
         {users.map((user, index) => (
           <TinderCard
@@ -87,7 +87,10 @@ const Home = () => {
               setTimeout(() => setSwipeInfo({ id: null, direction: null }), 1000);
             }}
           >
-            <div className="tinder-card-wrapper w-full h-full flex justify-center items-center px-4" style={{ zIndex: users.length - index }}>
+            <div
+              className="tinder-card-wrapper w-full h-full flex justify-center items-center px-4"
+              style={{ zIndex: users.length - index }}
+            >
               <ProfileCard user={user} swipeInfo={swipeInfo} />
             </div>
           </TinderCard>

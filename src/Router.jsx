@@ -1,13 +1,20 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Login from './pages/Auth/Login';
-import Register from './pages/Auth/Register';
+import MultiStepFormRegister from './pages/Auth/MultiStepFormRegister';
 import protectedRoutes from './ProtectedRoutes';
+
+const ProtectedLayout = () => (
+  <>
+    <Navbar />
+    <Outlet />
+  </>
+);
 
 const AppRoutes = () => (
   <Routes>
     <Route path="/login" element={<Login />} />
-    <Route path="/register" element={<Register />} />
+    <Route path='/register' element={<MultiStepFormRegister />} />
     {protectedRoutes().map((route, index) => (
       <Route key={index} path={route.path} element={route.element} />
     ))}
@@ -15,4 +22,3 @@ const AppRoutes = () => (
 );
 
 export default AppRoutes;
-

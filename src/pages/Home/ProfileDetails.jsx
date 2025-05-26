@@ -25,21 +25,16 @@ const ProfileDetails = ({ user, age, city, country, languages, travel, distance,
         )}
       </div>
 
-      {/* Bio */}
       {user.bio && (
         <p className="text-base leading-relaxed text-gray-700 italic border-l-4 border-sky-200 pl-4">
           {user.bio}
         </p>
       )}
-
-      {/* Basic Info */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
         <p><span className="font-medium text-gray-600">Gender:</span> {user.gender || 'Not specified'}</p>
         <p><span className="font-medium text-gray-600">Languages:</span> {languages}</p>
         <p><span className="font-medium text-gray-600">Adventure Style:</span> {user.adventureStyle || 'Not specified'}</p>
       </div>
-
-      {/* Travel Details */}
       {travel?.travelDates && (
         <div className="bg-gradient-to-br from-sky-50 via-blue-50 to-sky-100 p-4 rounded-xl shadow-sm space-y-2 text-sm">
           <div className="flex items-center gap-2 text-blue-600">
@@ -62,8 +57,6 @@ const ProfileDetails = ({ user, age, city, country, languages, travel, distance,
           </div>
         </div>
       )}
-
-      {/* Reviews */}
       <div className="pt-2">
         <ReviewList userId={user._id} />
       </div>

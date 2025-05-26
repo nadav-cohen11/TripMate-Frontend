@@ -1,10 +1,7 @@
 const EventCard = ({ event }) => {
-    const { name,images, dates, place, url, description } = event;
-  
-    const image =
-      images?.find((img) => img.ratio === '16_9')?.url ||
-      images?.[0]?.url ||
-      'https://via.placeholder.com/600x400?text=No+Image';
+    const { name,images, dates, place, description } = event;
+    
+    const image = images[0]?.url
   
     const date = dates?.start?.dateTime
       ? new Date(dates.start.dateTime).toLocaleString(undefined, {
@@ -37,7 +34,7 @@ const EventCard = ({ event }) => {
             )}
           </div>
           <a
-            href={url}
+            href={image}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-4 inline-block text-blue-600 hover:underline font-medium"

@@ -11,12 +11,13 @@ export const login = async (email, password, location) => {
 
 export const register = async (userData) => {
     try {
-      const response = await api.post("/users/register", userData);
-      return response;
+        console.log(userData)
+        const response = await api.post("/users/register", userData);
+        return response;
     } catch (error) {
-      throw error;
+        throw error;
     }
-  };
+};
 
 export const getUser = async (userId) => {
     try {
@@ -36,16 +37,16 @@ export const getUserLoggedIn = async () => {
     }
 };
 
-export const updateUser = async(userId, userData) => {
+export const updateUser = async (userData) => {
     try {
-        const response = await api.put("/users/updateUser", { userId, userData });
+        const response = await api.put("/users/updateUser", { userData });
         return response.data
     } catch (error) {
         throw error;
     }
-};
+};  
 
-export const deleteUser = async(userId) => {
+export const deleteUser = async (userId) => {
     try {
         const response = await api.delete("/users/deleteUser", { data: { userId } });
         return response.data
@@ -56,18 +57,33 @@ export const deleteUser = async(userId) => {
 
 export const getUserLocation = async () => {
     try {
-    const response = await api.get('/users/location');
-    return response.data;
-   }catch(error) {
-      throw error;
-   }
+        const response = await api.get('/users/location');
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
 }
 
 export const getUsersLocations = async () => {
-  try {
-    const response = await api.get('/users/usersLocations');
-    return response.data;
-  }catch(error) {
-    throw error;
-  }
+    try {
+        const response = await api.get('/users/usersLocations');
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
 }
+
+
+export const getUserById = async (userId) => {
+    try {
+        const response = await api.get(`/users/${userId}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getQrCodeByUserId = async (userId) => {
+  const { data } = await api.get(`/qr/${userId}`);
+  return data.qrCode;
+};
