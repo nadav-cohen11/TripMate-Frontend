@@ -19,36 +19,18 @@ export const register = async (userData) => {
     }
 };
 
-export const getUser = async (userId) => {
+export const getUser = async () => {
     try {
-        const response = await api.get(`users/getUser/${userId}`);
+        const response = await api.get(`/users/getUser`);
         return response.data
     } catch (error) {
         throw error
     }
 };
 
-export const getUserLoggedIn = async () => {
-    try {
-        const response = await api.get(`/users/getUser/${userId}`);
-        return response.data
-    } catch (error) {
-        throw error;
-    }
-};
-
 export const updateUser = async (userData) => {
     try {
         const response = await api.put("/users/updateUser", { userData });
-        return response.data
-    } catch (error) {
-        throw error;
-    }
-};  
-
-export const deleteUser = async (userId) => {
-    try {
-        const response = await api.delete("/users/deleteUser", { data: { userId } });
         return response.data
     } catch (error) {
         throw error;

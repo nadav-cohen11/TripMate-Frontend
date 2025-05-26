@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
 import { useMutation } from '@tanstack/react-query';
@@ -47,7 +47,6 @@ export default function ProfileSetup({ nextStep,formRegister }) {
       }
       nextStep()
     },
-    
     onError: (err) => {
       const message = extractBackendError(err);
       toast.error(message);

@@ -9,7 +9,6 @@ const ProfileCard = ({ user, swipeInfo }) => {
 
   const nextPhoto = () => setPhotoIndex((prev) => (prev + 1) % (user.photos?.length || 1));
   const prevPhoto = () => setPhotoIndex((prev) => (prev - 1 + (user.photos?.length || 1)) % (user.photos?.length || 1));
-  console.log(user)
   const travel = user.travelPreferences || {};
   const languages = user.languagesSpoken?.join(', ') || '';
   const country = user.location?.country || '';

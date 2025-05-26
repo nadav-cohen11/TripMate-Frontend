@@ -116,6 +116,16 @@ const ChatWindow = ({
     );
   }
 
+  if (!selectedChat) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[80vh] min-h-[400px] w-full max-w-[500px] p-4 bg-white rounded-xl shadow-lg">
+        <div className="text-gray-400 text-lg font-medium text-center">
+          Select a chat to start messaging
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-[80vh] min-h-[400px] w-full max-w-[500px] p-4 bg-white rounded-xl shadow-lg">
       {selectedChat && (

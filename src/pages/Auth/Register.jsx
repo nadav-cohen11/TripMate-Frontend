@@ -18,7 +18,6 @@ const schema = z.object({
 });
 
 export default function Register({ nextStep, form, setForm }) {
-  
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -69,3 +68,5 @@ export default function Register({ nextStep, form, setForm }) {
     </div>
   );
 }
+
+export default Register

@@ -24,7 +24,6 @@ export function useProfileSetupForm(formRegister) {
   useEffect(() => {
     const getLocations = async () => {
       const loc = await getCurrentLocation();
-      console.log(loc)
       setForm((prevForm) => ({
         ...prevForm,
         location: {
@@ -34,7 +33,6 @@ export function useProfileSetupForm(formRegister) {
     };
     getLocations();
   }, []);
-  
 
   const { data: user } = useQuery({
     queryKey: ['user'],
@@ -64,8 +62,19 @@ export function useProfileSetupForm(formRegister) {
     }
   }, [user, formRegister]);
 
-  const handleInputChange = (e) =>
-    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+  const handleInputChange = (e) => {
+    if (e.target.name === 'country' || e.target.name === 'city') {
+      setForm((f) => ({
+        ...f,
+        location: {
+          ...f.location,
+          [e.target.name]: e.target.value,
+        },
+      }));
+    } else {
+      setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+    }
+  };
 
   const handleLocationChange = (newLocation) => {
     setForm((prevForm) => ({
