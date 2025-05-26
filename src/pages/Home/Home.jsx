@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import TinderCard from 'react-tinder-card';
 import ProfileCard from './ProfileCard';
@@ -10,43 +10,38 @@ import { calculateDistance } from '../../utils/calculateDistanceUtils';
 import { useQuery } from '@tanstack/react-query';
 import Typewriter from '../../components/Typewriter';
 
+const fetchUsers = async () => {
+  try {
+    const [displayUsers, currentUserLocation] = await Promise.all([
+      NonMatchedUsers(),
+      getUserLocation(),
+    ]);
+
+    return displayUsers.map((user) => {
+      const compatibilityScore = Math.floor(Math.random() * 101);
+
+      const userCoords = user.location?.coordinates;
+      const currentCoords = currentUserLocation?.location?.coordinates;
+
+      const distance =
+        Array.isArray(userCoords) && Array.isArray(currentCoords)
+          ? calculateDistance(currentCoords[1], currentCoords[0], userCoords[1], userCoords[0])
+          : null;
+
+      return {
+        ...user,
+        distance: distance ? Math.round(distance) : null,
+        compatibilityScore,
+        aiSuggested: compatibilityScore >= 70,
+      };
+    });
+  } catch (err) {
+    throw err;
+  }
+};
+
 const Home = () => {
   const [swipeInfo, setSwipeInfo] = useState({ id: null, direction: null });
-
-  const loadUsers = useCallback(async () => {
-    setLoading(true);
-    try {
-      const [displayUsers, currentUserLocation] = await Promise.all([
-        NonMatchedUsers(),
-        getUserLocation(),
-      ]);
-
-      const usersWithDetails = displayUsers.map((user) => {
-        const compatibilityScore = Math.floor(Math.random() * 101);
-
-        const userCoords = user.location?.coordinates;
-        const currentCoords = currentUserLocation?.location?.coordinates;
-
-        const distance =
-          Array.isArray(userCoords) && Array.isArray(currentCoords)
-            ? calculateDistance(currentCoords[1], currentCoords[0], userCoords[1], userCoords[0])
-            : null;
-
-        return {
-          ...user,
-          distance: distance ? Math.round(distance) : null,
-          compatibilityScore,
-          aiSuggested: compatibilityScore >= 70,
-        };
-      });
-
-      setUsers(usersWithDetails);
-    } catch (err) {
-      toast.error(extractBackendError(err));
-    } finally {
-      setLoading(false);
-    }
-  }, []);
 
   const {
     data: users = [],
@@ -55,7 +50,7 @@ const Home = () => {
   } = useQuery({
     queryKey: ['users-with-location'],
     queryFn: fetchUsers,
-    onError: () => toast.error(extractBackendError(error)),
+    onError: (err) => toast.error(extractBackendError(err)),
     staleTime: 5 * 60 * 1000,
   });
 
@@ -77,12 +72,10 @@ const Home = () => {
   }
 
   return (
-
     <div className="relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden">
-    <div className="absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}>
-      TripMate
-    </div>
-
+      <div className="absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}>
+        TripMate
+      </div>
       <div className="flex items-center justify-center min-h-screen px-4 z-10">
         {users.map((user, index) => (
           <TinderCard

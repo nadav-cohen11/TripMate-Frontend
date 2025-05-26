@@ -4,6 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 
 const Navbar = () => {
   const location = useLocation();
+  const pathname = location.pathname;
   const { user, loading } = useAuth();
   const iconColor = "#334155";
 
@@ -29,7 +30,7 @@ const Navbar = () => {
       "
     >
       {navItems.map(({ to, icon: Icon }) => {
-        const isActive = pathname === to;
+        const isActive = location.pathname === to;
         return (
           <NavLink
             key={to}
