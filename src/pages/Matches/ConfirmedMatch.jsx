@@ -1,11 +1,13 @@
 import { publishReview } from '@/api/reviewApi';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 const ConfirmedMatch = ({
   match,
   openReviewId,
   setOpenReviewId,
+  handleBlock,
 }) => {
   const friend = match.otherUser;
   const [review, setReview] = useState('');
@@ -21,10 +23,10 @@ const ConfirmedMatch = ({
     mutationFn: ({ revieweeId, review, rating }) =>
       publishReview(revieweeId, review, rating),
     onSuccess: () => {
-      console.log('Review submitted successfully');
+      toast.success('Review submitted successfully');
     },
     onError: (error) => {
-      console.error('Failed to submit review:', error);
+      toast.error('Review already submitted');
     },
   });
 
@@ -120,7 +122,13 @@ const ConfirmedMatch = ({
               </div>
             </div>
           ) : (
-            <div className='flex justify-end mt-2'>
+            <div className='flex justify-end mt-2 gap-2'>
+              <button
+                className='px-4 py-1 bg-red-100 hover:bg-red-200 text-red-700 rounded text-sm font-medium transition border border-red-200'
+                onClick={() => handleBlock(match._id)}
+              >
+                Block
+              </button>
               <button
                 className='px-4 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded text-sm font-medium transition'
                 onClick={() => handleOpenReview(match._id)}

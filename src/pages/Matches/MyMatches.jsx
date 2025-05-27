@@ -5,16 +5,50 @@ import { publishReview } from '@/api/reviewApi';
 import { Button } from '@/components/ui/button';
 import ConfirmedMatch from './ConfirmedMatch';
 import PendingMatch from './PendingMatch';
+import { accept, decline } from '@/api/matchApi';
+import { toast } from 'react-toastify';
+import { block } from '@/api/matchApi';
 
 const MyMatches = () => {
   const [openReviewId, setOpenReviewId] = useState(null);
   const [filter, setFilter] = useState('allMatches');
-  const {
-    matches = [],
-    pendingMatches,
-    isLoading,
-    error,
-  } = useFetchMyMatches();
+  const [pendingList, setPendingList] = useState([]);
+  const [acceptedList, setAcceptedList] = useState([]);
+  const { matches, pendingMatches, isLoading, error } = useFetchMyMatches();
+
+  useEffect(() => {
+    if (matches) setAcceptedList(matches);
+    if (pendingMatches) setPendingList(pendingMatches);
+  }, [matches, pendingMatches]);
+
+  const acceptMutation = useMutation({
+    mutationFn: accept,
+    onSuccess: (_, matchId) => {
+      window.location.reload();
+    },
+  });
+
+  const declineMutation = useMutation({
+    mutationFn: decline,
+    onSuccess: (_, matchId) => {
+      setPendingList((prev) => prev.filter((m) => m._id !== matchId));
+    },
+  });
+
+  const blockMutation = useMutation({
+    mutationFn: block,
+    onSuccess: (_, matchId) => {
+      setAcceptedList((prev) => prev.filter((m) => m._id !== matchId));
+      toast.success('User blocked successfully');
+    },
+  });
+
+  const handleBlock = (matchId) => {
+    const confirmation = confirm("Are you sure you want to block this user?")
+    if (!confirmation) return
+
+    blockMutation.mutate(matchId)
+  }
 
   if (isLoading) {
     return (
@@ -78,18 +112,19 @@ const MyMatches = () => {
           </div>
           {filter === 'allMatches' && (
             <>
-              {matches.length === 0 ? (
+              {acceptedList.length === 0 ? (
                 <div className='text-gray-500 text-base text-center'>
                   No matches found.
                 </div>
               ) : (
                 <>
-                  <p>Total matches: {matches.length}</p>
-                  {matches.map((match) => (
+                  <p>Total matches: {acceptedList.length}</p>
+                  {acceptedList.map((match) => (
                     <ConfirmedMatch
-                      key={match.id}
+                      key={match._id}
                       match={match}
                       openReviewId={openReviewId}
+                      handleBlock={handleBlock}
                       setOpenReviewId={setOpenReviewId}
                     />
                   ))}
@@ -100,15 +135,20 @@ const MyMatches = () => {
 
           {filter === 'pending' && (
             <>
-              {!Array.isArray(pendingMatches) || pendingMatches.length === 0 ? (
+              {!Array.isArray(pendingList) || pendingList.length === 0 ? (
                 <div className='text-gray-500 text-base text-center'>
                   No pending matches found.
                 </div>
               ) : (
                 <>
-                  <p>Total pending matches: {pendingMatches.length}</p>
-                  {pendingMatches.map((match) => (
-                    <PendingMatch key={match.id} match={match} />
+                  <p>Total pending matches: {pendingList.length}</p>
+                  {pendingList.map((match) => (
+                    <PendingMatch
+                      key={match._id}
+                      match={match}
+                      acceptMutation={acceptMutation}
+                      declineMutation={declineMutation}
+                    />
                   ))}
                 </>
               )}

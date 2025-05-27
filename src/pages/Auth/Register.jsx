@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify';
 import TextInput from '@/components/ui/textInput';
 import LoginButton from '@/components/ui/loginButton';
-import schema from '@/schemas/passwordSchema';
+import schema from '@/schemas/passwordSchema.js';
 
 const Register = ({ nextStep, form, setForm }) => {
   const handleChange = (e) =>

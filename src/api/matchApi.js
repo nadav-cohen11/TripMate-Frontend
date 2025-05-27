@@ -12,6 +12,7 @@ export const createOrAcceptMatch = async ({ user2Id, scores }) => {
   }
 };
 
+
 export const getPendingMatches = async () => {
   try {
     const response = await api.get('/matches/pending/received');
@@ -30,6 +31,38 @@ export const getConfirmedMatches = async () => {
   }
 };
 
+export const accept = async (matchId) => {
+  try {
+    const response = await api.post('/matches/accept', {
+      matchId
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const decline = async (matchId) => {
+  try {
+    const response = await api.post('/matches/decline', {
+      matchId,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const block = async (matchId) => {
+  try {
+    const response = await api.post('/matches/block', {
+      matchId,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 
 export const unmatchUsers = async ({ user2Id }) => {
@@ -44,6 +77,6 @@ export const unmatchUsers = async ({ user2Id }) => {
 };
 
 export const NonMatchedUsers = async () => {
-    const response = await api.get('/matches/home/NonMatchedUsers');
-    return response.data;
+  const response = await api.get('/matches/home/NonMatchedUsers');
+  return response.data;
 };

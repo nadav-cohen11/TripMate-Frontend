@@ -11,7 +11,6 @@ export const getUserReviews = async (userId) => {
 
 export const publishReview = async (revieweeId, comment,rating) => {
     try {
-        console.log(comment)
         const response = await api.post(`reviews/createReview`, { revieweeId, comment,rating });
         return response.data;
     } catch (error) {
