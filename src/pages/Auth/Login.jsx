@@ -44,7 +44,7 @@ const Login = () => {
       <div className="absolute top-6 left-6 z-20">
         <Typewriter
           text="TripMate"
-          className="text-4xl text-black font-bold tracking-wide"
+          className="text-4xl text-black tracking-wide"
           style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}
         />
       </div>
