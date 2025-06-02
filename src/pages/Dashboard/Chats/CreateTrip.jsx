@@ -118,6 +118,17 @@ const CreateTrip = ({ userId, socket, setChats, matches }) => {
           }
           setOpen(false);
         });
+        setForm({
+          tripName: '',
+          country: '',
+          description: '',
+          city: '',
+          startDate: '',
+          endDate: '',
+          notes: '',
+        });
+        setTripParticipants([{ _id: userId }]);
+        setStep(1);
       } else {
         setLoading(false);
         setOpen(false);
