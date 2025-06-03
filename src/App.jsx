@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import AppRoutes from './Router';
+import AppRoutes from './Routes/Router';
 import { ToastContainer } from 'react-toastify';
 import ToastConfig from './components/ui/ToastConfig';
 import { AuthProvider } from './context/AuthContext';

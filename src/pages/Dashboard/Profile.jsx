@@ -1,6 +1,6 @@
 import React from 'react'
 import Navbar from '@/components/ui/NavBar'
-import ProfileSetup from '../ProfileSetUp'
+import ProfileSetup from '../UserProfile/ProfileSetUp'
 
 const Profile = () => {
   return (

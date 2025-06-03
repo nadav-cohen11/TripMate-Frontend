@@ -8,7 +8,7 @@ import { handleCardSwipe } from '../../utils/matchHandlersUtils';
 import { getUserLocation } from '../../api/userApi';
 import { calculateDistance } from '../../utils/calculateDistanceUtils';
 import { useQuery } from '@tanstack/react-query';
-import Typewriter from '../../components/Typewriter';
+import Typewriter from '../../components/animations/Typewriter';
 
 const fetchUsers = async () => {
   try {

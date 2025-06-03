@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import ProfileSetup from '../ProfileSetUp';
+import ProfileSetup from '../UserProfile/ProfileSetUp';
 import Register from './Register';
 import UploadTestPage from './UploadPhotoPage';
 import Home from '../Home/Home';

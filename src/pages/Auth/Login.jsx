@@ -8,7 +8,7 @@ import { extractBackendError } from '../../utils/errorUtils';
 import { getCurrentLocation } from '@/utils/getLocationUtiles';
 import { AuthContext } from '../../context/AuthContext';
 import { useMutation } from '@tanstack/react-query';
-import Typewriter from '@/components/Typewriter';
+import Typewriter from '@/components/animations/Typewriter';
 
 const Login = () => {
   const [email, setEmail] = useState('');

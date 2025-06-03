@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { register } from '@/api/userApi';
 import { extractBackendError } from '@/utils/errorUtils';
 import { uploadFiles } from '@/api/mediaApi';
-import { adventureStyles, genders } from './constants';
+import { adventureStyles, genders } from '../../constants/profile';
 import useProfileSetupForm from '@/hooks/useProfileSetupForm';
 import useProfileDataQueries from '@/hooks/useProfileDataQueries';
 import { FaInstagram, FaFacebook } from 'react-icons/fa';
