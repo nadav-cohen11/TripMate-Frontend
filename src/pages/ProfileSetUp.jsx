@@ -1,30 +1,54 @@
-import React from 'react';
+import { useState } from 'react';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
 import { useMutation } from '@tanstack/react-query';
 import { register, updateUser } from '@/api/userApi';
+import { uploadFiles } from '@/api/mediaApi';
 import { extractBackendError } from '@/utils/errorUtils';
 import { useNavigate } from 'react-router-dom';
-import  useProfileSetupForm  from '@/hooks/useProfileSetupForm';
+import { adventureStyles, genders } from './constants';
+import { useProfileSetupForm } from '@/hooks/useProfileSetupForm';
+import { useProfileDataQueries } from '@/hooks/useProfileDataQueries';
 
-const ProfileSetup = ({ formRegister }) => {
+const ProfileSetup = ({ nextStep, formRegister }) => {
   const {
     form,
     imgURLs,
+    setImgURLs,
     handleInputChange,
     handleLocationChange,
     handleLanguagesChange,
     handleAdventureStyleChange,
-    handleImageUpload,
   } = useProfileSetupForm(formRegister);
+
+  const [selectedPhotos, setSelectedPhotos] = useState(null);
+
+  const {
+    countryOptions,
+    loadingCountries,
+    languageOptions,
+    loadingLanguages,
+    cityOptions,
+    loadingCities,
+  } = useProfileDataQueries(form.location?.country);
 
   const navigate = useNavigate();
 
   const mutationRegister = useMutation({
     mutationFn: register,
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success('User registered successfully');
-      navigate('/home');
+      if (selectedPhotos && selectedPhotos.length > 0) {
+        try {
+          const uploaded = await uploadFiles('upload-profile', selectedPhotos, false);
+          setImgURLs(uploaded);
+        } catch (uploadErr) {
+          toast.error('Photo upload failed');
+          console.error(uploadErr);
+        }
+      }
+      navigate('/test');
+      if (nextStep) nextStep();
     },
     onError: (err) => {
       const message = extractBackendError(err);
@@ -43,15 +67,20 @@ const ProfileSetup = ({ formRegister }) => {
     },
   });
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const payload = {
       ...form,
-      photos: imgURLs,
+      email: formRegister.email,
+      password: formRegister.password,
       languagesSpoken: form.languagesSpoken.map((o) => o.value),
     };
-    if (!formRegister) mutation.mutate(payload);
-    else mutationRegister.mutate(payload);
+
+    if (!formRegister) {
+      mutation.mutate(payload);
+    } else {
+      mutationRegister.mutate(payload);
+    }
   };
 
   return (
@@ -83,9 +112,9 @@ const ProfileSetup = ({ formRegister }) => {
             Upload Profile Pictures
             <input
               type='file'
-              accept='image/*'
               multiple
-              onChange={handleImageUpload}
+              accept='image/*'
+              onChange={(e) => setSelectedPhotos(e.target.files)}
               className='sr-only'
             />
           </label>
@@ -112,59 +141,73 @@ const ProfileSetup = ({ formRegister }) => {
           className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200'
         />
 
-        <input
-          type='text'
+        <select
           name='gender'
           value={form.gender}
           disabled={!formRegister}
           onChange={handleInputChange}
-          placeholder='Gender'
           required
           className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200'
-        />
+        >
+          <option value=''>Gender</option>
+          {genders.map((g) => (
+            <option value={g.toLowerCase()} key={g}>
+              {g}
+            </option>
+          ))}
+        </select>
 
-        <input
-          type='text'
-          name='country'
-          value={form.location?.country || ''}
-          onChange={(e) => handleLocationChange({ country: e.target.value, city: '' })}
-          placeholder='Country'
-          required
-          className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300'
-        />
-
-        <input
-          type='text'
-          name='city'
-          value={form.location?.city || ''}
-          onChange={(e) => handleLocationChange({ city: e.target.value })}
-          placeholder='City'
-          required
-          className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300'
-        />
-
-        <input
-          type='text'
-          name='languagesSpoken'
-          value={form.languagesSpoken.map((l) => l.label || l.value).join(', ')}
-          onChange={(e) =>
-            handleLanguagesChange(
-              e.target.value
-                .split(',')
-                .map((lang) => ({ label: lang.trim(), value: lang.trim() }))
-            )
+        <Select
+          placeholder={loadingCountries ? 'Loading countries…' : 'Country'}
+          options={countryOptions}
+          value={
+            countryOptions.find((o) => o.value === form.location?.country) || null
           }
-          placeholder='Languages Spoken (comma separated)'
-          className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300'
+          onChange={(o) => handleLocationChange({ country: o?.value || '', city: '' })}
+          isSearchable
+          classNamePrefix='rs'
+          className='rounded-xl'
         />
 
-        <input
-          type='text'
-          name='adventureStyle'
-          value={form.adventureStyle}
-          onChange={handleAdventureStyleChange}
+        <Select
+          placeholder={
+            !form.location?.country
+              ? 'Select country first'
+              : loadingCities
+                ? 'Loading cities…'
+                : 'City'
+          }
+          options={cityOptions}
+          value={
+            form.location?.city
+              ? cityOptions.find((o) => o.value === form.location?.city) || null
+              : null
+          }
+          onChange={(o) => handleLocationChange({ city: o ? o.value : '' })}
+          isSearchable
+          isDisabled={!form.location?.country || loadingCities}
+          classNamePrefix='rs'
+          className='rounded-xl'
+        />
+
+        <Select
+          placeholder={loadingLanguages ? 'Loading languages…' : 'Select languages…'}
+          options={languageOptions}
+          isMulti
+          value={form.languagesSpoken}
+          onChange={handleLanguagesChange}
+          isSearchable
+          classNamePrefix='rs'
+          className='rounded-xl'
+        />
+
+        <Select
+          options={adventureStyles}
           placeholder='Adventure Style'
-          className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300'
+          value={adventureStyles.find((o) => o.value === form.adventureStyle) || null}
+          onChange={handleAdventureStyleChange}
+          classNamePrefix='rs'
+          className='rounded-xl'
         />
 
         <textarea

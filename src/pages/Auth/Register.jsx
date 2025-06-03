@@ -56,3 +56,4 @@ const Register = ({ nextStep, form, setForm }) => {
 };
 
 export default Register;
+

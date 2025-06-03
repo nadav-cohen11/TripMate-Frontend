@@ -11,6 +11,7 @@ export const login = async (email, password, location) => {
 
 export const register = async (userData) => {
     try {
+        console.log(userData)
         const response = await api.post("/users/register", userData);
         return response;
     } catch (error) {
@@ -36,15 +37,6 @@ export const updateUser = async (userData) => {
     }
 };
 
-export const deleteUser = async (userId) => {
-    try {
-        const response = await api.delete("/users/deleteUser", { data: { userId } });
-        return response.data
-    } catch (error) {
-        throw error;
-    }
-};
-
 export const getUserLocation = async () => {
     try {
         const response = await api.get('/users/location');
@@ -63,6 +55,16 @@ export const getUsersLocations = async () => {
     }
 }
 
+
+export const getUserById = async (userId) => {
+    try {
+        const response = await api.get(`/users/${userId}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export const getAllTripsForUser = async () => {
     try {
         const response = await api.get('/trips/getAllTripsForUser')
@@ -71,3 +73,8 @@ export const getAllTripsForUser = async () => {
         throw error
     }
 }
+
+export const getQrCodeByUserId = async (userId) => {
+  const { data } = await api.get(`/qr/${userId}`);
+  return data.qrCode;
+};

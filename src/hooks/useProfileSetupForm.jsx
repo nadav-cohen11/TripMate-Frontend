@@ -23,12 +23,11 @@ const useProfileSetupForm = (formRegister) => {
 
   useEffect(() => {
     const getLocations = async () => {
-      const location = await getCurrentLocation();
+      const loc = await getCurrentLocation();
       setForm((prevForm) => ({
         ...prevForm,
         location: {
-          ...prevForm.location,
-          ...location,
+          coordinates: loc,
         },
       }));
     };
@@ -63,8 +62,19 @@ const useProfileSetupForm = (formRegister) => {
     }
   }, [user, formRegister]);
 
-  const handleInputChange = (e) =>
-    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+  const handleInputChange = (e) => {
+    if (e.target.name === 'country' || e.target.name === 'city') {
+      setForm((f) => ({
+        ...f,
+        location: {
+          ...f.location,
+          [e.target.name]: e.target.value,
+        },
+      }));
+    } else {
+      setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+    }
+  };
 
   const handleLocationChange = (newLocation) => {
     setForm((prevForm) => ({
@@ -93,7 +103,6 @@ const useProfileSetupForm = (formRegister) => {
   return {
     form,
     imgURLs,
-
     setForm,
     setImgURLs,
     handleInputChange,

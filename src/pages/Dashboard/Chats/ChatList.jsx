@@ -78,18 +78,18 @@ const ChatList = ({
   return (
     <>
       <button
-        className="sm:hidden fixed top-4 right-4 z-30 bg-white/80 rounded-full p-2 shadow-md border border-blue-200"
+        className='sm:hidden fixed top-4 right-4 z-30 bg-white/80 rounded-full p-2 shadow-md border border-blue-200'
         onClick={() => setShowSidebar((prev) => !prev)}
-        aria-label="Toggle chat list"
+        aria-label='Toggle chat list'
       >
         <svg
-          width="28"
-          height="28"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
+          width='28'
+          height='28'
+          fill='none'
+          stroke='currentColor'
+          strokeWidth='2'
         >
-          <path d="M4 8h20M4 14h20M4 20h20" />
+          <path d='M4 8h20M4 14h20M4 20h20' />
         </svg>
       </button>
       <div
@@ -102,25 +102,32 @@ const ChatList = ({
         `}
         style={{ maxWidth: '90vw' }}
       >
-        <div className="mb-8 flex  gap-2">
-          <div className="text-2xl font-bold text-blue-700 mb-6 tracking-wide" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 700 }}>
+        <div className='mb-8 flex flex-col  gap-2'>
+          <div
+            className='text-2xl font-bold text-blue-700 mb-6 tracking-wide'
+            style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 700 }}
+          >
             Chats
           </div>
-          <FriendsList
-            matches={matchesWithoutChat}
-            userId={userId}
-            socket={socket}
-            setChats={setChats}
-          />
-          <CreateTrip
-            matches={matches}
-            userId={userId}
-            socket={socket}
-            setChats={setChats}
-          />
+          <div className='flex gap-2.5 flex-col'>
+            <FriendsList
+              matches={matchesWithoutChat}
+              userId={userId}
+              socket={socket}
+              setChats={setChats}
+            />
+            <CreateTrip
+              matches={matches}
+              userId={userId}
+              socket={socket}
+              setChats={setChats}
+            />
+          </div>
         </div>
-        <h4 className="font-semibold text-blue-800 mb-2 text-lg">Direct Chats</h4>
-        <div className="space-y-2">
+        <h4 className='font-semibold text-blue-800 mb-2 text-lg'>
+          Direct Chats
+        </h4>
+        <div className='space-y-2'>
           {directChats &&
             directChats.map((chat) => (
               <div
@@ -136,18 +143,20 @@ const ChatList = ({
                       : 'hover:bg-blue-100/60'
                   }`}
               >
-                <div className="font-medium truncate text-blue-900">
+                <div className='font-medium truncate text-blue-900'>
                   {chat.participants?.find((p) => p._id !== userId)?.fullName ||
                     ''}
                 </div>
-                <div className="text-xs text-blue-600 truncate">
+                <div className='text-xs text-blue-600 truncate'>
                   {chat.lastMessagePreview}
                 </div>
               </div>
             ))}
         </div>
-        <h4 className="font-semibold text-blue-800 mt-8 mb-2 text-lg">Groups</h4>
-        <div className="space-y-2">
+        <h4 className='font-semibold text-blue-800 mt-8 mb-2 text-lg'>
+          Groups
+        </h4>
+        <div className='space-y-2'>
           {groupChats &&
             groupChats.map((chat) => (
               <div
@@ -163,10 +172,10 @@ const ChatList = ({
                       : 'hover:bg-blue-100/60'
                   }`}
               >
-                <div className="font-medium truncate text-blue-900">
+                <div className='font-medium truncate text-blue-900'>
                   {chat.chatName || 'Group'}
                 </div>
-                <div className="text-xs text-blue-600 truncate">
+                <div className='text-xs text-blue-600 truncate'>
                   {chat.lastMessagePreview}
                 </div>
               </div>
@@ -175,7 +184,7 @@ const ChatList = ({
       </div>
       {showSidebar && (
         <div
-          className="fixed inset-0 z-10 sm:hidden"
+          className='fixed inset-0 z-10 sm:hidden'
           style={{
             background: 'rgb(28 25 25 / 42%)',
           }}
