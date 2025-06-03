@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getConfirmedMatches, getPendingMatches } from '@/api/matchApi';
 import { useMemo } from 'react';
+import { getAllTripsForUser } from '@/api/userApi';
 
 const useFetchMyMatches = () => {
   const { data, isLoading, error } = useQuery({
@@ -13,6 +14,17 @@ const useFetchMyMatches = () => {
     queryFn: getPendingMatches,
   });
 
+  const { data: hadTrips } = useQuery({
+    queryKey: ['getHadTrips'],
+    queryFn: getAllTripsForUser,
+  });
+  
+  const uniqeIdsHadTrip = useMemo(() => {
+    if (!hadTrips) return [];
+    const trips = hadTrips.map((trip) => trip.participants.map((p) => p.userId._id));
+    return [...new Set(trips.flat())];
+  }, [hadTrips]);
+  
   const matches = useMemo(() => {
     if (!data) return [];
     const { matches = [], userId } = data;
@@ -25,10 +37,10 @@ const useFetchMyMatches = () => {
   return {
     matches,
     pendingMatches,
+    uniqeIdsHadTrip,
     isLoading,
     error,
   };
 };
-
 
 export default useFetchMyMatches;

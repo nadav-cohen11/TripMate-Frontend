@@ -21,7 +21,6 @@ const [form, setForm] = useState({
   facebook: '',
 });
 
-
   const [imgURLs, setImgURLs] = useState([]);
 
   useEffect(() => {

@@ -13,3 +13,5 @@ export const handleCardSwipe = async (direction, userId) => {
     console.error(`Swipe ${direction} failed for user ${userId}:`, err);
   }
 };
+
+

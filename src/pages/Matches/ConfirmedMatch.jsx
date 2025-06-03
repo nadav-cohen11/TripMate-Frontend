@@ -8,6 +8,7 @@ const ConfirmedMatch = ({
   openReviewId,
   setOpenReviewId,
   handleBlock,
+  hadTrip,
 }) => {
   const friend = match.otherUser;
   const [review, setReview] = useState('');
@@ -130,10 +131,13 @@ const ConfirmedMatch = ({
                 Block
               </button>
               <button
-                className='px-4 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded text-sm font-medium transition'
+                disabled={!hadTrip}
                 onClick={() => handleOpenReview(match._id)}
+                className='px-4 py-1 text-sm font-medium rounded transition text-white
+    bg-blue-500 hover:bg-blue-600
+    disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400'
               >
-                Review
+                {!hadTrip ? 'Trip Required' : 'Review'}
               </button>
             </div>
           )}

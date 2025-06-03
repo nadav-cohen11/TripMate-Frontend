@@ -20,7 +20,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
     handleLanguagesChange,
     handleAdventureStyleChange,
   } = useProfileSetupForm(formRegister);
-
+  
   const [selectedPhotos, setSelectedPhotos] = useState(null)
   const [previewURLs, setPreviewURLs] = useState([]);
 
@@ -63,7 +63,6 @@ export default function ProfileSetup({ nextStep, formRegister }) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-
     const payload = {
       ...form,
       email: formRegister.email,

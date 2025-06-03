@@ -1,6 +1,7 @@
 import Home from './pages/Home/Home';
 import Chat from './pages/Dashboard/Chats/Chat';
 import Map from './pages/Map/Map';
+import MyMatches from './pages/Matches/MyMatches';
 import ProtectedRoute from './components/ProtectedRoute'; 
 import UploadTestPage from './pages/Auth/UploadPhotoPage';
 import ReelsPage from './pages/Reels/Reels';

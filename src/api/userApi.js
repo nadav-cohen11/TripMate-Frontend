@@ -62,7 +62,16 @@ export const getUserById = async (userId) => {
     } catch (error) {
         throw error;
     }
-};
+}
+
+export const getAllTripsForUser = async () => {
+    try {
+        const response = await api.get('/trips/getAllTripsForUser')
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
 
 export const getQrCodeByUserId = async (userId) => {
   const { data } = await api.get(`/qr/${userId}`);
