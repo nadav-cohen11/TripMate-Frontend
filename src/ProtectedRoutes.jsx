@@ -14,6 +14,7 @@ const protectedRoutes = () => [
   { path: '/reels', element: <ProtectedRoute><ReelsPage /></ProtectedRoute> },
   { path: '/setup', element: <ProtectedRoute><UserProfilePage /></ProtectedRoute> },
   { path: '/test', element: <ProtectedRoute><UploadTestPage /></ProtectedRoute> },
+  { path: '/matches', element: <ProtectedRoute><MyMatches /></ProtectedRoute> },
   { path: '/profile/:userId', element: <ProtectedRoute><UserProfilePage /></ProtectedRoute> },
 ];
 

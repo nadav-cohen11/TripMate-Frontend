@@ -7,7 +7,7 @@ import { extractBackendError } from '@/utils/errorUtils';
 import { uploadFiles } from '@/api/mediaApi';
 import { adventureStyles, genders } from './constants';
 import useProfileSetupForm from '@/hooks/useProfileSetupForm';
-import { useProfileDataQueries } from '@/hooks/useProfileDataQueries';
+import useProfileDataQueries from '@/hooks/useProfileDataQueries';
 import { FaInstagram, FaFacebook } from 'react-icons/fa';
 
 export default function ProfileSetup({ nextStep, formRegister }) {
