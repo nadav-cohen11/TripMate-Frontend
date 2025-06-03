@@ -56,6 +56,15 @@ const protectedRoutes = () => [
       </ProtectedRoute>
     ),
   },
+
+  {
+    path: '/m',
+    element: (
+      <ProtectedRoute>
+        <MyMatches />
+      </ProtectedRoute>
+    ),
+  },
 ];
 
 export default protectedRoutes;

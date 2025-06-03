@@ -1,6 +1,6 @@
 import api from "/src/api/axios.js";
 
-export const login = async (email, password) => {
+export const login = async (email, password, location) => {
     try {
         const response = await api.post("/users/login", { email, password, location });
         return response.data.id;
@@ -60,5 +60,14 @@ export const getUsersLocations = async () => {
         return response.data;
     } catch (error) {
         throw error;
+    }
+}
+
+export const getAllTripsForUser = async () => {
+    try {
+        const response = await api.get('/trips/getAllTripsForUser')
+        return response.data
+    } catch (error) {
+        throw error
     }
 }

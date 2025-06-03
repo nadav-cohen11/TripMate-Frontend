@@ -1,7 +1,6 @@
 import useFetchMyMatches from '@/hooks/useFetchMyMatches';
 import { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { publishReview } from '@/api/reviewApi';
 import { Button } from '@/components/ui/button';
 import ConfirmedMatch from './ConfirmedMatch';
 import PendingMatch from './PendingMatch';
@@ -14,7 +13,9 @@ const MyMatches = () => {
   const [filter, setFilter] = useState('allMatches');
   const [pendingList, setPendingList] = useState([]);
   const [acceptedList, setAcceptedList] = useState([]);
-  const { matches, pendingMatches, isLoading, error } = useFetchMyMatches();
+  const { matches, pendingMatches, uniqeIdsHadTrip, isLoading, error } =
+    useFetchMyMatches();
+
 
   useEffect(() => {
     if (matches) setAcceptedList(matches);
@@ -23,7 +24,7 @@ const MyMatches = () => {
 
   const acceptMutation = useMutation({
     mutationFn: accept,
-    onSuccess: (_, matchId) => {
+    onSuccess: () => {
       window.location.reload();
     },
   });
@@ -44,11 +45,11 @@ const MyMatches = () => {
   });
 
   const handleBlock = (matchId) => {
-    const confirmation = confirm("Are you sure you want to block this user?")
-    if (!confirmation) return
+    const confirmation = confirm('Are you sure you want to block this user?');
+    if (!confirmation) return;
 
-    blockMutation.mutate(matchId)
-  }
+    blockMutation.mutate(matchId);
+  };
 
   if (isLoading) {
     return (
@@ -126,6 +127,7 @@ const MyMatches = () => {
                       openReviewId={openReviewId}
                       handleBlock={handleBlock}
                       setOpenReviewId={setOpenReviewId}
+                      hadTrip={uniqeIdsHadTrip.includes(match.otherUser._id)}
                     />
                   ))}
                 </>
