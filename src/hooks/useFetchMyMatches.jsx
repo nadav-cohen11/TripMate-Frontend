@@ -24,7 +24,7 @@ const useFetchMyMatches = () => {
     const trips = hadTrips.map((trip) => trip.participants.map((p) => p.userId._id));
     return [...new Set(trips.flat())];
   }, [hadTrips]);
-
+  
   const matches = useMemo(() => {
     if (!data) return [];
     const { matches = [], userId } = data;

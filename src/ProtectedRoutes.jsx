@@ -1,12 +1,9 @@
 import Home from './pages/Home/Home';
 import Chat from './pages/Dashboard/Chats/Chat';
 import Map from './pages/Map/Map';
-import Profile from './pages/Dashboard/Profile';
-import Favorites from './pages/Dashboard/Favorites';
-import ProfileSetup from './pages/ProfileSetUp';
-import ProtectedRoute from './components/ProtectedRoute';
 import MyMatches from './pages/Matches/MyMatches';
-import UploadTestPage from './pages/test/UploadTestPage';
+import ProtectedRoute from './components/ProtectedRoute'; 
+import UploadTestPage from './pages/Auth/UploadPhotoPage';
 import ReelsPage from './pages/Reels/Reels';
 import UserProfilePage from './pages/UserProfile/UserProfilePage';
 

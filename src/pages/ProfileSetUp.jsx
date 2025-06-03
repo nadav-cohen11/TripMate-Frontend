@@ -1,16 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
 import { useMutation } from '@tanstack/react-query';
-import { register, updateUser } from '@/api/userApi';
-import { uploadFiles } from '@/api/mediaApi';
+import { register } from '@/api/userApi';
 import { extractBackendError } from '@/utils/errorUtils';
-import { useNavigate } from 'react-router-dom';
+import { uploadFiles } from '@/api/mediaApi';
 import { adventureStyles, genders } from './constants';
-import  useProfileSetupForm  from '@/hooks/useProfileSetupForm';
-import useProfileDataQueries from '@/hooks/useProfileDataQueries';
+import useProfileSetupForm from '@/hooks/useProfileSetupForm';
+import { useProfileDataQueries } from '@/hooks/useProfileDataQueries';
+import { FaInstagram, FaFacebook } from 'react-icons/fa';
 
-const ProfileSetup = ({ nextStep, formRegister }) => {
+export default function ProfileSetup({ nextStep, formRegister }) {
   const {
     form,
     imgURLs,
@@ -20,8 +20,24 @@ const ProfileSetup = ({ nextStep, formRegister }) => {
     handleLanguagesChange,
     handleAdventureStyleChange,
   } = useProfileSetupForm(formRegister);
+  
+  const [selectedPhotos, setSelectedPhotos] = useState(null)
+  const [previewURLs, setPreviewURLs] = useState([]);
 
-  const [selectedPhotos, setSelectedPhotos] = useState(null);
+  useEffect(() => {
+    if (!selectedPhotos) {
+      setPreviewURLs([]);
+      return;
+    }
+    const urls = Array.from(selectedPhotos).map((file) =>
+      URL.createObjectURL(file)
+    );
+    setPreviewURLs(urls);
+
+    return () => {
+      urls.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [selectedPhotos]);
 
   const {
     countryOptions,
@@ -32,23 +48,11 @@ const ProfileSetup = ({ nextStep, formRegister }) => {
     loadingCities,
   } = useProfileDataQueries(form.location?.country);
 
-  const navigate = useNavigate();
-
   const mutationRegister = useMutation({
     mutationFn: register,
     onSuccess: async () => {
       toast.success('User registered successfully');
-      if (selectedPhotos && selectedPhotos.length > 0) {
-        try {
-          const uploaded = await uploadFiles('upload-profile', selectedPhotos, false);
-          setImgURLs(uploaded);
-        } catch (uploadErr) {
-          toast.error('Photo upload failed');
-          console.error(uploadErr);
-        }
-      }
-      navigate('/test');
-      if (nextStep) nextStep();
+      nextStep()
     },
     onError: (err) => {
       const message = extractBackendError(err);
@@ -56,16 +60,6 @@ const ProfileSetup = ({ nextStep, formRegister }) => {
     },
   });
 
-  const mutation = useMutation({
-    mutationFn: async (data) => updateUser(data, { method: 'PUT' }),
-    onSuccess: () => {
-      toast.success('Profile updated successfully');
-    },
-    onError: (error) => {
-      toast.error('Failed to update profile');
-      console.log(error);
-    },
-  });
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -74,13 +68,29 @@ const ProfileSetup = ({ nextStep, formRegister }) => {
       email: formRegister.email,
       password: formRegister.password,
       languagesSpoken: form.languagesSpoken.map((o) => o.value),
+      instagram: form.instagram ? `https://instagram.com/${form.instagram}` : '',
+      facebook: form.facebook ? `https://facebook.com/${form.facebook}` : '',
     };
 
-    if (!formRegister) {
-      mutation.mutate(payload);
-    } else {
-      mutationRegister.mutate(payload);
-    }
+    mutationRegister.mutate(payload, {
+      onSuccess: async () => {
+        toast.success('User registered successfully');
+        if (selectedPhotos && selectedPhotos.length > 0) {
+          try {
+            const uploaded = await uploadFiles('upload-profile', selectedPhotos, false);
+            setImgURLs(uploaded);
+            nextStep
+          } catch (uploadErr) {
+            toast.error('Photo upload failed');
+            console.error(uploadErr);
+          }
+        }
+      },
+      onError: (err) => {
+        const msg = extractBackendError(err);
+        toast.error(msg);
+      },
+    });
   };
 
   return (
@@ -91,7 +101,20 @@ const ProfileSetup = ({ nextStep, formRegister }) => {
       >
         <div className='flex flex-col items-center gap-3'>
           <div className='flex gap-2'>
-            {imgURLs.length > 0 ? (
+            {previewURLs.length > 0 ? (
+              previewURLs.map((url, idx) => (
+                <div
+                  key={idx}
+                  className='h-20 w-20 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'
+                >
+                  <img
+                    src={url}
+                    alt='preview'
+                    className='h-full w-full object-cover'
+                  />
+                </div>
+              ))
+            ) : imgURLs.length > 0 ? (
               imgURLs.map((url, idx) => (
                 <div
                   key={idx}
@@ -119,7 +142,6 @@ const ProfileSetup = ({ nextStep, formRegister }) => {
             />
           </label>
         </div>
-
         <input
           type='text'
           name='fullName'
@@ -161,9 +183,12 @@ const ProfileSetup = ({ nextStep, formRegister }) => {
           placeholder={loadingCountries ? 'Loading countries…' : 'Country'}
           options={countryOptions}
           value={
-            countryOptions.find((o) => o.value === form.location?.country) || null
+            countryOptions.find((o) => o.value === form.location?.country) ||
+            null
           }
-          onChange={(o) => handleLocationChange({ country: o?.value || '', city: '' })}
+          onChange={(o) => {
+            handleLocationChange({ country: o?.value || '', city: '' });
+          }}
           isSearchable
           classNamePrefix='rs'
           className='rounded-xl'
@@ -191,7 +216,9 @@ const ProfileSetup = ({ nextStep, formRegister }) => {
         />
 
         <Select
-          placeholder={loadingLanguages ? 'Loading languages…' : 'Select languages…'}
+          placeholder={
+            loadingLanguages ? 'Loading languages…' : 'Select languages…'
+          }
           options={languageOptions}
           isMulti
           value={form.languagesSpoken}
@@ -204,7 +231,9 @@ const ProfileSetup = ({ nextStep, formRegister }) => {
         <Select
           options={adventureStyles}
           placeholder='Adventure Style'
-          value={adventureStyles.find((o) => o.value === form.adventureStyle) || null}
+          value={
+            adventureStyles.find((o) => o.value === form.adventureStyle) || null
+          }
           onChange={handleAdventureStyleChange}
           classNamePrefix='rs'
           className='rounded-xl'
@@ -219,6 +248,32 @@ const ProfileSetup = ({ nextStep, formRegister }) => {
           className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-300'
         />
 
+        <div className="flex items-center gap-3 border border-gray-300 rounded-xl px-4 py-2 bg-white focus-within:ring-2 focus-within:ring-pink-300">
+          <FaInstagram className="text-pink-500 text-lg" />
+          <span className="text-gray-500 text-sm">instagram.com/</span>
+          <input
+            type="text"
+            name="instagram"
+            value={form.instagram}
+            onChange={handleInputChange}
+            placeholder="your_username"
+            className="flex-1 bg-transparent outline-none text-sm"
+          />
+        </div>
+
+        <div className="flex items-center gap-3 border border-gray-300 rounded-xl px-4 py-2 bg-white focus-within:ring-2 focus-within:ring-blue-300">
+          <FaFacebook className="text-blue-600 text-lg" />
+          <span className="text-gray-500 text-sm">facebook.com/</span>
+          <input
+            type="text"
+            name="facebook"
+            value={form.facebook}
+            onChange={handleInputChange}
+            placeholder="your.username"
+            className="flex-1 bg-transparent outline-none text-sm"
+          />
+        </div>
+
         <button
           type='submit'
           className='bg-blue-500 hover:bg-blue-600 text-white rounded-xl py-2 font-medium transition'
@@ -229,5 +284,3 @@ const ProfileSetup = ({ nextStep, formRegister }) => {
     </div>
   );
 }
-
-export default ProfileSetup

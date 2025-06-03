@@ -13,6 +13,7 @@ const ConfirmedMatch = ({
   const friend = match.otherUser;
   const [review, setReview] = useState('');
   const [rating, setRating] = useState(0);
+
   const handleOpenReview = (matchId) => {
     setOpenReviewId(matchId);
     setReview('');

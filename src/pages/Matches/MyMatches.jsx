@@ -16,7 +16,6 @@ const MyMatches = () => {
   const { matches, pendingMatches, uniqeIdsHadTrip, isLoading, error } =
     useFetchMyMatches();
 
-
   useEffect(() => {
     if (matches) setAcceptedList(matches);
     if (pendingMatches) setPendingList(pendingMatches);

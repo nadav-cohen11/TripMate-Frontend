@@ -19,7 +19,7 @@ const Chats = () => {
       setSelectedChatId(directChat ? directChat._id : chats[0]._id);
     }
   }, [chats]);
-  
+
   useEffect(() => {
     if (socketInstance && selectedChatId) {
       socketInstance.emit('joinRoom', { chatId: selectedChatId });
@@ -33,7 +33,6 @@ const Chats = () => {
       socketInstance.off('messageReceived', handleMessageReceived);
     };
   }, [socketInstance]);
-  
 
   const handleSendMessage = async (e) => {
     e?.preventDefault?.();
@@ -47,7 +46,6 @@ const Chats = () => {
       setMessage('');
     }
   };
-  
 
   const handleMessageReceived = (msg) => {
     setChats((prev) =>
@@ -58,22 +56,21 @@ const Chats = () => {
               messages: [...(chat.messages || []), msg],
               lastMessagePreview: msg.content,
             }
-          : chat
-      )
+          : chat,
+      ),
     );
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden">
-      <div className="absolute top-6 left-6 z-20">
-        <Typewriter 
-          text="TripMate" 
-          className="text-4xl text-black font-bold tracking-wide"
-          style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}
-        />
+    <div className='relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden'>
+      <div
+        className='absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide'
+        style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}
+      >
+        TripMate
       </div>
-      <div className="flex flex-col lg:flex-row min-h-screen pt-24 px-4 lg:px-12 gap-6">
-        <div className="w-full lg:w-1/3">
+      <div className='flex flex-col lg:flex-row min-h-screen pt-24 px-4 lg:px-12 gap-6'>
+        <div className='w-full lg:w-1/3'>
           <ChatList
             chats={chats}
             selectedChatId={selectedChatId}
@@ -83,10 +80,12 @@ const Chats = () => {
             setSelectedChatId={setSelectedChatId}
           />
         </div>
-        <div className="w-full lg:w-2/3">
+        <div className='w-full lg:w-2/3'>
           <ChatWindow
             selectedChat={
-              selectedChatId ? chats.find((c) => c._id === selectedChatId) : null
+              selectedChatId
+                ? chats.find((c) => c._id === selectedChatId)
+                : null
             }
             isGroupChat={
               selectedChatId
