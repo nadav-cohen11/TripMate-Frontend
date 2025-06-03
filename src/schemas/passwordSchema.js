@@ -1,7 +1,5 @@
-
 import { z } from 'zod';
-
-export const schema = z.object({
+const schema = z.object({
   email: z.string().email('Invalid email address'),
   password: z
     .string()
@@ -14,3 +12,5 @@ export const schema = z.object({
       'Password must contain at least one special character',
     ),
 });
+
+export default schema;

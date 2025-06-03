@@ -162,37 +162,16 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200'
         />
 
-        <select
+        <input
+          type='text'
           name='gender'
           value={form.gender}
           disabled={!formRegister}
           onChange={handleInputChange}
+          placeholder='Gender'
           required
           className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200'
-        >
-          <option value=''>Gender</option>
-          {genders.map((g) => (
-            <option value={g.toLowerCase()} key={g}>
-              {g}
-            </option>
-          ))}
-        </select>
-
-        <Select
-          placeholder={loadingCountries ? 'Loading countries…' : 'Country'}
-          options={countryOptions}
-          value={
-            countryOptions.find((o) => o.value === form.location?.country) ||
-            null
-          }
-          onChange={(o) => {
-            handleLocationChange({ country: o?.value || '', city: '' });
-          }}
-          isSearchable
-          classNamePrefix='rs'
-          className='rounded-xl'
         />
-
         <Select
           placeholder={
             !form.location?.country
@@ -214,28 +193,38 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           className='rounded-xl'
         />
 
-        <Select
-          placeholder={
-            loadingLanguages ? 'Loading languages…' : 'Select languages…'
-          }
-          options={languageOptions}
-          isMulti
-          value={form.languagesSpoken}
-          onChange={handleLanguagesChange}
-          isSearchable
-          classNamePrefix='rs'
-          className='rounded-xl'
+        <input
+          type='text'
+          name='city'
+          value={form.location?.city || ''}
+          onChange={(e) => handleLocationChange({ city: e.target.value })}
+          placeholder='City'
+          required
+          className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300'
         />
 
-        <Select
-          options={adventureStyles}
-          placeholder='Adventure Style'
-          value={
-            adventureStyles.find((o) => o.value === form.adventureStyle) || null
+        <input
+          type='text'
+          name='languagesSpoken'
+          value={form.languagesSpoken.map((l) => l.label || l.value).join(', ')}
+          onChange={(e) =>
+            handleLanguagesChange(
+              e.target.value
+                .split(',')
+                .map((lang) => ({ label: lang.trim(), value: lang.trim() }))
+            )
           }
+          placeholder='Languages Spoken (comma separated)'
+          className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300'
+        />
+
+        <input
+          type='text'
+          name='adventureStyle'
+          value={form.adventureStyle}
           onChange={handleAdventureStyleChange}
-          classNamePrefix='rs'
-          className='rounded-xl'
+          placeholder='Adventure Style'
+          className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300'
         />
 
         <textarea
@@ -256,4 +245,5 @@ export default function ProfileSetup({ nextStep, formRegister }) {
       </form>
     </div>
   );
+export default ProfileSetup
 }

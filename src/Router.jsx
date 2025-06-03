@@ -4,6 +4,7 @@ import Login from './pages/Auth/Login';
 import MultiStepFormRegister from './pages/Auth/MultiStepFormRegister';
 import protectedRoutes from './ProtectedRoutes';
 import Navbar from './components/ui/NavBar';
+import MyMatches from './pages/Matches/MyMatches';
 
 const ProtectedLayout = () => (
   <>

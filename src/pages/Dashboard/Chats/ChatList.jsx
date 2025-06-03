@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { FriendsList } from './FriendsList';
-import { CreateTrip } from './CreateTrip';
+import FriendsList from './FriendsList';
+import CreateTrip from './CreateTrip';
 
 const ChatList = ({
   chats,
