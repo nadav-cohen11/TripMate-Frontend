@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import Match from './Match';
 
-export function FriendsList({ userId, socket, setChats, matches }) {
+const FriendsList = ({ userId, socket, setChats, matches })  => {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -95,3 +95,5 @@ export function FriendsList({ userId, socket, setChats, matches }) {
     </Dialog>
   );
 }
+
+export default FriendsList;

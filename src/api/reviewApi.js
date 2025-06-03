@@ -8,3 +8,13 @@ export const getUserReviews = async (userId) => {
         throw error
     }
 };
+
+export const publishReview = async (revieweeId, comment,rating) => {
+    try {
+        const response = await api.post(`reviews/createReview`, { revieweeId, comment,rating });
+        return response.data;
+    } catch (error) {
+        throw error
+    }
+
+}

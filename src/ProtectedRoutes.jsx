@@ -2,7 +2,7 @@ import Home from './pages/Home/Home';
 import Chat from './pages/Dashboard/Chats/Chat';
 import Map from './pages/Map/Map';
 import ProtectedRoute from './components/ProtectedRoute'; 
-import UploadTestPage from './pages/test/UploadTestPage';
+import UploadTestPage from './pages/Auth/UploadPhotoPage';
 import ReelsPage from './pages/Reels/Reels';
 import UserProfilePage from './pages/UserProfile/UserProfilePage';
 

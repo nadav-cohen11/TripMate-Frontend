@@ -1,4 +1,5 @@
 import api from './axios'
+
 export const uploadFiles = async (endpoint, files, isMultiple = false) => {
   console.log("files: ", files);
   
