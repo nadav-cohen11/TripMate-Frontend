@@ -6,8 +6,9 @@ import { register } from '@/api/userApi';
 import { extractBackendError } from '@/utils/errorUtils';
 import { uploadFiles } from '@/api/mediaApi';
 import { adventureStyles, genders } from './constants';
-import useProfileSetupForm  from '@/hooks/useProfileSetupForm';
+import useProfileSetupForm from '@/hooks/useProfileSetupForm';
 import { useProfileDataQueries } from '@/hooks/useProfileDataQueries';
+import { FaInstagram, FaFacebook } from 'react-icons/fa';
 
 export default function ProfileSetup({ nextStep, formRegister }) {
   const {
@@ -68,6 +69,8 @@ export default function ProfileSetup({ nextStep, formRegister }) {
       email: formRegister.email,
       password: formRegister.password,
       languagesSpoken: form.languagesSpoken.map((o) => o.value),
+      instagram: form.instagram ? `https://instagram.com/${form.instagram}` : '',
+      facebook: form.facebook ? `https://facebook.com/${form.facebook}` : '',
     };
 
     mutationRegister.mutate(payload, {
@@ -245,6 +248,32 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           onChange={handleInputChange}
           className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-300'
         />
+
+        <div className="flex items-center gap-3 border border-gray-300 rounded-xl px-4 py-2 bg-white focus-within:ring-2 focus-within:ring-pink-300">
+          <FaInstagram className="text-pink-500 text-lg" />
+          <span className="text-gray-500 text-sm">instagram.com/</span>
+          <input
+            type="text"
+            name="instagram"
+            value={form.instagram}
+            onChange={handleInputChange}
+            placeholder="your_username"
+            className="flex-1 bg-transparent outline-none text-sm"
+          />
+        </div>
+
+        <div className="flex items-center gap-3 border border-gray-300 rounded-xl px-4 py-2 bg-white focus-within:ring-2 focus-within:ring-blue-300">
+          <FaFacebook className="text-blue-600 text-lg" />
+          <span className="text-gray-500 text-sm">facebook.com/</span>
+          <input
+            type="text"
+            name="facebook"
+            value={form.facebook}
+            onChange={handleInputChange}
+            placeholder="your.username"
+            className="flex-1 bg-transparent outline-none text-sm"
+          />
+        </div>
 
         <button
           type='submit'

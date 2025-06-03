@@ -4,20 +4,23 @@ import { getUser } from '@/api/userApi';
 import { getCurrentLocation } from '@/utils/getLocationUtiles';
 
 const useProfileSetupForm = (formRegister) => {
-  const [form, setForm] = useState({
-    email: formRegister?.email || '',
-    password: formRegister?.password || '',
-    fullName: '',
-    birthDate: '',
-    gender: '',
-    location: {
-      country: '',
-      city: '',
-    },
-    languagesSpoken: [],
-    adventureStyle: '',
-    bio: '',
-  });
+const [form, setForm] = useState({
+  email: formRegister?.email || '',
+  password: formRegister?.password || '',
+  fullName: '',
+  birthDate: '',
+  gender: '',
+  location: {
+    country: '',
+    city: '',
+  },
+  languagesSpoken: [],
+  adventureStyle: '',
+  bio: '',
+  instagram: '',
+  facebook: '',
+});
+
 
   const [imgURLs, setImgURLs] = useState([]);
 
@@ -57,6 +60,8 @@ const useProfileSetupForm = (formRegister) => {
         })),
         adventureStyle: user.adventureStyle || '',
         bio: user.bio || '',
+        instagram: form.instagram,
+        facebook: form.facebook,
       });
       if (user.photos) setImgURLs(user.photos);
     }
