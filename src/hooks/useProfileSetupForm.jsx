@@ -3,21 +3,23 @@ import { useQuery } from '@tanstack/react-query';
 import { getUser } from '@/api/userApi';
 import { getCurrentLocation } from '@/utils/getLocationUtiles';
 
-export function useProfileSetupForm(formRegister) {
-  const [form, setForm] = useState({
-    email: formRegister?.email || '',
-    password: formRegister?.password || '',
-    fullName: '',
-    birthDate: '',
-    gender: '',
-    location: {
-      country: '',
-      city: '',
-    },
-    languagesSpoken: [],
-    adventureStyle: '',
-    bio: '',
-  });
+const useProfileSetupForm = (formRegister) => {
+const [form, setForm] = useState({
+  email: formRegister?.email || '',
+  password: formRegister?.password || '',
+  fullName: '',
+  birthDate: '',
+  gender: '',
+  location: {
+    country: '',
+    city: '',
+  },
+  languagesSpoken: [],
+  adventureStyle: '',
+  bio: '',
+  instagram: '',
+  facebook: '',
+});
 
   const [imgURLs, setImgURLs] = useState([]);
 
@@ -38,7 +40,7 @@ export function useProfileSetupForm(formRegister) {
     queryKey: ['user'],
     queryFn: () => getUser(),
     staleTime: 5 * 60 * 1000,
-    enabled: !formRegister, 
+    enabled: !formRegister,
   });
 
   useEffect(() => {
@@ -57,6 +59,8 @@ export function useProfileSetupForm(formRegister) {
         })),
         adventureStyle: user.adventureStyle || '',
         bio: user.bio || '',
+        instagram: form.instagram,
+        facebook: form.facebook,
       });
       if (user.photos) setImgURLs(user.photos);
     }
@@ -111,4 +115,6 @@ export function useProfileSetupForm(formRegister) {
     handleAdventureStyleChange,
     handleImageUpload,
   };
-}
+};
+
+export default useProfileSetupForm;
