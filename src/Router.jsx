@@ -16,7 +16,6 @@ const AppRoutes = () => (
   <Routes>
     <Route path="/login" element={<Login />} />
     <Route path='/register' element={<MultiStepFormRegister />} />
-
     <Route element={<ProtectedLayout />} >
     {protectedRoutes().map((route, index) => (
       <Route key={index} path={route.path} element={route.element} />
