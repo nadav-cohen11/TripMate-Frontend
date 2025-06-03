@@ -102,7 +102,7 @@ const ChatList = ({
         `}
         style={{ maxWidth: '90vw' }}
       >
-        <div className='mb-8 flex flex-col  gap-2'>
+        <div className='mb-8 flex flex-col gap-2'>
           <div
             className='text-2xl font-bold text-blue-700 mb-6 tracking-wide'
             style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 700 }}
@@ -124,62 +124,64 @@ const ChatList = ({
             />
           </div>
         </div>
-        <h4 className='font-semibold text-blue-800 mb-2 text-lg'>
-          Direct Chats
-        </h4>
-        <div className='space-y-2'>
-          {directChats &&
-            directChats.map((chat) => (
-              <div
-                key={chat._id}
-                onClick={() => {
-                  setSelectedChatId(chat._id);
-                  if (window.innerWidth < 640) setShowSidebar(false);
-                }}
-                className={`px-4 py-3 rounded-xl cursor-pointer transition-colors flex flex-col shadow-sm border border-blue-100
-                  ${
-                    selectedChatId === chat._id
-                      ? 'bg-blue-200/80 border-blue-300'
-                      : 'hover:bg-blue-100/60'
-                  }`}
-              >
-                <div className='font-medium truncate text-blue-900'>
-                  {chat.participants?.find((p) => p._id !== userId)?.fullName ||
-                    ''}
+        <div className="flex-1 min-h-0 overflow-y-auto">
+          <h4 className='font-semibold text-blue-800 mb-2 text-lg'>
+            Direct Chats
+          </h4>
+          <div className='space-y-2'>
+            {directChats &&
+              directChats.map((chat) => (
+                <div
+                  key={chat._id}
+                  onClick={() => {
+                    setSelectedChatId(chat._id);
+                    if (window.innerWidth < 640) setShowSidebar(false);
+                  }}
+                  className={`px-4 py-3 rounded-xl cursor-pointer transition-colors flex flex-col shadow-sm border border-blue-100
+                    ${
+                      selectedChatId === chat._id
+                        ? 'bg-blue-200/80 border-blue-300'
+                        : 'hover:bg-blue-100/60'
+                    }`}
+                >
+                  <div className='font-medium truncate text-blue-900'>
+                    {chat.participants?.find((p) => p._id !== userId)?.fullName ||
+                      ''}
+                  </div>
+                  <div className='text-xs text-blue-600 truncate'>
+                    {chat.lastMessagePreview}
+                  </div>
                 </div>
-                <div className='text-xs text-blue-600 truncate'>
-                  {chat.lastMessagePreview}
+              ))}
+          </div>
+          <h4 className='font-semibold text-blue-800 mt-8 mb-2 text-lg'>
+            Groups
+          </h4>
+          <div className='space-y-2'>
+            {groupChats &&
+              groupChats.map((chat) => (
+                <div
+                  key={chat._id}
+                  onClick={() => {
+                    setSelectedChatId(chat._id);
+                    if (window.innerWidth < 640) setShowSidebar(false);
+                  }}
+                  className={`px-4 py-3 rounded-xl cursor-pointer transition-colors flex flex-col shadow-sm border border-blue-100
+                    ${
+                      selectedChatId === chat._id
+                        ? 'bg-blue-200/80 border-blue-300'
+                        : 'hover:bg-blue-100/60'
+                    }`}
+                >
+                  <div className='font-medium truncate text-blue-900'>
+                    {chat.chatName || 'Group'}
+                  </div>
+                  <div className='text-xs text-blue-600 truncate'>
+                    {chat.lastMessagePreview}
+                  </div>
                 </div>
-              </div>
-            ))}
-        </div>
-        <h4 className='font-semibold text-blue-800 mt-8 mb-2 text-lg'>
-          Groups
-        </h4>
-        <div className='space-y-2'>
-          {groupChats &&
-            groupChats.map((chat) => (
-              <div
-                key={chat._id}
-                onClick={() => {
-                  setSelectedChatId(chat._id);
-                  if (window.innerWidth < 640) setShowSidebar(false);
-                }}
-                className={`px-4 py-3 rounded-xl cursor-pointer transition-colors flex flex-col shadow-sm border border-blue-100
-                  ${
-                    selectedChatId === chat._id
-                      ? 'bg-blue-200/80 border-blue-300'
-                      : 'hover:bg-blue-100/60'
-                  }`}
-              >
-                <div className='font-medium truncate text-blue-900'>
-                  {chat.chatName || 'Group'}
-                </div>
-                <div className='text-xs text-blue-600 truncate'>
-                  {chat.lastMessagePreview}
-                </div>
-              </div>
-            ))}
+              ))}
+          </div>
         </div>
       </div>
       {showSidebar && (

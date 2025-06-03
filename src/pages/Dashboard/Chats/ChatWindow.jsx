@@ -193,7 +193,7 @@ const ChatWindow = ({
                   </time>
                 </div>
                 {msgs.map((msg, idx) => {
-                  const isSender = msg.sender._id === userId;
+                  const isSender = msg.sender?._id === userId;
                   const time = msg.sentAt
                     ? new Date(msg.sentAt).toLocaleTimeString([], {
                         hour: '2-digit',
@@ -211,11 +211,11 @@ const ChatWindow = ({
                         className={`inline-block px-3 py-2 rounded-2xl min-w-[40px] max-w-[80vw] sm:max-w-[70%] break-words relative ${
                           isSender ? 'bg-green-100' : 'bg-gray-100'
                         }`}
-                        aria-label={`${msg.sender.fullName} says: ${msg.content}`}
+                        aria-label={`${msg.sender?.fullName} says: ${msg.content}`}
                       >
                         {isGroupChat && !isSender && (
                           <div className="text-xs font-semibold text-blue-700 mb-1 select-text">
-                            {msg.sender.fullName}
+                            {msg.sender?.fullName || 'System Suggestion'}
                           </div>
                         )}
                         <span>{msg.content}</span>
