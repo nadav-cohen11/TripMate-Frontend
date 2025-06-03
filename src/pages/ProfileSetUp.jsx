@@ -6,7 +6,7 @@ import { register } from '@/api/userApi';
 import { extractBackendError } from '@/utils/errorUtils';
 import { uploadFiles } from '@/api/mediaApi';
 import { adventureStyles, genders } from './constants';
-import { useProfileSetupForm } from '@/hooks/useProfileSetupForm';
+import useProfileSetupForm  from '@/hooks/useProfileSetupForm';
 import { useProfileDataQueries } from '@/hooks/useProfileDataQueries';
 
 export default function ProfileSetup({ nextStep, formRegister }) {
