@@ -112,9 +112,16 @@ const CreateTrip = ({ userId, socket, setChats, matches }) => {
         },
       };
       if (socket) {
-        socket.emit('createTrip', { newTrip }, (trip) => {
-          if (!trip) {
+        socket.emit('createTrip', { newTrip }, ({ chat, error }) => {
+          if (error) {
+            setError(error || 'Failed to create trip.');
+            setLoading(false);
+            return;
+          }
+          if (!chat) {
             setError('Failed to create trip.');
+            setLoading(false);
+            return;
           }
           setOpen(false);
         });
@@ -145,7 +152,7 @@ const CreateTrip = ({ userId, socket, setChats, matches }) => {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button
-            className="
+            className='
               w-full sm:w-auto
               px-6 py-3
               rounded-xl
@@ -157,99 +164,99 @@ const CreateTrip = ({ userId, socket, setChats, matches }) => {
               transition-all duration-200
               focus:outline-none focus:ring-2 focus:ring-blue-400
               flex items-center gap-2
-            "
+            '
             onClick={() => setOpen(true)}
           >
             <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
+              className='w-5 h-5'
+              fill='none'
+              stroke='currentColor'
               strokeWidth={2}
-              viewBox="0 0 24 24"
+              viewBox='0 0 24 24'
             >
               <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 4v16m8-8H4"
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                d='M12 4v16m8-8H4'
               />
             </svg>
             Create Your Trip
           </Button>
         </DialogTrigger>
         {open && (
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className='sm:max-w-[425px]'>
             <DialogHeader>
               <DialogTitle>Create Your Trip</DialogTitle>
               <DialogDescription>
                 Create a trip with your friends
               </DialogDescription>
             </DialogHeader>
-            <div className="grid gap-4">
+            <div className='grid gap-4'>
               {step === 1 ? (
-                <form className="space-y-4" onSubmit={handleSubmit}>
+                <form className='space-y-4' onSubmit={handleSubmit}>
                   <div>
-                    <Label htmlFor="tripName">Trip Name</Label>
+                    <Label htmlFor='tripName'>Trip Name</Label>
                     <Input
-                      id="tripName"
-                      placeholder="Our trip"
+                      id='tripName'
+                      placeholder='Our trip'
                       value={form.tripName}
                       onChange={handleChange}
                       required
                     />
                   </div>
                   <div>
-                    <Label htmlFor="country">Country</Label>
+                    <Label htmlFor='country'>Country</Label>
                     <Input
-                      id="country"
-                      placeholder="e.g. France"
+                      id='country'
+                      placeholder='e.g. France'
                       value={form.country}
                       onChange={handleChange}
                       required
                     />
                   </div>
                   <div>
-                    <Label htmlFor="city">City</Label>
+                    <Label htmlFor='city'>City</Label>
                     <Input
-                      id="city"
-                      placeholder="e.g. Paris"
+                      id='city'
+                      placeholder='e.g. Paris'
                       value={form.city}
                       onChange={handleChange}
                       required
                     />
                   </div>
                   <div>
-                    <Label htmlFor="startDate">Start Date</Label>
+                    <Label htmlFor='startDate'>Start Date</Label>
                     <Input
-                      id="startDate"
-                      type="date"
+                      id='startDate'
+                      type='date'
                       value={form.startDate}
                       onChange={handleChange}
                       required
                     />
                   </div>
                   <div>
-                    <Label htmlFor="endDate">End Date</Label>
+                    <Label htmlFor='endDate'>End Date</Label>
                     <Input
-                      id="endDate"
-                      type="date"
+                      id='endDate'
+                      type='date'
                       value={form.endDate}
                       onChange={handleChange}
                       required
                     />
                   </div>
                   <div>
-                    <Label htmlFor="description">Notes</Label>
+                    <Label htmlFor='description'>Notes</Label>
                     <Textarea
-                      id="description"
-                      placeholder="Trip details..."
+                      id='description'
+                      placeholder='Trip details...'
                       value={form.description}
                       onChange={handleChange}
                     />
                   </div>
-                  {error && <div className="text-red-500 text-sm">{error}</div>}
+                  {error && <div className='text-red-500 text-sm'>{error}</div>}
                   <Button
-                    type="button"
-                    className="
+                    type='button'
+                    className='
                       w-full
                       px-6 py-3
                       rounded-xl
@@ -261,15 +268,15 @@ const CreateTrip = ({ userId, socket, setChats, matches }) => {
                       transition-all duration-200
                       focus:outline-none focus:ring-2 focus:ring-blue-400
                       flex items-center gap-2
-                    "
+                    '
                     onClick={handleStepOneValidation}
                   >
                     Next
                   </Button>
                 </form>
               ) : (
-                <form className="space-y-4" onSubmit={handleSubmit}>
-                  <div className="grid gap-4 py-4">
+                <form className='space-y-4' onSubmit={handleSubmit}>
+                  <div className='grid gap-4 py-4'>
                     {matches && matches.length > 0 ? (
                       matches.map((match) => (
                         <Match
@@ -278,21 +285,21 @@ const CreateTrip = ({ userId, socket, setChats, matches }) => {
                           match={match}
                           socket={socket}
                           setChats={setChats}
-                          buttonContent="Add"
+                          buttonContent='Add'
                           addFriendToTrip={addFriendToTrip}
                           removeFriendFromTrip={removeFriendFromTrip}
                         />
                       ))
                     ) : (
-                      <div className="text-center text-gray-500 py-8">
+                      <div className='text-center text-gray-500 py-8'>
                         No friends found.
                       </div>
                     )}
                   </div>
-                  {error && <div className="text-red-500 text-sm">{error}</div>}
+                  {error && <div className='text-red-500 text-sm'>{error}</div>}
                   <Button
-                    type="submit"
-                    className="
+                    type='submit'
+                    className='
                       w-full
                       px-6 py-3
                       rounded-xl
@@ -304,7 +311,7 @@ const CreateTrip = ({ userId, socket, setChats, matches }) => {
                       transition-all duration-200
                       focus:outline-none focus:ring-2 focus:ring-blue-400
                       flex items-center gap-2
-                    "
+                    '
                     disabled={loading}
                   >
                     {loading ? 'Creating...' : 'Create Trip'}

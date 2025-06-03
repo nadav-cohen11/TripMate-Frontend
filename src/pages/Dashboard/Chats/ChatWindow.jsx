@@ -221,7 +221,7 @@ const ChatWindow = ({
                         aria-label={`${msg.sender?.fullName} says: ${msg.content}`}
                       >
                         {isGroupChat && !isSender && (
-                          <div className='text-xs font-semibold text-blue-700 mb-1 select-text'>
+                          <div className="text-xs font-semibold text-blue-700 mb-1 select-text">
                             {msg.sender?.fullName || 'System Suggestion'}
                           </div>
                         )}
