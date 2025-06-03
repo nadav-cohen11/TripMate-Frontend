@@ -6,7 +6,7 @@ import {
   fetchLanguageOptions,
 } from '@/utils/profileSetupUtils';
 
-const useProfileDataQueries = (selectedCountry) => {
+export function useProfileDataQueries(selectedCountry) {
   const { data: countryOptions = [], isLoading: loadingCountries } = useQuery({
     queryKey: ['countries'],
     queryFn: async () => {
