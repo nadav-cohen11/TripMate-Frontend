@@ -3,6 +3,7 @@ import ChatList from './ChatList';
 import ChatWindow from './ChatWindow';
 import useChatSocket from '@/hooks/useChatSocket';
 import { AuthContext } from '@/context/AuthContext';
+import Typewriter from '@/components/Typewriter';
 
 const Chats = () => {
   const [chats, setChats] = useState([]);

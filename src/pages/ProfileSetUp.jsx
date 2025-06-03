@@ -1,30 +1,58 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
 import { useMutation } from '@tanstack/react-query';
 import { register, updateUser } from '@/api/userApi';
 import { extractBackendError } from '@/utils/errorUtils';
 import { useNavigate } from 'react-router-dom';
-import  useProfileSetupForm  from '@/hooks/useProfileSetupForm';
+import { uploadFiles } from '@/api/mediaApi';
+import { adventureStyles, genders } from './constants';
+import { useProfileSetupForm } from '@/hooks/useProfileSetupForm';
+import { useProfileDataQueries } from '@/hooks/useProfileDataQueries';
 
-const ProfileSetup = ({ formRegister }) => {
+export default function ProfileSetup({ nextStep, formRegister }) {
   const {
     form,
     imgURLs,
+    setImgURLs,
     handleInputChange,
     handleLocationChange,
     handleLanguagesChange,
     handleAdventureStyleChange,
-    handleImageUpload,
   } = useProfileSetupForm(formRegister);
 
-  const navigate = useNavigate();
+  const [selectedPhotos, setSelectedPhotos] = useState(null)
+  const [previewURLs, setPreviewURLs] = useState([]);
+
+  useEffect(() => {
+    if (!selectedPhotos) {
+      setPreviewURLs([]);
+      return;
+    }
+    const urls = Array.from(selectedPhotos).map((file) =>
+      URL.createObjectURL(file)
+    );
+    setPreviewURLs(urls);
+
+    return () => {
+      urls.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [selectedPhotos]);
+
+  const {
+    countryOptions,
+    loadingCountries,
+    languageOptions,
+    loadingLanguages,
+    cityOptions,
+    loadingCities,
+  } = useProfileDataQueries(form.location?.country);
 
   const mutationRegister = useMutation({
     mutationFn: register,
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success('User registered successfully');
-      navigate('/home');
+      nextStep()
     },
     onError: (err) => {
       const message = extractBackendError(err);
@@ -32,26 +60,36 @@ const ProfileSetup = ({ formRegister }) => {
     },
   });
 
-  const mutation = useMutation({
-    mutationFn: async (data) => updateUser(data, { method: 'PUT' }),
-    onSuccess: () => {
-      toast.success('Profile updated successfully');
-    },
-    onError: (error) => {
-      toast.error('Failed to update profile');
-      console.log(error);
-    },
-  });
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
+
     const payload = {
       ...form,
-      photos: imgURLs,
+      email: formRegister.email,
+      password: formRegister.password,
       languagesSpoken: form.languagesSpoken.map((o) => o.value),
     };
-    if (!formRegister) mutation.mutate(payload);
-    else mutationRegister.mutate(payload);
+
+    mutationRegister.mutate(payload, {
+      onSuccess: async () => {
+        toast.success('User registered successfully');
+        if (selectedPhotos && selectedPhotos.length > 0) {
+          try {
+            const uploaded = await uploadFiles('upload-profile', selectedPhotos, false);
+            setImgURLs(uploaded);
+            nextStep
+          } catch (uploadErr) {
+            toast.error('Photo upload failed');
+            console.error(uploadErr);
+          }
+        }
+      },
+      onError: (err) => {
+        const msg = extractBackendError(err);
+        toast.error(msg);
+      },
+    });
   };
 
   return (
@@ -62,7 +100,20 @@ const ProfileSetup = ({ formRegister }) => {
       >
         <div className='flex flex-col items-center gap-3'>
           <div className='flex gap-2'>
-            {imgURLs.length > 0 ? (
+            {previewURLs.length > 0 ? (
+              previewURLs.map((url, idx) => (
+                <div
+                  key={idx}
+                  className='h-20 w-20 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'
+                >
+                  <img
+                    src={url}
+                    alt='preview'
+                    className='h-full w-full object-cover'
+                  />
+                </div>
+              ))
+            ) : imgURLs.length > 0 ? (
               imgURLs.map((url, idx) => (
                 <div
                   key={idx}
@@ -83,14 +134,13 @@ const ProfileSetup = ({ formRegister }) => {
             Upload Profile Pictures
             <input
               type='file'
-              accept='image/*'
               multiple
-              onChange={handleImageUpload}
+              accept='image/*'
+              onChange={(e) => setSelectedPhotos(e.target.files)}
               className='sr-only'
             />
           </label>
         </div>
-
         <input
           type='text'
           name='fullName'
@@ -122,15 +172,25 @@ const ProfileSetup = ({ formRegister }) => {
           required
           className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200'
         />
-
-        <input
-          type='text'
-          name='country'
-          value={form.location?.country || ''}
-          onChange={(e) => handleLocationChange({ country: e.target.value, city: '' })}
-          placeholder='Country'
-          required
-          className='input-white bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300'
+        <Select
+          placeholder={
+            !form.location?.country
+              ? 'Select country first'
+              : loadingCities
+                ? 'Loading cities…'
+                : 'City'
+          }
+          options={cityOptions}
+          value={
+            form.location?.city
+              ? cityOptions.find((o) => o.value === form.location?.city) || null
+              : null
+          }
+          onChange={(o) => handleLocationChange({ city: o ? o.value : '' })}
+          isSearchable
+          isDisabled={!form.location?.country || loadingCities}
+          classNamePrefix='rs'
+          className='rounded-xl'
         />
 
         <input
@@ -185,6 +245,5 @@ const ProfileSetup = ({ formRegister }) => {
       </form>
     </div>
   );
-}
-
 export default ProfileSetup
+}

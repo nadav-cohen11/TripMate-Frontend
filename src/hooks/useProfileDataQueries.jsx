@@ -50,5 +50,3 @@ const useProfileDataQueries = (selectedCountry) => {
     loadingCities,
   };
 }
-
-export default useProfileDataQueries
