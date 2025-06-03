@@ -52,3 +52,4 @@ const useProfileDataQueries = (selectedCountry) => {
 }
 
 
+export default useProfileDataQueries;

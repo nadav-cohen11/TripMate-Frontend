@@ -7,8 +7,8 @@ import { uploadFiles } from '@/api/mediaApi';
 import { extractBackendError } from '@/utils/errorUtils';
 import { useNavigate } from 'react-router-dom';
 import { adventureStyles, genders } from './constants';
-import { useProfileSetupForm } from '@/hooks/useProfileSetupForm';
-import { useProfileDataQueries } from '@/hooks/useProfileDataQueries';
+import  useProfileSetupForm  from '@/hooks/useProfileSetupForm';
+import useProfileDataQueries from '@/hooks/useProfileDataQueries';
 
 const ProfileSetup = ({ nextStep, formRegister }) => {
   const {
