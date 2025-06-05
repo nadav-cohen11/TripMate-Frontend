@@ -21,16 +21,15 @@ const fetchEvents = async ({ queryKey }) => {
 };
 
 export const EventList = ({ lat, lon, keyword: externalKeyword }) => {
-  const [keyword, setKeyword] = useState('');
-  const [debouncedKeyword, setDebouncedKeyword] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('');
+  const [debouncedKeyword, setDebouncedKeyword] = useState('');
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedKeyword(selectedFilter || keyword || externalKeyword);
+      setDebouncedKeyword(selectedFilter || externalKeyword);
     }, 500);
     return () => clearTimeout(handler);
-  }, [keyword, selectedFilter, externalKeyword]);
+  }, [selectedFilter, externalKeyword]);
 
   const {
     data: events,
@@ -42,7 +41,6 @@ export const EventList = ({ lat, lon, keyword: externalKeyword }) => {
     enabled: !!lat && !!lon,
     staleTime: 5 * 60 * 1000,
     cacheTime: 10 * 60 * 1000,
-    
   });
 
   return (
@@ -57,7 +55,7 @@ export const EventList = ({ lat, lon, keyword: externalKeyword }) => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0, transition: { duration: 0.4 } }}
       >
-        🎉 Nearby Events Just for You
+         Nearby Events Just for You 🎉
       </motion.h2>
 
       <div className="flex flex-wrap justify-center gap-2 mb-4">
@@ -76,19 +74,6 @@ export const EventList = ({ lat, lon, keyword: externalKeyword }) => {
             <span className="mr-1">{icon}</span> {label}
           </button>
         ))}
-      </div>
-
-      <div className="mb-6 flex justify-center">
-        <input
-          type="text"
-          value={keyword}
-          onChange={(e) => {
-            setSelectedFilter('');
-            setKeyword(e.target.value);
-          }}
-          placeholder="Search by keyword (e.g. music, tech...)"
-          className="w-full max-w-md px-4 py-2 rounded-xl border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-400 transition"
-        />
       </div>
 
       {isLoading && (
