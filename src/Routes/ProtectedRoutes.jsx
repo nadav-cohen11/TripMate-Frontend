@@ -6,13 +6,14 @@ import ProtectedRoute from './ProtectedRoute';
 import UploadTestPage from '../pages/Auth/UploadPhotoPage';
 import ReelsPage from '../pages/Reels/Reels';
 import UserProfilePage from '../pages/UserProfile/UserProfilePage';
+import ProfileSetup from '@/pages/UserProfile/ProfileSetUp';
 
 const protectedRoutes = () => [
   { path: '/home/', element: <ProtectedRoute><Home /></ProtectedRoute> },
   { path: '/chat', element: <ProtectedRoute><Chat /></ProtectedRoute> },
   { path: '/map', element: <ProtectedRoute><Map /></ProtectedRoute> },
   { path: '/reels', element: <ProtectedRoute><ReelsPage /></ProtectedRoute> },
-  { path: '/setup', element: <ProtectedRoute><UserProfilePage /></ProtectedRoute> },
+  { path: '/setup', element: <ProtectedRoute><ProfileSetup /></ProtectedRoute> },
   { path: '/test', element: <ProtectedRoute><UploadTestPage /></ProtectedRoute> },
   { path: '/matches', element: <ProtectedRoute><MyMatches /></ProtectedRoute> },
   { path: '/profile/:userId', element: <ProtectedRoute><UserProfilePage /></ProtectedRoute> },
