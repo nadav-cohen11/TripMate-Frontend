@@ -5,7 +5,6 @@ export const createOrAcceptMatch = async ({ user2Id }) => {
     const response = await api.post('/matches/', {
       user2Id,
     });
-    console.log(response)
     return response.data;
   } catch (error) {
     throw error;
