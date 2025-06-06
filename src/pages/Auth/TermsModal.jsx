@@ -21,7 +21,7 @@ const TermsModal = ({ isOpen, onClose }) => {
           </div>
           <div className="border-b pb-4">
             <p>2. גיל מינימלי לשימוש</p>
-            <p>השירות מיועד למשתמשים בני 18 ומעלה. קטינים נדרשים לקבל אישור מהורה או אפוטרופוס.</p>
+            <p>השירות מיועד למשתמשים בני 16 ומעלה. קטינים נדרשים לקבל אישור מהורה או אפוטרופוס.</p>
           </div>
           <div className="border-b pb-4">
             <p>3. אחריות המשתמש</p>
@@ -72,7 +72,7 @@ const TermsModal = ({ isOpen, onClose }) => {
               </div>
               <div className="border-b pb-4">
                 <p className="font-semibold">2. Minimum Age</p>
-                <p>The app is intended for users aged 18 and above. Minors may use the app only with parental or legal guardian consent.</p>
+                <p>The app is intended for users aged 16 and above. Minors may use the app only with parental or legal guardian consent.</p>
               </div>
               <div className="border-b pb-4">
                 <p className="font-semibold">3. User Responsibility</p>
