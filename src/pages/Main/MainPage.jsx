@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import TripMateTitle from '@/components/ui/TripMateTitle';
 
 const LoadingPage = () => {
   const navigate = useNavigate();
@@ -16,8 +15,6 @@ const LoadingPage = () => {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200">
-      <TripMateTitle />
-      
       <div className="min-h-screen flex items-center justify-center overflow-hidden relative">
         <motion.div
           initial={{ opacity: 0 }}
