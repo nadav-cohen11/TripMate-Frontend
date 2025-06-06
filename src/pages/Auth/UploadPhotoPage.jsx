@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
@@ -5,8 +6,9 @@ import { uploadFiles } from '@/api/mediaApi';
 import { toast } from 'react-toastify';
 import { X } from 'lucide-react';
 import { extractBackendError } from '@/utils/errorUtils';
+import TripMateTitle from '@/components/ui/TripMateTitle';
 
-const UploadTestPage = () => {
+const UploadPhotoPage = () => {
   const [selectedPhotos, setSelectedPhotos] = useState([]);
   const [previewURLs, setPreviewURLs] = useState([]);
 
@@ -45,9 +47,7 @@ const UploadTestPage = () => {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden">
-      <div className="absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}>
-        TripMate
-      </div>
+      <TripMateTitle />
       <h1 className="text-3xl font-bold text-center">📸 Upload Your Photos</h1>
 
       <section className="bg-white p-6 rounded-xl shadow border space-y-6">
@@ -105,4 +105,4 @@ const UploadTestPage = () => {
   );
 };
 
-export default UploadTestPage;
+export default UploadPhotoPage;

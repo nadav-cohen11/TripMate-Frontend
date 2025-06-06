@@ -3,7 +3,7 @@ import ChatList from './ChatList';
 import ChatWindow from './ChatWindow';
 import useChatSocket from '@/hooks/useChatSocket';
 import { AuthContext } from '@/context/AuthContext';
-import Typewriter from '@/components/animations/Typewriter';
+import TripMateTitle from '@/components/ui/TripMateTitle';
 
 const Chats = () => {
   const [chats, setChats] = useState([]);
@@ -64,12 +64,7 @@ const Chats = () => {
 
   return (
     <div className='relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden'>
-      <div
-        className='absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide'
-        style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}
-      >
-        TripMate
-      </div>
+      <TripMateTitle />
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         className='sm:hidden fixed top-4 right-4 z-30 bg-white/80 rounded-full p-2 shadow-md border border-blue-200'

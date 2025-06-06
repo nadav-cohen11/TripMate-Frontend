@@ -8,6 +8,7 @@ import ProfileImage from '../Home/ProfileImage';
 import PhotoNavigation from '../Home/PhotoNavigation';
 import ProfileDetails from '../Home/ProfileDetails';
 import UserQRCode from './UserQRCode';
+import TripMateTitle from '@/components/ui/TripMateTitle';
 
 const UserProfilePage = () => {
   const { userId } = useParams();
@@ -58,10 +59,8 @@ const UserProfilePage = () => {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden">
+      <TripMateTitle />
 
-      <div className="absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}>
-        TripMate
-      </div>
       <IoSettingsOutline className="absolute top-6 right-6 text-4xl text-gray-600 cursor-pointer hover:text-gray-800 transition-colors duration-200" />
 
       <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-12 items-center justify-center mt-16">

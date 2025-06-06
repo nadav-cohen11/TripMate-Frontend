@@ -8,7 +8,7 @@ import { extractBackendError } from '../../utils/errorUtils';
 import { getCurrentLocation } from '@/utils/getLocationUtiles';
 import { AuthContext } from '../../context/AuthContext';
 import { useMutation } from '@tanstack/react-query';
-import Typewriter from '@/components/animations/Typewriter';
+import TripMateTitle from '@/components/ui/TripMateTitle';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -41,13 +41,7 @@ const Login = () => {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-[#eaf4ff] to-[#dbeeff] px-4">
-      <div className="absolute top-6 left-6 z-20">
-        <Typewriter
-          text="TripMate"
-          className="text-4xl text-black tracking-wide"
-          style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}
-        />
-      </div>
+      <TripMateTitle />
 
       <form
         onSubmit={handleSubmit}
