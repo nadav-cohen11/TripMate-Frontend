@@ -64,7 +64,7 @@ const UserProfilePage = () => {
       </div>
       <IoSettingsOutline className="absolute top-6 right-6 text-4xl text-gray-600 cursor-pointer hover:text-gray-800 transition-colors duration-200" />
 
-      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-12 items-center justify-center mt-16">
+      <div className="max-w-6xl mx-auto flex flex-col gap-8 sm:gap-12 items-center mt-16">
         <div className="w-full max-w-sm space-y-6">
           <div className="bg-white rounded-3xl border border-blue-100 shadow-lg overflow-hidden">
             <ProfileImage photo={photo} photoIndex={photoIndex} />
@@ -78,7 +78,7 @@ const UserProfilePage = () => {
           </div>
         </div>
 
-        <div className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-blue-100 p-8 flex flex-col gap-8 relative">
+        <div className="w-full max-w-sm md:max-w-md lg:max-w-lg bg-white rounded-3xl shadow-xl border border-blue-100 p-8 flex flex-col gap-8 relative">
           <div className="absolute top-4 right-4">
             <UserQRCode />
           </div>
