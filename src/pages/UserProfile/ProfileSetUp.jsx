@@ -40,8 +40,8 @@ export default function ProfileSetup({ nextStep, formRegister }) {
       urls.forEach((url) => URL.revokeObjectURL(url));
     };
   }, [selectedPhotos]);
-
-  const { countries, cities, languageOptions, loadingLanguages } =
+  
+  const { countries, cities, langs } =
     useProfileDataQueries(form.location?.country);
 
   const mutationRegister = useMutation({
@@ -234,10 +234,11 @@ export default function ProfileSetup({ nextStep, formRegister }) {
         />
 
         <Select
-          placeholder={
-            loadingLanguages ? 'Loading languages…' : 'Select languages…'
-          }
-          options={languageOptions}
+          placeholder='Select languages…'
+          options={langs.map((l) => ({
+            label: l,
+            value: l,
+          }))}
           isMulti
           value={form.languagesSpoken}
           onChange={handleLanguagesChange}
