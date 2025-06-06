@@ -29,7 +29,7 @@ export const Map = () => {
       TripMate
     </div>
 
-      <div className="z-10 relative flex flex-col gap-6 pt-28 px-6 md:px-12 max-w-screen-md mx-auto">
+      <div className="z-10 relative flex flex-col gap-6 pt-28 px-6 md:px-12 max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl mx-auto">
         <FilterSelector activeFilter={filter} setFilter={setFilter} filterIcons={FILTER_ICONS}   />
         <RadiusSlider radius={radius} setRadius={setRadius} />
       </div>
