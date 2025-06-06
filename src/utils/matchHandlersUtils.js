@@ -3,8 +3,7 @@ export const handleCardSwipe = async (direction, userId) => {
   try {
     if (direction === 'right') {
       await createOrAcceptMatch({
-        user2Id: userId,
-        scores: { compatibility: Math.floor(Math.random() * 100) },
+        user2Id: userId
       });
     } else if (direction === 'left') {
       await unmatchUsers({ user2Id: userId });

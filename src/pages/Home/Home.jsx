@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import TinderCard from 'react-tinder-card';
 import ProfileCard from './ProfileCard';
@@ -18,14 +18,18 @@ const fetchUsers = async () => {
     ]);
 
     return displayUsers.map((user) => {
-      const compatibilityScore = Math.floor(Math.random() * 101);
-
+      const compatibilityScore = user.compatibilityScore
       const userCoords = user.location?.coordinates;
       const currentCoords = currentUserLocation?.location?.coordinates;
 
       const distance =
         Array.isArray(userCoords) && Array.isArray(currentCoords)
-          ? calculateDistance(currentCoords[1], currentCoords[0], userCoords[1], userCoords[0])
+          ? calculateDistance(
+              currentCoords[1],
+              currentCoords[0],
+              userCoords[1],
+              userCoords[0],
+            )
           : null;
 
       return {
@@ -64,19 +68,24 @@ const Home = () => {
 
   if (!users.length) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 text-center text-gray-800">
-        <h1 className="text-2xl font-semibold">No more matches at the moment!</h1>
-        <p className="mt-2">Check back later or adjust your preferences.</p>
+      <div className='flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 text-center text-gray-800'>
+        <h1 className='text-2xl font-semibold'>
+          No more matches at the moment!
+        </h1>
+        <p className='mt-2'>Check back later or adjust your preferences.</p>
       </div>
     );
   }
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden">
-      <div className="absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}>
+    <div className='relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden'>
+      <div
+        className='absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide'
+        style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}
+      >
         TripMate
       </div>
-      <div className="flex items-center justify-center min-h-screen px-4 z-10">
+      <div className='flex items-center justify-center min-h-screen px-4 z-10'>
         {users.map((user, index) => (
           <TinderCard
             key={user._id}
@@ -92,7 +101,7 @@ const Home = () => {
             }}
           >
             <div
-              className="tinder-card-wrapper w-full h-full flex justify-center items-center px-4"
+              className='tinder-card-wrapper w-full h-full flex justify-center items-center px-4'
               style={{ zIndex: users.length - index }}
             >
               <ProfileCard user={user} swipeInfo={swipeInfo} />
