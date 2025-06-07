@@ -9,12 +9,12 @@ import { adventureStyles, genders } from '../../constants/profile';
 import useProfileSetupForm from '@/hooks/useProfileSetupForm';
 import useProfileDataQueries from '@/hooks/useProfileDataQueries';
 import { FaInstagram, FaFacebook } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom'
 
 export default function ProfileSetup({ nextStep, formRegister }) {
   const {
     form,
     imgURLs,
-
     setImgURLs,
     handleSocialChange,
     handleInputChange,
@@ -31,6 +31,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
       setPreviewURLs([]);
       return;
     }
+    
     const urls = Array.from(selectedPhotos).map((file) =>
       URL.createObjectURL(file),
     );
@@ -40,7 +41,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
       urls.forEach((url) => URL.revokeObjectURL(url));
     };
   }, [selectedPhotos]);
-  
+
   const { countries, cities, langs } =
     useProfileDataQueries(form.location?.country);
 
@@ -69,19 +70,22 @@ export default function ProfileSetup({ nextStep, formRegister }) {
       toast.error(message);
     },
   });
-
-  const mutationUpdate = useMutation({
-    mutationFn: async (data) => updateUser(data, { method: 'PUT' }),
-    onSuccess: async () => {
-      toast.success('Profile updated successfully');
-    },
-    onError: (error) => {
-      const msg = extractBackendError(error);
-      toast.error(msg);
-      console.log(error);
-    },
-  });
-
+const navigate = useNavigate()
+const mutationUpdate = useMutation({
+  mutationFn: async (data) => updateUser(data, { method: 'PUT' }),
+  onSuccess: async (updatedData) => {
+    toast.success('Profile updated successfully');
+    if (updatedData?.profilePhotoURL) {
+      setImgURLs([updatedData.profilePhotoURL]);
+    }
+      navigate(`/profile/${updatedData._id}`); 
+  },
+  onError: (error) => {
+    const msg = extractBackendError(error);
+    toast.error(msg);
+    console.log(error);
+  },
+});
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -116,37 +120,31 @@ export default function ProfileSetup({ nextStep, formRegister }) {
         <div className='flex flex-col items-center gap-2'>
           <div className='flex gap-2'>
             {previewURLs.length > 0 ? (
-              previewURLs.map((url, idx) => (
-                <div
-                  key={idx}
-                  className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'
-                >
-                  <img
-                    src={url}
-                    alt='preview'
-                    className='h-full w-full object-cover'
-                  />
-                </div>
-              ))
+              <div
+                className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'
+              >
+                <img
+                  src={previewURLs[0]}
+                  alt='preview'
+                  className='h-full w-full object-cover'
+                />
+              </div>
             ) : imgURLs.length > 0 ? (
-              imgURLs.map((url, idx) => (
-                <div
-                  key={idx}
-                  className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'
-                >
-                  <img
-                    src={url}
-                    alt='avatar'
-                    className='h-full w-full object-cover'
-                  />
-                </div>
-              ))
+              <div
+                className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'
+              >
+                <img
+                  src={imgURLs[0]}
+                  alt='avatar'
+                  className='h-full w-full object-cover'
+                />
+              </div>
             ) : (
               <div className='h-20 w-20 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300' />
             )}
           </div>
           <label className='text-xs text-blue-600 underline cursor-pointer'>
-            Upload Profile Pictures
+            Upload Profile Picture
             <input
               type='file'
               multiple
@@ -202,9 +200,9 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           value={
             form.location?.country
               ? {
-                  label: form.location.country.name,
-                  value: form.location.country,
-                }
+                label: form.location.country.name,
+                value: form.location.country,
+              }
               : null
           }
           onChange={(o) => {
