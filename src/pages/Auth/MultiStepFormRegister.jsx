@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import ProfileSetup from '../UserProfile/ProfileSetUp';
 import Register from './Register';
-import UploadTestPage from './UploadPhotoPage';
+import UploadMediaPage from '../Auth/UploadMedia';
 import Home from '../Home/Home';
 
 const MultiStepFormRegister = () => {
@@ -25,7 +25,7 @@ const MultiStepFormRegister = () => {
    else if( step === 2) {
     return <ProfileSetup nextStep={nextStep} formRegister={formRegister} />;
   } else if (step === 3) {
-    return <UploadTestPage nextStep={nextStep} />;
+    return <UploadMediaPage nextStep={nextStep} />;
   } else {
     return <Home></Home>
   }

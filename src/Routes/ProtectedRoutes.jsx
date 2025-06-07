@@ -3,7 +3,7 @@ import Chat from '../pages/Dashboard/Chats/Chat';
 import Map from '../pages/Map/Map';
 import MyMatches from '../pages/Matches/MyMatches';
 import ProtectedRoute from './ProtectedRoute'; 
-import UploadTestPage from '../pages/Auth/UploadPhotoPage';
+import UploadMediaPage from '../pages/Auth/UploadMedia';
 import ReelsPage from '../pages/Reels/Reels';
 import UserProfilePage from '../pages/UserProfile/UserProfilePage';
 import ProfileSetup from '@/pages/UserProfile/ProfileSetUp';
@@ -14,7 +14,7 @@ const protectedRoutes = () => [
   { path: '/map', element: <ProtectedRoute><Map /></ProtectedRoute> },
   { path: '/reels', element: <ProtectedRoute><ReelsPage /></ProtectedRoute> },
   { path: '/setup', element: <ProtectedRoute><ProfileSetup /></ProtectedRoute> },
-  { path: '/test', element: <ProtectedRoute><UploadTestPage /></ProtectedRoute> },
+  { path: '/photos', element: <ProtectedRoute><UploadMediaPage /></ProtectedRoute> },
   { path: '/matches', element: <ProtectedRoute><MyMatches /></ProtectedRoute> },
   { path: '/profile/:userId', element: <ProtectedRoute><UserProfilePage /></ProtectedRoute> },
 ];
