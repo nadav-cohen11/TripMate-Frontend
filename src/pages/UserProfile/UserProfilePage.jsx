@@ -5,13 +5,13 @@ import { useQuery } from '@tanstack/react-query';
 import { getUserById } from '../../api/userApi';
 import { toast } from 'react-toastify';
 import ProfileImage from '../Home/ProfileImage';
-import PhotoNavigation from '../Home/PhotoNavigation';
 import ProfileDetails from '../Home/ProfileDetails';
 import UserQRCode from './UserQRCode';
+import { useNavigate } from 'react-router-dom';
 
 const UserProfilePage = () => {
   const { userId } = useParams();
-  const [photoIndex, setPhotoIndex] = useState(0);
+  const navigate = useNavigate();
 
   const {
     data: user,
@@ -26,19 +26,12 @@ const UserProfilePage = () => {
     onError: () => toast.error('Failed to load user profile.'),
   });
 
-  const nextPhoto = () =>
-    setPhotoIndex((prev) => (prev + 1) % (user?.photos?.length || 1));
-  const prevPhoto = () =>
-    setPhotoIndex((prev) =>
-      (prev - 1 + (user?.photos?.length || 1)) % (user?.photos?.length || 1)
-    );
-
   const travel = user?.travelPreferences || {};
   const languages = user?.languagesSpoken?.join(', ') || '';
   const country = user?.location?.country || '';
   const city = user?.location?.city || '';
   const photo =
-    user?.photos?.[photoIndex]?.url || '/assets/images/Annonymos_picture.jpg';
+    user?.photos?.[0]?.url || '/assets/images/Annonymos_picture.jpg';
 
   if (isLoading) {
     return (
@@ -57,29 +50,29 @@ const UserProfilePage = () => {
   }
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden">
+    <div className='relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden'>
+      <header>
+        <div
+          className='absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide'
+          style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}
+        >
+          TripMate
+        </div>
 
-      <div className="absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}>
-        TripMate
-      </div>
-      <IoSettingsOutline className="absolute top-6 right-6 text-4xl text-gray-600 cursor-pointer hover:text-gray-800 transition-colors duration-200" />
+        <button onClick={() => navigate('/setup')}>
+          <IoSettingsOutline className='absolute top-6 right-6 text-4xl text-gray-600 cursor-pointer hover:text-gray-800 transition-colors duration-200' />
+        </button>
+      </header>
 
-      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-12 items-center justify-center mt-16">
-        <div className="w-full max-w-sm space-y-6">
-          <div className="bg-white rounded-3xl border border-blue-100 shadow-lg overflow-hidden">
-            <ProfileImage photo={photo} photoIndex={photoIndex} />
-            <PhotoNavigation
-              user={user}
-              photoIndex={photoIndex}
-              nextPhoto={nextPhoto}
-              prevPhoto={prevPhoto}
-              setPhotoIndex={setPhotoIndex}
-            />
+      <div className='max-w-6xl mx-auto flex flex-col lg:flex-row gap-12 items-center justify-center mt-16'>
+        <div className='w-full max-w-sm space-y-6'>
+          <div className='bg-white rounded-3xl border border-blue-100 shadow-lg overflow-hidden'>
+            <ProfileImage photo={photo} />
           </div>
         </div>
 
-        <div className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-blue-100 p-8 flex flex-col gap-8 relative">
-          <div className="absolute top-4 right-4">
+        <div className='w-full max-w-md bg-white rounded-3xl shadow-xl border border-blue-100 p-8 flex flex-col gap-8 relative'>
+          <div className='absolute top-4 right-4'>
             <UserQRCode />
           </div>
           <ProfileDetails

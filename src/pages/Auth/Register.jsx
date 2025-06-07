@@ -4,6 +4,8 @@ import TextInput from '@/components/ui/textInput';
 import LoginButton from '@/components/ui/loginButton';
 import schema from '@/schemas/passwordSchema.js';
 import TermsModal from './TermsModal';
+import { useMutation } from '@tanstack/react-query';
+import { getUserByEmail } from '@/api/userApi';
 
 const Register = ({ nextStep, form, setForm }) => {
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
@@ -16,13 +18,25 @@ const Register = ({ nextStep, form, setForm }) => {
     }
   };
 
+  const checkEmailExistMutation = useMutation({
+    mutationFn: () => getUserByEmail(form.email),
+    onSuccess: () => {
+      toast.error('User with this email already exists');
+    }
+  });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const result = await checkEmailExistMutation
+        .mutateAsync()
+        .catch(() => null);
+      if (result) return;
       schema.parse(form);
       nextStep();
     } catch (err) {
-      toast.error(err.errors[0]?.message || 'Invalid input');
+      console.log(err);
+      toast.error(err.errors?.[0]?.message || 'Invalid input');
     }
   };
 
@@ -53,21 +67,21 @@ const Register = ({ nextStep, form, setForm }) => {
           required
           className='bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300'
         />
-        <div className="flex items-start gap-2">
+        <div className='flex items-start gap-2'>
           <input
-            type="checkbox"
-            name="termsAccepted"
+            type='checkbox'
+            name='termsAccepted'
             checked={form.termsAccepted || false}
             onChange={handleChange}
-            className="mt-1"
+            className='mt-1'
             required
           />
-          <label className="text-sm">
+          <label className='text-sm'>
             I agree to the{' '}
             <button
-              type="button"
+              type='button'
               onClick={() => setIsTermsModalOpen(true)}
-              className="text-blue-500 hover:text-blue-600 underline"
+              className='text-blue-500 hover:text-blue-600 underline'
             >
               Terms of Use
             </button>

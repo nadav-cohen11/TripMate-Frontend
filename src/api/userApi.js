@@ -74,6 +74,22 @@ export const getAllTripsForUser = async () => {
 }
 
 export const getQrCodeByUserId = async (userId) => {
-  const { data } = await api.get(`/qr/${userId}`);
-  return data.qrCode;
+    try {
+        const { data } = await api.get(`/qr/${userId}`);
+        return data.qrCode;
+
+    } catch (error) {
+        throw error
+    }
+}
+
+
+export const getUserByEmail = async (email) => {
+    try {
+        const response = await api.get(`/users/getUserByEmail`, { params: { email } });
+        return response.data
+    } catch (error) {
+        throw error
+    }
 };
+
