@@ -10,6 +10,8 @@ import useProfileSetupForm from '@/hooks/useProfileSetupForm';
 import useProfileDataQueries from '@/hooks/useProfileDataQueries';
 import { FaInstagram, FaFacebook } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom'
+import { Spinner } from '@/components/ui/spinner'; 
+
 
 export default function ProfileSetup({ nextStep, formRegister }) {
   const {
@@ -25,6 +27,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
 
   const [selectedPhotos, setSelectedPhotos] = useState(null);
   const [previewURLs, setPreviewURLs] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!selectedPhotos) {
@@ -35,6 +38,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
     const urls = Array.from(selectedPhotos).map((file) =>
       URL.createObjectURL(file),
     );
+    console.log("Preview URLs: ", urls);
     setPreviewURLs(urls);
 
     return () => {
@@ -50,6 +54,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
     onSuccess: async () => {
       toast.success('User registered successfully');
       if (selectedPhotos && selectedPhotos.length > 0) {
+          setLoading(true);
         try {
           const uploaded = await uploadFiles(
             'upload-profile',
@@ -57,8 +62,10 @@ export default function ProfileSetup({ nextStep, formRegister }) {
             false,
           );
           setImgURLs(uploaded);
+          setLoading(false);
           nextStep;
         } catch (uploadErr) {
+           setLoading(false); 
           toast.error('Photo upload failed');
           console.error(uploadErr);
         }
@@ -118,8 +125,9 @@ const mutationUpdate = useMutation({
         style={{ minHeight: 'unset' }}
       >
         <div className='flex flex-col items-center gap-2'>
-          <div className='flex gap-2'>
-            {previewURLs.length > 0 ? (
+          <div className='flex gap-2'> {loading ? (
+              <Spinner size={64} color="text-blue-500" />
+            ) : previewURLs.length > 0 ? (
               <div
                 className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'
               >

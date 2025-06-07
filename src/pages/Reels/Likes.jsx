@@ -9,17 +9,29 @@ const Likes = ({ reelId }) => {
   const [hasLiked, setHasLiked] = useState(false);
 
   useEffect(() => {
-    getReelLikes(reelId).then(({ count, userHasLiked }) => {
-      setLikes(count);
-      setHasLiked(userHasLiked);
-    });
+    const fetchLikes = async () => {
+      try {
+        const response = await getReelLikes(reelId);
+        if (response) {
+          const { count = 0, userHasLiked = false } = response;
+          setLikes(count);
+          setHasLiked(userHasLiked);
+        } else {
+          throw new Error("Invalid response from getReelLikes");
+        }
+      } catch (error) {
+        toast.error("Failed to fetch likes");
+      }
+    };
+
+    fetchLikes();
   }, [reelId]);
 
   const handleLike = async () => {
     try {
       if (hasLiked) {
         await unLikeReel(reelId);
-        setLikes((prev) => prev - 1);
+        setLikes((prev) => Math.max(prev - 1, 0));
         setHasLiked(false);
       } else {
         await likeReel(reelId);
@@ -27,7 +39,7 @@ const Likes = ({ reelId }) => {
         setHasLiked(true);
       }
     } catch (error) {
-      toast.error(extractBackendError(error));
+      toast.error(extractBackendError(error) || "Failed to update like status");
     }
   };
 
