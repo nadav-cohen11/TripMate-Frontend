@@ -10,7 +10,7 @@ const ToastConfig = {
   theme: "light",
   icon: true,
   style: {
-    borderRadius: "10px",
+    borderRadius: "50%",
     padding: "12px 16px",
     fontSize: "0.95rem",
     fontWeight: "500",

@@ -37,26 +37,48 @@ const UploadMediaPage = () => {
     }
   }, [mediaType]);
 
-const handleTripChange = async (tripId) => {
-  setSelectedTrip(tripId);
-  if (tripId) {
-    try {
-      const userTrips = await getAllTripsForUser(); 
-      const selectedTripData = userTrips.find((trip) => trip.tripId === tripId); 
-      if (selectedTripData) {
-        const participants = selectedTripData.participants || [];
-        setTripParticipants(participants);
+  const handleTripChange = async (tripId) => {
+    setSelectedTrip(tripId);
+    if (tripId) {
+      try {
+        const userTrips = await getAllTripsForUser();
+        const selectedTripData = userTrips.find((trip) => trip.tripId === tripId);
+        if (selectedTripData) {
+          const participants = selectedTripData.participants || [];
+          setTripParticipants(participants);
 
-        const confirmTagging = window.confirm(
-          'Do you want to tag participants from this trip in the reel?'
-        );
-        setTagParticipants(confirmTagging);
+          toast.info(
+            <div>
+              <span>Do you want to tag participants from this trip in the reel?</span>
+              <div className="mt-2 flex gap-2">
+                <button
+                  onClick={() => {
+                    setTagParticipants(true);
+                    toast.dismiss();
+                  }}
+                  className="px-3 py-1 bg-blue-600 text-white rounded"
+                >
+                  Yes
+                </button>
+                <button
+                  onClick={() => {
+                    setTagParticipants(false);
+                    toast.dismiss();
+                  }}
+                  className="px-3 py-1 bg-gray-300 rounded"
+                >
+                  No
+                </button>
+              </div>
+            </div>,
+            { autoClose: false, closeOnClick: false }
+          );
+        }
+      } catch (error) {
+        toast.error('Failed to fetch trip participants');
       }
-    } catch (error) {
-      toast.error('Failed to fetch trip participants');
     }
-  }
-};
+  };
 
   useEffect(() => {
     if (mediaType === 'photos' && location.state?.photos &&
@@ -68,38 +90,38 @@ const handleTripChange = async (tripId) => {
     }
   }, [location.state, mediaType]);
 
-const uploadMutation = useMutation({
-  mutationFn: () => {
-    const firstComment = tagParticipants
-      ? `Tagged participants: ${tripParticipants
+  const uploadMutation = useMutation({
+    mutationFn: () => {
+      const firstComment = tagParticipants
+        ? `Tagged participants: ${tripParticipants
           .map((p) => `${import.meta.env.VITE_FRONTEND_URL}/profile/${p.userId._id}`)
           .join(', ')}` : null;
 
-    return uploadFiles(
-      mediaType === 'photos' ? 'upload-photos' : 'upload-reel',
-      selectedFiles,
-      mediaType === 'photos',
-      selectedTrip,
-      firstComment
-    );
-  },
-  onSuccess: () => {
-    toast.success(
-      mediaType === 'photos'
-        ? 'Photos uploaded successfully!'
-        : 'Reels uploaded successfully!'
-    );
-    setSelectedFiles([]);
-    setPreviewURLs([]);
-    setSelectedTrip(null);
-    setTagParticipants(false);
-    setTripParticipants([]);
-    navigate('/home');
-  },
-  onError: (error) => {
-    toast.error(extractBackendError(error));
-  },
-});
+      return uploadFiles(
+        mediaType === 'photos' ? 'upload-photos' : 'upload-reel',
+        selectedFiles,
+        mediaType === 'photos',
+        selectedTrip,
+        firstComment
+      );
+    },
+    onSuccess: () => {
+      toast.success(
+        mediaType === 'photos'
+          ? 'Photos uploaded successfully!'
+          : 'Reels uploaded successfully!'
+      );
+      setSelectedFiles([]);
+      setPreviewURLs([]);
+      setSelectedTrip(null);
+      setTagParticipants(false);
+      setTripParticipants([]);
+      navigate('/home');
+    },
+    onError: (error) => {
+      toast.error(extractBackendError(error));
+    },
+  });
 
   const deleteMutation = useMutation({
     mutationFn: (mediaId) => deleteFile(mediaId, mediaType),
@@ -314,39 +336,39 @@ const uploadMutation = useMutation({
         )}
 
         {mediaType === 'reels' && trips.length > 0 && (
-        <div className="mb-4">
-          <label htmlFor="trip-select" className="block text-sm font-medium text-gray-700">
-            Select Trip
-          </label>
-          <select
-            id="trip-select"
-            value={selectedTrip || ''}
-            onChange={(e) => handleTripChange(e.target.value)}
-            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
-          >
-            <option value="" disabled>
-              Choose a trip
-            </option>
-            {trips.map((trip) => (
-              <option key={trip.tripId} value={trip.tripId}>
-                {trip.tripName} - {trip.destination.city}, {trip.destination.country}{' '}
-                {trip.travelDates.start
-                  ? `(${new Date(trip.travelDates.start).toLocaleDateString()} - ${new Date(
+          <div className="mb-4">
+            <label htmlFor="trip-select" className="block text-sm font-medium text-gray-700">
+              Select Trip
+            </label>
+            <select
+              id="trip-select"
+              value={selectedTrip || ''}
+              onChange={(e) => handleTripChange(e.target.value)}
+              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+            >
+              <option value="" disabled>
+                Choose a trip
+              </option>
+              {trips.map((trip) => (
+                <option key={trip.tripId} value={trip.tripId}>
+                  {trip.tripName} - {trip.destination.city}, {trip.destination.country}{' '}
+                  {trip.travelDates.start
+                    ? `(${new Date(trip.travelDates.start).toLocaleDateString()} - ${new Date(
                       trip.travelDates.end
                     ).toLocaleDateString()})`
-                  : ''}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
+                    : ''}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         <div className="flex justify-end">
           <button
             onClick={() => uploadMutation.mutate()}
             disabled={
-              selectedFiles.length === 0 || 
-              uploadMutation.isLoading || 
+              selectedFiles.length === 0 ||
+              uploadMutation.isLoading ||
               (mediaType === 'reels' && !selectedTrip)
             }
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center"
