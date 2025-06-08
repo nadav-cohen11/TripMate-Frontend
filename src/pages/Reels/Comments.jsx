@@ -3,7 +3,7 @@ import { useEffect, useState, memo, useCallback } from "react";
 import { getReelComments, addCommentToReel } from "../../api/reelsApi";
 import { toast } from "react-toastify";
 import { extractBackendError } from "@/utils/errorUtils";
-import { Link } from "react-router-dom"; 
+
 const Comments = ({ reelId }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
@@ -32,33 +32,12 @@ const Comments = ({ reelId }) => {
     }
   };
 
-
-const renderCommentText = (text) => {
-  const urlRegex = /(http:\/\/localhost:5173\/profile\/[a-zA-Z0-9]+)/g;
-  const parts = text.split(urlRegex);
-
-  return parts.map((part, idx) => {
-    if (urlRegex.test(part)) {
-      const userId = part.split("/profile/")[1];
-      return (
-        <Link
-          key={idx}
-          to={`/profile/${userId}`}
-          className="text-blue-400 hover:underline"
-        >
-          {part}
-        </Link>
-      );
-    }
-    return part;
-  });
-};
   return (
     <div className="w-full mt-2 bg-white/10 rounded-xl px-4 py-3 backdrop-blur-md">
       <div className="max-h-32 overflow-y-auto space-y-2 text-white text-sm pr-2 custom-scroll">
         {comments.map((comment, idx) => (
           <p key={idx} className="break-words">
-            <strong>{comment.userId.fullName}:</strong> {renderCommentText(comment.text)}
+            <strong>{comment.userId.fullName}:</strong> {comment.text}
           </p>
         ))}
       </div>

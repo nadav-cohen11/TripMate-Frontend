@@ -49,7 +49,11 @@ const Likes = ({ reelId }) => {
       className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur bg-white/10 hover:bg-white/20 transition"
       aria-label="Like reel"
     >
-      <Heart className={`w-5 h-5 ${hasLiked ? "text-red-500" : "text-white/70"}`} />
+      <Heart
+        className="w-5 h-5"
+        color={hasLiked ? "#FF0000" : "rgba(255,255,255,0.7)"}
+        fill={hasLiked ? "#FF0000" : "none"}
+      />
       <span className="text-sm text-white font-medium">{likes}</span>
     </button>
   );

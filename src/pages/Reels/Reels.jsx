@@ -54,7 +54,7 @@ const Reels = () => {
               className="h-screen w-screen flex-shrink-0 relative"
             >
               <ReelItem reel={reel}>
-                <div className="absolute bottom-24 left-6 z-10 space-y-4">
+                <div className="absolute bottom-24 z-10 space-y-4 w-full px-4">
                   <Likes reelId={reel._id} />
                   <Comments reelId={reel._id} />
                 </div>

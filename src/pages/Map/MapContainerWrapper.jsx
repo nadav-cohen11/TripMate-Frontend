@@ -20,8 +20,8 @@ export const MapContainerWrapper = ({
         className="h-[70vh] w-full rounded-2xl shadow-xl border border-gray-200"
       >
         <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://carto.com/">CARTO</a> contributors & OpenStreetMap'
         />
 
         {userLocations.map((user, idx) => (
