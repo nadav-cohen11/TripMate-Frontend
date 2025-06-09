@@ -3,7 +3,6 @@ import ChatList from './ChatList';
 import ChatWindow from './ChatWindow';
 import useChatSocket from '@/hooks/useChatSocket';
 import { AuthContext } from '@/context/AuthContext';
-import Typewriter from '@/components/animations/Typewriter';
 
 const Chats = () => {
   const [chats, setChats] = useState([]);
@@ -48,6 +47,7 @@ const Chats = () => {
   };
 
   const handleMessageReceived = (msg) => {
+    console.log(msg)
     setChats((prev) =>
       prev.map((chat) =>
         String(chat._id) === String(msg.chatId)

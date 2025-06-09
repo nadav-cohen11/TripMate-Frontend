@@ -18,14 +18,18 @@ const ChatList = ({
   const [showSidebar, setShowSidebar] = useState(true);
 
   useEffect(() => {
+    console.log(chats);
+  }, [chats]);
+
+  useEffect(() => {
     if (!socket) return;
 
-    socket.on('newTripCreated', ({ chats }) => {
-      setChats(chats);
+    socket.on('newTripCreated', ({ chat }) => {
+      setChats((prev) => [...prev, chat]);
     });
 
-    socket.on('newChatCreated', ({ chats }) => {
-      setChats(chats);
+    socket.on('newChatCreated', ({ chat }) => {
+      setChats((prevChats) => [...prevChats, chat]);
     });
 
     return () => {
@@ -124,7 +128,7 @@ const ChatList = ({
             />
           </div>
         </div>
-        <div className="flex-1 min-h-0 overflow-y-auto">
+        <div className='flex-1 min-h-0 overflow-y-auto'>
           <h4 className='font-semibold text-blue-800 mb-2 text-lg'>
             Direct Chats
           </h4>
@@ -145,8 +149,8 @@ const ChatList = ({
                     }`}
                 >
                   <div className='font-medium truncate text-blue-900'>
-                    {chat.participants?.find((p) => p._id !== userId)?.fullName ||
-                      ''}
+                    {chat.participants?.find((p) => p._id !== userId)
+                      ?.fullName || ''}
                   </div>
                   <div className='text-xs text-blue-600 truncate'>
                     {chat.lastMessagePreview}
