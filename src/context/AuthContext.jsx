@@ -10,7 +10,7 @@ const fetchAuthStatus = async () => {
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const { data, isLoading, isError, refetch } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ['authStatus'],
     queryFn: fetchAuthStatus,
     staleTime: 1000 * 60 * 60,

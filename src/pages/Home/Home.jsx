@@ -8,7 +8,7 @@ import { handleCardSwipe } from '../../utils/matchHandlersUtils';
 import { getUserLocation } from '../../api/userApi';
 import { calculateDistance } from '../../utils/calculateDistanceUtils';
 import { useQuery } from '@tanstack/react-query';
-import Typewriter from '../../components/animations/Typewriter';
+import { Spinner } from '@/components/ui/spinner';
 
 const fetchUsers = async () => {
   try {
@@ -51,13 +51,13 @@ const Home = () => {
     queryKey: ['users-with-location'],
     queryFn: fetchUsers,
     onError: (err) => toast.error(extractBackendError(err)),
-    staleTime: 5 * 60 * 1000,
+    staleTime: 1000 * 60 * 5, 
   });
 
   if (isLoading) {
     return (
-      <div className='flex items-center justify-center min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 text-lg text-gray-800'>
-        🔍 Searching for your next adventure...
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200">
+        <Spinner size={50} color="text-blue-500" />
       </div>
     );
   }
@@ -73,7 +73,10 @@ const Home = () => {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden">
-      <div className="absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}>
+      <div
+        className="absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide"
+        style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}
+      >
         TripMate
       </div>
       <div className="flex items-center justify-center min-h-screen px-4 z-10">
@@ -81,14 +84,11 @@ const Home = () => {
           <TinderCard
             key={user._id}
             preventSwipe={['up', 'down']}
-            className='absolute w-full h-full'
+            className="absolute w-full h-full"
             onSwipe={(dir) => {
               handleCardSwipe(dir, user._id);
               setSwipeInfo({ id: user._id, direction: dir });
-              setTimeout(
-                () => setSwipeInfo({ id: null, direction: null }),
-                1000,
-              );
+              setTimeout(() => setSwipeInfo({ id: null, direction: null }), 1000);
             }}
           >
             <div

@@ -3,18 +3,33 @@ import L from "leaflet";
 import { renderToStaticMarkup } from "react-dom/server";
 import { FILTER_ICONS } from "@/constants/filters";
 
-const createDivIcon = (Icon) =>
-  L.divIcon({
-    html: renderToStaticMarkup(
-      <div className="text-red-600 text-2xl">
-        <Icon />
-      </div>
-    ),
+const createDivIcon = (Icon) => {
+  const iconMarkup = renderToStaticMarkup(
+    <div
+      style={{
+        background: "linear-gradient(135deg, #2563eb 70%, #60a5fa 100%)",
+        borderRadius: "50%",
+        boxShadow: "0 2px 12px rgba(37,99,235,0.4)",
+        width: 36,
+        height: 36,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        border: "2.5px solid #1e40af",
+      }}
+    >
+      <Icon style={{ color: "#fff", fontSize: 22 }} />
+    </div>
+  );
+
+  return L.divIcon({
+    html: iconMarkup,
     className: "custom-div-icon",
-    iconSize: [30, 30],
-    iconAnchor: [15, 30],
-    popupAnchor: [0, -30],
+    iconSize: [36, 36],
+    iconAnchor: [18, 36],
+    popupAnchor: [0, -36],
   });
+};
 
 export const PlaceMarker = ({ place, filter }) => {
   const Icon = FILTER_ICONS[filter];

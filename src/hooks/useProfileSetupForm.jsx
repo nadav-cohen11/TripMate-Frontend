@@ -2,24 +2,29 @@ import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getUser } from '@/api/userApi';
 import { getCurrentLocation } from '@/utils/getLocationUtiles';
+import { Country } from 'country-state-city';
 
 const useProfileSetupForm = (formRegister) => {
-const [form, setForm] = useState({
-  email: formRegister?.email || '',
-  password: formRegister?.password || '',
-  fullName: '',
-  birthDate: '',
-  gender: '',
-  location: {
-    country: '',
-    city: '',
-  },
-  languagesSpoken: [],
-  adventureStyle: '',
-  bio: '',
-  instagram: '',
-  facebook: '',
-});
+  const [form, setForm] = useState({
+    email: formRegister?.email || '',
+    password: formRegister?.password || '',
+    fullName: '',
+    birthDate: '',
+    gender: '',
+    location: {
+      country: '',
+      city: '',
+    },
+    languagesSpoken: [],
+    adventureStyle: '',
+    bio: '',
+    instagram: '',
+    facebook: '',
+    socialLinks: {
+      instagram: '',
+      facebook: '',
+    },
+  });
 
   const [imgURLs, setImgURLs] = useState([]);
 
@@ -50,7 +55,13 @@ const [form, setForm] = useState({
         birthDate: user.birthDate ? user.birthDate.slice(0, 10) : '',
         gender: user.gender || '',
         location: {
-          country: user.location?.country || '',
+          country: {
+        name: user.location?.country || '',
+        code:
+          Country.getAllCountries().find(
+            (c) => c.name === user.location?.country,
+          )?.isoCode || '',
+          },
           city: user.location?.city || '',
         },
         languagesSpoken: (user.languagesSpoken || []).map((l) => ({
@@ -59,8 +70,14 @@ const [form, setForm] = useState({
         })),
         adventureStyle: user.adventureStyle || '',
         bio: user.bio || '',
-        instagram: form.instagram,
-        facebook: form.facebook,
+        socialLinks: {
+          instagram: user.socialLinks?.instagram
+        ? user.socialLinks.instagram.replace(/^https?:\/\/(www\.)?instagram\.com\//, '').replace(/\/$/, '')
+        : '',
+          facebook: user.socialLinks?.facebook
+        ? user.socialLinks.facebook.replace(/^https?:\/\/(www\.)?facebook\.com\//, '').replace(/\/$/, '')
+        : '',
+        },
       });
       if (user.photos) setImgURLs(user.photos);
     }
@@ -94,6 +111,18 @@ const [form, setForm] = useState({
     setForm((f) => ({ ...f, languagesSpoken: selectedLanguages || [] }));
   };
 
+  const handleSocialChange = (e) => {
+    const { name, value } = e.target;
+
+    setForm((f) => ({
+      ...f,
+      socialLinks: {
+        ...f.socialLinks,
+        [name]: value,
+      },
+    }));
+  };
+
   const handleAdventureStyleChange = (selectedStyle) => {
     setForm((f) => ({ ...f, adventureStyle: selectedStyle?.value || '' }));
   };
@@ -109,6 +138,7 @@ const [form, setForm] = useState({
     imgURLs,
     setForm,
     setImgURLs,
+    handleSocialChange,
     handleInputChange,
     handleLocationChange,
     handleLanguagesChange,

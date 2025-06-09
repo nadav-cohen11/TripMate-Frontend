@@ -1,55 +1,38 @@
-import { useQuery } from '@tanstack/react-query';
-import { toast } from 'react-toastify';
-import {
-  fetchCities,
-  fetchCountryOptions,
-  fetchLanguageOptions,
-} from '@/utils/profileSetupUtils';
+import { Country, City } from 'country-state-city';
+import { useEffect, useState } from 'react';
+import ISO6391 from 'iso-639-1';
 
 const useProfileDataQueries = (selectedCountry) => {
-  const { data: countryOptions = [], isLoading: loadingCountries } = useQuery({
-    queryKey: ['countries'],
-    queryFn: async () => {
-      let countries = await fetchCountryOptions();
-      countries = countries.filter((_, ind) => ind !== 166);
-      return countries
-        .map((c) => ({ value: c.name, label: c.name }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-    },
-    onError: () => toast.error('Failed to load countries'),
-  });
+  const [countries, setCountries] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [langs,setLangs] = useState([])
 
-  const { data: languageOptions = [], isLoading: loadingLanguages } = useQuery({
-    queryKey: ['languages'],
-    queryFn: async () => {
-      const languages = await fetchLanguageOptions();
-      return [...languages].sort().map((l) => ({ value: l, label: l }));
-    },
-    onError: () => toast.error('Failed to load languages'),
-  });
+  useEffect(() => {
+    setCountries(
+      Country.getAllCountries().map((c) => ({
+        name: c.name,
+        code: c.isoCode,
+      })),
+    );
+    if (selectedCountry) {
+      setCities(
+        City.getCitiesOfCountry(selectedCountry.code).map((c) => c.name),
+      );
+    }
+  }, [selectedCountry]);
 
-  const { data: cityOptions = [], isLoading: loadingCities } = useQuery({
-    queryKey: ['cities', selectedCountry],
-    queryFn: async () => {
-      if (!selectedCountry) return [];
-      const cities = await fetchCities(selectedCountry);
-      return cities
-        .sort((a, b) => a.localeCompare(b))
-        .map((n) => ({ value: n, label: n }));
-    },
-    enabled: !!selectedCountry,
-    onError: () => toast.error('Failed to load cities'),
-  });
+
+  useEffect(() => {
+    setLangs(ISO6391.getAllNames());
+    console.log(ISO6391.getAllNames());
+  },[])
+
 
   return {
-    countryOptions,
-    loadingCountries,
-    languageOptions,
-    loadingLanguages,
-    cityOptions,
-    loadingCities,
+    countries,
+    cities,
+    langs,
   };
-}
-
+};
 
 export default useProfileDataQueries;

@@ -1,5 +1,6 @@
 const EventCard = ({ event }) => {
-    const { name,images, dates, place, description } = event;
+  
+    const { name,images, dates, place, description, url } = event;
     
     const image = images[0]?.url
   
@@ -34,7 +35,7 @@ const EventCard = ({ event }) => {
             )}
           </div>
           <a
-            href={image}
+            href={url}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-4 inline-block text-blue-600 hover:underline font-medium"
