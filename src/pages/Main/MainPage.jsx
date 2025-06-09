@@ -21,7 +21,7 @@ const LoadingPage = () => {
         transition={{ duration: 1.5, delay: 0.4 }}
         className="absolute z-30 flex flex-col items-center"
       >
-        <h1 className="text-5xl font-bold text-[#2575FC] tracking-wide" style={{ fontFamily: "'Raleway', sans-serif" }}>
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-[#2575FC] tracking-wide" style={{ fontFamily: "'Raleway', sans-serif" }}>
           TripMate
         </h1>
 

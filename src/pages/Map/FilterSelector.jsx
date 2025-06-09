@@ -1,7 +1,7 @@
 export const FilterSelector = ({ activeFilter, setFilter, filterIcons = [] }) => {
   return (
 
-    <div className="flex flex-wrap gap-3 mb-4">
+    <div className="flex flex-wrap justify-center gap-3 mb-4">
       {Object.entries(filterIcons).map(([label, Icon]) => {
         const isActive = activeFilter === label;
         return (
