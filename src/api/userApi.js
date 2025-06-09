@@ -1,4 +1,5 @@
 import api from "/src/api/axios.js";
+import axios from "axios";
 
 export const login = async (email, password, location) => {
     try {
@@ -93,3 +94,31 @@ export const getUserByEmail = async (email) => {
     }
 };
 
+
+export const translate = async (prompt) => {
+    try {
+        console.log(prompt)
+        const user = await getUser();
+        const toLang = user.languagesSpoken[0];
+        const detectRes = await axios.get('https://api.mymemory.translated.net/get', {
+            params: {
+                q: prompt,
+                langpair: 'auto|en'
+            }
+        });
+        const fromLang = detectRes.data.responseData.detectedSourceLanguage || 'en';
+
+        const response = await axios.get('https://api.mymemory.translated.net/get', {
+            params: {
+                q: prompt,
+                langpair: `${fromLang}|${toLang}`
+            }
+        });
+
+        
+        return response.data.responseData.translatedText;
+    } catch (error) {
+        console.error('Error in translate:', error);
+        throw error;
+    }
+}

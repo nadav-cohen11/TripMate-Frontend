@@ -29,6 +29,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
   const [previewURLs, setPreviewURLs] = useState([]);
   const [loading, setLoading] = useState(false);
 
+
   useEffect(() => {
     if (!selectedPhotos) {
       setPreviewURLs([]);
@@ -38,7 +39,6 @@ export default function ProfileSetup({ nextStep, formRegister }) {
     const urls = Array.from(selectedPhotos).map((file) =>
       URL.createObjectURL(file),
     );
-    console.log("Preview URLs: ", urls);
     setPreviewURLs(urls);
 
     return () => {

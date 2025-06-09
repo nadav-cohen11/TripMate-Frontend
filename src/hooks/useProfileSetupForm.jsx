@@ -34,6 +34,7 @@ const useProfileSetupForm = (formRegister) => {
       setForm((prevForm) => ({
         ...prevForm,
         location: {
+          ...prevForm.location,
           coordinates: loc,
         },
       }));
