@@ -9,11 +9,14 @@ import ProfileDetails from '../Home/ProfileDetails';
 import UserQRCode from './UserQRCode';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { Heart, Users, Bell } from 'lucide-react';
+import useFetchMyMatches from '@/hooks/useFetchMyMatches';
 
 const UserProfilePage = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { matches, pendingMatches } = useFetchMyMatches();
 
   const {
     data: userProfile,
@@ -62,10 +65,32 @@ const UserProfilePage = () => {
         {userId === user && (
           <div className="absolute top-6 right-6 flex gap-4 z-50">
             <button
+              onClick={() => navigate('/matches')}
+              className="group relative flex items-center gap-3 px-5 py-2.5 bg-gradient-to-r from-blue-500 to-sky-400 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+            >
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <Users className="text-2xl text-white" />
+                  {pendingMatches?.length > 0 && (
+                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full border-2 border-white flex items-center justify-center">
+                      <span className="text-[10px] font-bold text-white">{pendingMatches.length}</span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex flex-col items-start">
+                  <span className="text-white font-medium">My Matches</span>
+                  <span className="text-white/80 text-xs">{matches?.length || 0} confirmed</span>
+                </div>
+              </div>
+            </button>
+            <button
               onClick={() => navigate('/setup')}
-              className="p-2 rounded-full hover:bg-gray-100 transition duration-150"
+              className="p-2 rounded-full hover:bg-gray-100 transition duration-150 group relative"
             >
               <IoSettingsOutline className="text-4xl text-gray-600 cursor-pointer hover:text-gray-800 transition-colors duration-200" />
+              <span className="absolute -top-9 left-1/2 -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                Edit Profile
+              </span>
             </button>
           </div>
         )}
