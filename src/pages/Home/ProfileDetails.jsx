@@ -1,11 +1,11 @@
 import { Globe2, CalendarDays, Users, Sparkles } from 'lucide-react';
 import ReviewList from './ReviewList';
 
-const ProfileDetails = ({ user, age, city, country, languages, travel, distance, aiSuggested, compatibilityScore }) => {
+const ProfileDetails = ({ user, age, city, country, languages, travel, distance, compatibilityScore }) => {
   const roundedDistance = distance ? Math.round(distance) : null;
   return (
     <div className="flex-1 overflow-y-auto bg-white/90 backdrop-blur-md rounded-3xl px-6 py-6 shadow-xl text-gray-800 space-y-6">
-      {aiSuggested && (
+      {
         <div className="flex items-center gap-2 bg-gradient-to-r from-blue-100 via-sky-100 to-blue-50 text-blue-700 px-3 py-2 rounded-xl w-max shadow">
           <Sparkles className="w-4 h-4 text-blue-500" />
           <span className="text-sm font-medium">AI-Suggested Match</span>
@@ -13,7 +13,7 @@ const ProfileDetails = ({ user, age, city, country, languages, travel, distance,
             <span className="ml-2 text-xs text-gray-600">Score: {compatibilityScore}%</span>
           )}
         </div>
-      )}
+      }
 
       <div className="space-y-1">
         <h1 className="text-3xl font-bold tracking-tight">
