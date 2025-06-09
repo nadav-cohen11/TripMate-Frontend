@@ -47,7 +47,6 @@ const Chats = () => {
   };
 
   const handleMessageReceived = (msg) => {
-    console.log(msg)
     setChats((prev) =>
       prev.map((chat) =>
         String(chat._id) === String(msg.chatId)

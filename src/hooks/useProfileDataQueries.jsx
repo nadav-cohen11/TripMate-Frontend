@@ -24,7 +24,6 @@ const useProfileDataQueries = (selectedCountry) => {
 
   useEffect(() => {
     setLangs(ISO6391.getAllNames());
-    console.log(ISO6391.getAllNames());
   },[])
 
 

@@ -17,9 +17,6 @@ const ChatList = ({
   const [matchesWithoutChat, setMatchesWithoutChat] = useState([]);
   const [showSidebar, setShowSidebar] = useState(true);
 
-  useEffect(() => {
-    console.log(chats);
-  }, [chats]);
 
   useEffect(() => {
     if (!socket) return;
