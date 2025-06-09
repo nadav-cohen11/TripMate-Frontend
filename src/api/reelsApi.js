@@ -6,24 +6,52 @@ export const fetchReels = async () => {
 };
 
 export const getReelLikes = async (reelId) => {
-  const res = await api.get(`/media/${reelId}/likes`);
-  return res.data.totalLikes;
+  try {
+    const response = await api.get(`/media/${reelId}/likes`);
+    return {
+      count: response.data.likesCount || 0,
+      userHasLiked: response.data.userHasLiked || false,
+    };
+  } catch (error) {
+    throw error;
+  }
 };
 
+
 export const likeReel = async (reelId) => {
-  await api.post("/media/like", { reelId });
+  try {
+    const response = await api.post(`/media/like`, { reelId });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const unLikeReel = async (reelId) => {
+  try {
+    const response = await api.post(`/media/unlike`, { reelId });
+    return response.data; 
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const getReelComments = async (reelId) => {
-  const res = await api.get(`/media/${reelId}/comments`);
-  return res.data.comments;
+  try {
+    const response = await api.get(`/media/${reelId}/comments`);
+    return response.data.comments;
+  } catch (error) {
+    throw error;
+  }
 };
+
 
 export const addCommentToReel = async (reelId, text) => {
-  const res = await api.post("/media/comment", { reelId, text });
-  return res.data.updatedUser.comment;
-};
-
-export const unLikeReel = async (reelId) => {
-  await api.post("/media/unlike", { reelId });
+  try {
+    const response = await api.post(`/media/comment`, { reelId, text });
+    return response.data.updatedUser.comment;
+  } catch (error) {
+    throw error;
+  }
 };

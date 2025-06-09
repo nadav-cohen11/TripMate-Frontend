@@ -3,7 +3,6 @@ import ChatList from './ChatList';
 import ChatWindow from './ChatWindow';
 import useChatSocket from '@/hooks/useChatSocket';
 import { AuthContext } from '@/context/AuthContext';
-import Typewriter from '@/components/animations/Typewriter';
 
 const Chats = () => {
   const [chats, setChats] = useState([]);
@@ -69,37 +68,39 @@ const Chats = () => {
       >
         TripMate
       </div>
-      <div className='flex flex-col lg:flex-row min-h-screen pt-24 px-4 lg:px-12 gap-6'>
-        <div className='w-full lg:w-1/3'>
-          <ChatList
-            chats={chats}
-            selectedChatId={selectedChatId}
-            userId={userId}
-            socket={socketInstance}
-            setChats={setChats}
-            setSelectedChatId={setSelectedChatId}
-          />
-        </div>
-        <div className='w-full lg:w-2/3'>
-          <ChatWindow
-            selectedChat={
-              selectedChatId
-                ? chats.find((c) => c._id === selectedChatId)
-                : null
-            }
-            isGroupChat={
-              selectedChatId
-                ? chats.find((c) => c._id === selectedChatId).isGroupChat
-                : false
-            }
-            message={message}
-            socket={socketInstance}
-            userId={userId}
-            setMessage={setMessage}
-            handleSendMessage={handleSendMessage}
-            setChats={setChats}
-            setSelectedChatId={setSelectedChatId}
-          />
+      <div className='flex justify-center items-center min-h-screen pt-24 px-4 pb-16'>
+        <div className='bg-white rounded-lg shadow-xl w-full max-w-5xl h-[80vh] flex flex-col lg:flex-row overflow-hidden'>
+          <div className='w-full lg:w-1/3 border-r border-gray-200'>
+            <ChatList
+              chats={chats}
+              selectedChatId={selectedChatId}
+              userId={userId}
+              socket={socketInstance}
+              setChats={setChats}
+              setSelectedChatId={setSelectedChatId}
+            />
+          </div>
+          <div className='w-full lg:w-2/3'>
+            <ChatWindow
+              selectedChat={
+                selectedChatId
+                  ? chats.find((c) => c._id === selectedChatId)
+                  : null
+              }
+              isGroupChat={
+                selectedChatId
+                  ? chats.find((c) => c._id === selectedChatId).isGroupChat
+                  : false
+              }
+              message={message}
+              socket={socketInstance}
+              userId={userId}
+              setMessage={setMessage}
+              handleSendMessage={handleSendMessage}
+              setChats={setChats}
+              setSelectedChatId={setSelectedChatId}
+            />
+          </div>
         </div>
       </div>
     </div>

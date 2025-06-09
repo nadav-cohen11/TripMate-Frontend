@@ -8,12 +8,12 @@ import 'leaflet/dist/leaflet.css';
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <AppRoutes />
-      </Router>
-      <ToastContainer {...ToastConfig} />
-    </AuthProvider>
+      <AuthProvider>
+        <Router>
+          <AppRoutes />
+        </Router>
+        <ToastContainer {...ToastConfig} />
+      </AuthProvider>
   );
 }
 

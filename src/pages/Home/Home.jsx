@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import TinderCard from 'react-tinder-card';
 import ProfileCard from './ProfileCard';
@@ -8,7 +8,12 @@ import { handleCardSwipe } from '../../utils/matchHandlersUtils';
 import { getUserLocation } from '../../api/userApi';
 import { calculateDistance } from '../../utils/calculateDistanceUtils';
 import { useQuery } from '@tanstack/react-query';
-import Typewriter from '../../components/animations/Typewriter';
+import { Spinner } from '@/components/ui/spinner';
+import ErrorBoundary from '../../components/ErrorBoundary';
+
+const STALE_TIME = 1000 * 60 * 5;
+const SWIPE_ANIMATION_DURATION = 1000;
+const COMPATIBILITY_THRESHOLD = 70;
 
 const fetchUsers = async () => {
   try {
@@ -36,13 +41,39 @@ const fetchUsers = async () => {
         ...user,
         distance: distance ? Math.round(distance) : null,
         compatibilityScore,
-        aiSuggested: compatibilityScore >= 70,
+        aiSuggested: compatibilityScore >= COMPATIBILITY_THRESHOLD,
       };
     });
   } catch (err) {
+    console.error('Error fetching users:', err);
     throw err;
   }
 };
+
+const LoadingState = () => (
+  <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200">
+    <Spinner size={50} color="text-blue-500" />
+  </div>
+);
+
+const EmptyState = () => (
+  <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 text-center text-gray-800">
+    <h1 className="text-2xl font-semibold">No more matches at the moment!</h1>
+    <p className="mt-2">Check back later or adjust your preferences.</p>
+  </div>
+);
+
+const ErrorState = ({ onRetry }) => (
+  <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200">
+    <p className="text-red-500 mb-4">Something went wrong. Please try again.</p>
+    <button
+      onClick={onRetry}
+      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+    >
+      Retry
+    </button>
+  </div>
+);
 
 const Home = () => {
   const [swipeInfo, setSwipeInfo] = useState({ id: null, direction: null });
@@ -51,20 +82,20 @@ const Home = () => {
     data: users = [],
     isLoading,
     error,
+    refetch,
   } = useQuery({
     queryKey: ['users-with-location'],
     queryFn: fetchUsers,
     onError: (err) => toast.error(extractBackendError(err)),
-    staleTime: 5 * 60 * 1000,
+    staleTime: STALE_TIME,
+    retry: 2,
   });
 
-  if (isLoading) {
-    return (
-      <div className='flex items-center justify-center min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 text-lg text-gray-800'>
-        🔍 Searching for your next adventure...
-      </div>
-    );
-  }
+  const handleSwipe = useCallback((dir, userId) => {
+    handleCardSwipe(dir, userId);
+    setSwipeInfo({ id: userId, direction: dir });
+    setTimeout(() => setSwipeInfo({ id: null, direction: null }), SWIPE_ANIMATION_DURATION);
+  }, []);
 
   if (!users.length) {
     return (
@@ -104,13 +135,18 @@ const Home = () => {
               className='tinder-card-wrapper w-full h-full flex justify-center items-center px-4'
               style={{ zIndex: users.length - index }}
             >
-              <ProfileCard user={user} swipeInfo={swipeInfo} />
-            </div>
-          </TinderCard>
-        ))}
+              <div
+                className="tinder-card-wrapper w-full h-full flex justify-center items-center px-4"
+                style={{ zIndex: memoizedUsers.length - index }}
+              >
+                <ProfileCard user={user} swipeInfo={swipeInfo} />
+              </div>
+            </TinderCard>
+          ))}
+        </div>
       </div>
-    </div>
+    </ErrorBoundary>
   );
 };
 
-export default Home;
+export default React.memo(Home);

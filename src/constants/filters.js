@@ -1,4 +1,4 @@
-import { FaBeer, FaUtensils, FaHotel, FaCoffee } from 'react-icons/fa';
+import { MdLocalBar, MdRestaurant, MdHotel, MdLocalCafe } from 'react-icons/md';
 
 export const FILTERS = {
     Bars: [
@@ -22,9 +22,8 @@ export const FILTERS = {
   };
   
   export const FILTER_ICONS = {
-    Bars: FaBeer,
-    Restaurants: FaUtensils,
-    Hotels: FaHotel,
-    Cafes: FaCoffee,
+    Bars: MdLocalBar,
+    Restaurants: MdRestaurant,
+    Hotels: MdHotel,
+    Cafes: MdLocalCafe,
   };
-  

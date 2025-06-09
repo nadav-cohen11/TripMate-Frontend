@@ -51,9 +51,9 @@ const Login = () => {
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 w-full max-w-md flex flex-col gap-6 text-[#2D4A53] transition-all duration-300"
+        className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 w-full max-w-md flex flex-col gap-4 sm:gap-6 text-[#2D4A53] transition-all duration-300"
       >
-         <p className="text-3xl font-bold text-center mb-2">
+         <p className="text-2xl sm:text-3xl font-bold text-center mb-2">
           Log in
         </p>
 
