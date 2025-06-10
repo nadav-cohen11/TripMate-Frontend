@@ -85,7 +85,7 @@ const mutationUpdate = useMutation({
     if (updatedData?.profilePhotoURL) {
       setImgURLs([updatedData.profilePhotoURL]);
     }
-      navigate(`/profile/${updatedData._id}`); 
+    navigate(`/profile/${updatedData._id}`); 
   },
   onError: (error) => {
     const msg = extractBackendError(error);
