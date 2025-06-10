@@ -11,7 +11,7 @@ const TripMateTitle = () => {
     >
       <Typewriter
         text="TripMate"
-        className="text-4xl text-black tracking-wide"
+        className="text-4xl text-[#4a90e2] tracking-wide"
         style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}
       />
     </div>
