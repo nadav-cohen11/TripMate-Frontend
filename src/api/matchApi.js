@@ -1,10 +1,9 @@
 import api from "./axios";
 
-export const createOrAcceptMatch = async ({ user2Id, scores }) => {
+export const createOrAcceptMatch = async ({ user2Id }) => {
   try {
     const response = await api.post('/matches/', {
       user2Id,
-      scores,
     });
     return response.data;
   } catch (error) {

@@ -18,8 +18,7 @@ export const Map = () => {
   const debouncedFilter = useDebounce(filter, 600);
 
   const { userLocations, userLocation, coordinates, loading: loadingUsers } = useUserLocations();
-  const debouncedUserLocation = useDebounce(userLocation?.location?.coordinates, 600);
-
+  
   const { places, loading: loadingPlaces } = useNearbyPlaces(debouncedFilter, coordinates, debouncedRadius);
 
   const isLoading = loadingUsers || loadingPlaces;
@@ -28,7 +27,7 @@ export const Map = () => {
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200">
       <TripMateTitle />
 
-      <div className="z-10 relative flex flex-col gap-6 pt-28 px-6 md:px-12 max-w-screen-md mx-auto">
+      <div className="z-10 relative flex flex-col gap-6 pt-28 px-6 md:px-12 max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl mx-auto">
         <FilterSelector activeFilter={filter} setFilter={setFilter} filterIcons={FILTER_ICONS}   />
         <RadiusSlider radius={radius} setRadius={setRadius} />
       </div>
@@ -36,7 +35,7 @@ export const Map = () => {
       <div className="relative z-0">
         {isLoading ? (
           <div className="flex justify-center items-center h-[60vh]">
-            <Spinner />
+            <Spinner size={50} color="text-blue-500" />
           </div>
         ) : (
           <MapContainerWrapper

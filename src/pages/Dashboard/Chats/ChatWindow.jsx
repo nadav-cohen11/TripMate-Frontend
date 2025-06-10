@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import * as utils from './utils';
 import GroupDetails from './GroupDetails';
+import { translate } from '@/api/userApi';
 
 const ChatWindow = ({
   selectedChat,
@@ -14,6 +15,7 @@ const ChatWindow = ({
   handleSendMessage,
 }) => {
   const [showGroupDetails, setShowGroupDetails] = useState(false);
+  const [translatedMsgs, setTranslatedMsgs] = useState({});
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -207,33 +209,57 @@ const ChatWindow = ({
                       })
                     : '';
 
-                  return (
-                    <div
-                      key={idx}
-                      className={`my-2 ${
-                        isSender ? 'text-right' : 'text-left'
-                      }`}
-                    >
+                    const translated = translatedMsgs[msg._id];
+                    return (
                       <div
-                        className={`inline-block px-3 py-2 rounded-2xl min-w-[40px] max-w-[80vw] sm:max-w-[70%] break-words relative ${
-                          isSender ? 'bg-green-100' : 'bg-gray-100'
+                        key={idx}
+                        className={`my-2 ${
+                          isSender ? 'text-right' : 'text-left'
                         }`}
-                        aria-label={`${msg.sender?.fullName} says: ${msg.content}`}
                       >
-                        {isGroupChat && !isSender && (
-                          <div className="text-xs font-semibold text-blue-700 mb-1 select-text">
-                            {msg.sender?.fullName || 'System Suggestion'}
+                        <div
+                          className={`inline-block px-3 py-2 rounded-2xl min-w-[40px] max-w-[80vw] sm:max-w-[70%] break-words relative ${
+                            isSender ? 'bg-green-100' : 'bg-gray-100'
+                          }`}
+                          aria-label={`${msg.sender?.fullName} says: ${msg.content}`}
+                        >
+                          {isGroupChat && !isSender && (
+                            <div className='text-xs font-semibold text-blue-700 mb-1 select-text'>
+                              {msg.sender?.fullName || 'System Suggestion'}
+                            </div>
+                          )}
+                          <span>{msg.content}</span>
+                          <div className='flex justify-between mt-2 items-end gap-2'>
+                            {!translated && (
+                              <button
+                                className='flex text-xs cursor-pointer text-blue-600 hover:underline'
+                                onClick={async () => {
+                                  const result = await translate(msg.content);
+                                  setTranslatedMsgs((prev) => ({
+                                    ...prev,
+                                    [msg._id]: result,
+                                  }));
+                                }}
+                                type='button'
+                              >
+                                Translate
+                              </button>
+                            )}
+
+                            {translated && (
+                              <span className='text-xs text-gray-700 italic ml-2'>
+                                {translated}
+                              </span>
+                            )}
+                            {time && (
+                              <div className='text-xs text-gray-500 mt-1 text-right select-none ml-auto'>
+                                {time}
+                              </div>
+                            )}
                           </div>
-                        )}
-                        <span>{msg.content}</span>
-                        {time && (
-                          <div className='text-xs text-gray-500 mt-1 text-right select-none'>
-                            {time}
-                          </div>
-                        )}
+                        </div>
                       </div>
-                    </div>
-                  );
+                    );
                 })}
               </section>
             ),

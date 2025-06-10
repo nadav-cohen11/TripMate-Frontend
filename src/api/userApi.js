@@ -1,4 +1,5 @@
 import api from "/src/api/axios.js";
+import axios from "axios";
 
 export const login = async (email, password, location) => {
     try {
@@ -73,7 +74,61 @@ export const getAllTripsForUser = async () => {
     }
 }
 
+
+export const getAllGroups = async () => {
+    try {
+        const response = await api.get('/users/getGroupChats')
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
+
 export const getQrCodeByUserId = async (userId) => {
-  const { data } = await api.get(`/qr/${userId}`);
-  return data.qrCode;
+    try {
+        const { data } = await api.get(`/qr/${userId}`);
+        return data.qrCode;
+
+    } catch (error) {
+        throw error
+    }
+}
+
+
+export const getUserByEmail = async (email) => {
+    try {
+        const response = await api.get(`/users/getUserByEmail`, { params: { email } });
+        return response.data
+    } catch (error) {
+        throw error
+    }
 };
+
+
+export const translate = async (prompt) => {
+    try {
+        console.log(prompt)
+        const user = await getUser();
+        const toLang = user.languagesSpoken[0];
+        const detectRes = await axios.get('https://api.mymemory.translated.net/get', {
+            params: {
+                q: prompt,
+                langpair: 'auto|en'
+            }
+        });
+        const fromLang = detectRes.data.responseData.detectedSourceLanguage || 'en';
+
+        const response = await axios.get('https://api.mymemory.translated.net/get', {
+            params: {
+                q: prompt,
+                langpair: `${fromLang}|${toLang}`
+            }
+        });
+
+        
+        return response.data.responseData.translatedText;
+    } catch (error) {
+        console.error('Error in translate:', error);
+        throw error;
+    }
+}
