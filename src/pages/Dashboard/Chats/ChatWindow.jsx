@@ -133,7 +133,6 @@ const ChatWindow = ({
 
   return (
     <div className='flex flex-col h-[80vh] min-h-[400px] w-full max-w-[500px] p-4 bg-white rounded-xl shadow-lg'>
-      <button onClick={() => translate('Hello People')}>sdsdsd</button>
       {selectedChat && (
         <header
           onClick={handleHeaderClick}
