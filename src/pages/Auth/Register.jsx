@@ -42,60 +42,118 @@ const Register = ({ nextStep, form, setForm }) => {
   };
 
   return (
-    <div className='min-h-screen flex items-center justify-center bg-gradient-to-b from-[#eaf4ff] to-[#dbeeff] px-4'>
-      <form
-        onSubmit={handleSubmit}
-        className='bg-white rounded-3xl shadow-xl p-6 sm:p-8 w-full max-w-md flex flex-col gap-6 text-[#2D4A53] transition-all duration-300'
-      >
-        <TripMateTitle />
-        <p className='text-3xl font-bold text-center mb-2'>
-          Create Your Account
-        </p>
-        <TextInput
-          type='email'
-          name='email'
-          placeholder='Email'
-          value={form.email}
-          onChange={handleChange}
-          required
-          className='bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300'
-        />
-        <TextInput
-          type='password'
-          name='password'
-          placeholder='Password'
-          value={form.password}
-          onChange={handleChange}
-          required
-          className='bg-white border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300'
-        />
-        <div className='flex items-start gap-2'>
-          <input
-            type='checkbox'
-            name='termsAccepted'
-            checked={form.termsAccepted || false}
-            onChange={handleChange}
-            className='mt-1'
-            required
-          />
-          <label className='text-sm'>
-            I agree to the{' '}
-            <button
-              type='button'
-              onClick={() => setIsTermsModalOpen(true)}
-              className='text-blue-500 hover:text-blue-600 underline'
-            >
-              Terms of Use
-            </button>
-          </label>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#f0f7ff] to-[#e6f0ff] px-4">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <TripMateTitle />
         </div>
-        <LoginButton
-          type='submit'
-          className='bg-blue-500 hover:bg-blue-600 text-white rounded-xl py-2 font-medium transition'
+        <form
+          onSubmit={handleSubmit}
+          className="
+            bg-white
+            rounded-3xl
+            shadow-xl
+            p-6
+            sm:p-8
+            flex
+            flex-col
+            gap-4
+            sm:gap-6
+            text-[#4a90e2]
+            transition-all
+            duration-300
+          "
         >
-          Create Account<i className='bi bi-arrow-right ms-2'></i>
-        </LoginButton>
-      </form>
+          <div className="text-center">
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#4a90e2] mb-2">
+              Create Your Account
+            </h1>
+          </div>
+          <TextInput
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={handleChange}
+            required
+            className="
+              w-full
+              bg-white
+              border
+              border-blue-100
+              rounded-xl
+              px-4
+              py-2
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-200
+              text-[#4a90e2]
+              placeholder:text-blue-200
+            "
+          />
+          <TextInput
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+            required
+            className="
+              w-full
+              bg-white
+              border
+              border-blue-100
+              rounded-xl
+              px-4
+              py-2
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-200
+              text-[#4a90e2]
+              placeholder:text-blue-200
+            "
+          />
+          <div className="flex items-start gap-2">
+            <input
+              type="checkbox"
+              name="termsAccepted"
+              checked={form.termsAccepted || false}
+              onChange={handleChange}
+              className="mt-1 accent-blue-400"
+              required
+            />
+            <label className="text-sm text-[#4a90e2]">
+              I agree to the{' '}
+              <button
+                type="button"
+                onClick={() => setIsTermsModalOpen(true)}
+                className="text-blue-400 hover:text-blue-500 underline"
+              >
+                Terms of Use
+              </button>
+            </label>
+          </div>
+
+          <LoginButton
+            type="submit"
+            className="
+              w-full
+              !bg-[#4a90e2]
+              !hover:bg-[#4a90e2]
+              text-white
+              rounded-xl
+              py-2
+              font-medium
+              transition
+              shadow-lg
+              shadow-blue-200/25
+            "
+          >
+            Create Account <i className="bi bi-arrow-right ms-2"></i>
+          </LoginButton>
+        </form>
+      </div>
+
       <TermsModal
         isOpen={isTermsModalOpen}
         onClose={() => setIsTermsModalOpen(false)}
