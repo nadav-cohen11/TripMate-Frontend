@@ -74,6 +74,16 @@ export const getAllTripsForUser = async () => {
     }
 }
 
+
+export const getAllGroups = async () => {
+    try {
+        const response = await api.get('/users/getGroupChats')
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
+
 export const getQrCodeByUserId = async (userId) => {
     try {
         const { data } = await api.get(`/qr/${userId}`);

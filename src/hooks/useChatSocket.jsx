@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
-const useChatSocket = (userId, setChats) => {
+const useChatSocket = (userId, setChats = undefined) => {
   const [socketInstance, setSocketInstance] = useState(null);
   useEffect(() => {
     if (userId) {
@@ -14,17 +14,20 @@ const useChatSocket = (userId, setChats) => {
 
       socket.emit('setup', userId);
 
-      socket.emit('getChats', { userId }, (chats) => {
-        setChats(chats);
-      });
+      if (typeof setChats === 'function') {
+        socket.emit('getChats', { userId }, (chats) => {
+          setChats(chats);
+        });
+      }
 
       return () => {
         socket.disconnect();
       };
     }
-  }, [userId]);
+  }, [userId, setChats]);
 
   return socketInstance;
 };
+
 
 export default useChatSocket;
