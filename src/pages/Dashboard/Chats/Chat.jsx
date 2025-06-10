@@ -3,6 +3,7 @@ import ChatList from './ChatList';
 import ChatWindow from './ChatWindow';
 import useChatSocket from '@/hooks/useChatSocket';
 import { AuthContext } from '@/context/AuthContext';
+import { useLocation } from 'react-router-dom';
 
 const Chats = () => {
   const [chats, setChats] = useState([]);
@@ -11,6 +12,16 @@ const Chats = () => {
   const { user } = useContext(AuthContext);
   const userId = user;
   const socketInstance = useChatSocket(userId, setChats);
+
+  const location = useLocation();
+  const { group, msg } = location.state || {};
+
+  useEffect(() => {
+    if (group) setSelectedChatId(group._id);
+    if (msg) {
+      setMessage(`${msg.title}, ${msg.text}`);
+    }
+  }, [group,msg]);
 
   useEffect(() => {
     if (!selectedChatId && chats.length > 0) {
@@ -89,7 +100,7 @@ const Chats = () => {
               }
               isGroupChat={
                 selectedChatId
-                  ? chats.find((c) => c._id === selectedChatId).isGroupChat
+                  ? chats.find((c) => c._id === selectedChatId)?.isGroupChat
                   : false
               }
               message={message}
