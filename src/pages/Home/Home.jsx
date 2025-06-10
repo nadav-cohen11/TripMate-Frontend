@@ -8,7 +8,6 @@ import { handleCardSwipe } from '../../utils/matchHandlersUtils';
 import { getUserLocation } from '../../api/userApi';
 import { calculateDistance } from '../../utils/calculateDistanceUtils';
 import { useQuery } from '@tanstack/react-query';
-import Typewriter from '../../components/animations/Typewriter';
 import TripMateTitle from '@/components/ui/TripMateTitle';
 import { Spinner } from '@/components/ui/spinner';
 
@@ -76,7 +75,7 @@ const Home = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200">
-        <Spinner size="lg" />
+        <Spinner/>
       </div>
     );
   }
@@ -97,6 +96,12 @@ const Home = () => {
           No more matches at the moment!
         </h1>
         <p className="mt-2">Check back later or adjust your preferences.</p>
+        <button 
+          onClick={() => refetch()} 
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+        >
+          Refresh
+        </button>
       </div>
     );
   }
