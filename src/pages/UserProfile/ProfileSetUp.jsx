@@ -28,7 +28,30 @@ export default function ProfileSetup({ nextStep, formRegister }) {
   const [selectedPhotos, setSelectedPhotos] = useState(null);
   const [previewURLs, setPreviewURLs] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [ageError, setAgeError] = useState('');
 
+  const validateAge = (birthDate) => {
+    const today = new Date();
+    const birth = new Date(birthDate);
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
+    
+    if (age < 16) {
+      setAgeError('We are sorry, but you must be at least 16 years old to register for TripMate.');
+      return false;
+    }
+    setAgeError('');
+    return true;
+  };
+
+  const handleBirthDateChange = (e) => {
+    handleInputChange(e);
+    validateAge(e.target.value);
+  };
 
   useEffect(() => {
     if (!selectedPhotos) {
@@ -96,6 +119,9 @@ const mutationUpdate = useMutation({
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    if (!validateAge(form.birthDate)) {
+      return;
+    }
     const payload = {
       ...form,
       location: {
@@ -173,15 +199,22 @@ const mutationUpdate = useMutation({
           className='input-white bg-white border border-gray-300 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200 text-sm'
         />
 
-        <input
-          type='date'
-          name='birthDate'
-          value={form.birthDate}
-          disabled={!formRegister}
-          onChange={handleInputChange}
-          required
-          className='input-white bg-white border border-gray-300 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200 text-sm'
-        />
+        <div className="flex flex-col gap-1">
+          <input
+            type='date'
+            name='birthDate'
+            value={form.birthDate}
+            disabled={!formRegister}
+            onChange={handleBirthDateChange}
+            required
+            className={`input-white bg-white border ${ageError ? 'border-red-500' : 'border-gray-300'} rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200`}
+          />
+          {ageError && (
+            <p className="text-red-500 text-sm mt-1 bg-red-50 p-2 rounded-lg border border-red-200">
+              {ageError}
+            </p>
+          )}
+        </div>
 
         <select
           name='gender'

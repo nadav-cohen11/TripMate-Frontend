@@ -21,8 +21,8 @@ const fetchEvents = async ({ queryKey }) => {
 };
 
 export const EventList = ({ lat, lon, keyword: externalKeyword }) => {
-  const [debouncedKeyword, setDebouncedKeyword] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('');
+  const [debouncedKeyword, setDebouncedKeyword] = useState('');
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -55,7 +55,7 @@ export const EventList = ({ lat, lon, keyword: externalKeyword }) => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0, transition: { duration: 0.4 } }}
       >
-        🎉 Nearby Events Just for You
+         Nearby Events Just for You 🎉
       </motion.h2>
 
       <div className="flex flex-wrap justify-center gap-2 mb-4">

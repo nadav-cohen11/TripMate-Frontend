@@ -4,6 +4,7 @@ import TextInput from '@/components/ui/textInput';
 import LoginButton from '@/components/ui/loginButton';
 import schema from '@/schemas/passwordSchema.js';
 import TermsModal from './TermsModal';
+import TripMateTitle from '@/components/ui/TripMateTitle';
 import { useMutation } from '@tanstack/react-query';
 import { getUserByEmail } from '@/api/userApi';
 
@@ -46,6 +47,7 @@ const Register = ({ nextStep, form, setForm }) => {
         onSubmit={handleSubmit}
         className='bg-white rounded-3xl shadow-xl p-6 sm:p-8 w-full max-w-md flex flex-col gap-6 text-[#2D4A53] transition-all duration-300'
       >
+        <TripMateTitle />
         <p className='text-3xl font-bold text-center mb-2'>
           Create Your Account
         </p>

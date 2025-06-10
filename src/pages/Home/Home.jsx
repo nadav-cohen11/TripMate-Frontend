@@ -8,6 +8,8 @@ import { handleCardSwipe } from '../../utils/matchHandlersUtils';
 import { getUserLocation } from '../../api/userApi';
 import { calculateDistance } from '../../utils/calculateDistanceUtils';
 import { useQuery } from '@tanstack/react-query';
+import Typewriter from '../../components/animations/Typewriter';
+import TripMateTitle from '@/components/ui/TripMateTitle';
 import { Spinner } from '@/components/ui/spinner';
 
 const STALE_TIME = 1000 * 60 * 5;
@@ -101,12 +103,7 @@ const Home = () => {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden">
-      <div
-        className="absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide"
-        style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}
-      >
-        TripMate
-      </div>
+      <TripMateTitle />
       <div className="flex items-center justify-center min-h-screen px-4 z-10">
         {users.map((user, index) => (
           <TinderCard
