@@ -45,13 +45,13 @@ export const EventList = ({ lat, lon, keyword: externalKeyword }) => {
 
   return (
     <motion.div
-      className="mt-10 bg-white p-6 sm:p-8 rounded-2xl shadow-xl"
+      className="mt-10 bg-white/90 backdrop-blur-md p-8 rounded-3xl shadow-2xl border border-[#4a90e2]/10"
       initial="hidden"
       animate="show"
       variants={containerVariants}
     >
       <motion.h2
-        className="text-3xl font-bold mb-4 text-gray-800 text-center"
+        className="text-3xl font-bold mb-4 text-[#4a90e2] text-center tracking-wide"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0, transition: { duration: 0.4 } }}
       >
@@ -65,13 +65,13 @@ export const EventList = ({ lat, lon, keyword: externalKeyword }) => {
             onClick={() =>
               setSelectedFilter((prev) => (prev === label ? '' : label))
             }
-            className={`px-4 py-2 rounded-full border transition text-sm font-medium ${
+            className={`px-3 py-2 rounded-xl border transition text-xs font-semibold tracking-wide shadow-sm ${
               selectedFilter === label
-                ? 'bg-blue-600 text-white border-blue-600'
-                : 'bg-gray-100 text-gray-800 border-gray-300 hover:bg-gray-200'
+                ? 'bg-[#4a90e2] text-white border-[#4a90e2] shadow-lg'
+                : 'bg-white text-[#4a90e2] border-[#4a90e2]/30 hover:bg-[#eaf4fd]'
             }`}
           >
-            <span className="mr-1">{icon}</span> {label}
+            <span className="mr-1 text-lg">{icon}</span> {label}
           </button>
         ))}
       </div>

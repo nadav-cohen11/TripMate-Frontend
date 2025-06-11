@@ -25,12 +25,13 @@ export const useUserLocations = () => {
         } else if (Array.isArray(userLoc) && userLoc.length === 2) {
           setCoordinates(userLoc);
         } else {
+          console.warn("User location data is not in expected format:", userLoc);
           setCoordinates([]);
         }
       } catch (error) {
-        setUserLocation([]);
         setUserLocation(null);
         setCoordinates([]);
+        console.error("Error fetching user location or all users locations:", error);
       } finally {
         setLoading(false);
       }
