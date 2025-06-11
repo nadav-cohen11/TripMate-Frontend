@@ -16,24 +16,25 @@ const ProfileDetails = ({ user, age, city, country, languages, travel, distance,
       }
 
       <div className="space-y-1">
-        <h1 className="text-3xl font-bold tracking-tight">
+        <h1 className="text-3xl font-bold tracking-tight text-[#7ec3ee]">
           {user.fullName}{age ? `, ${age}` : ''}
         </h1>
         <p className="text-sm text-gray-500">📍 {city}, {country}</p>
         {roundedDistance != null && (
-          <p className="text-sm text-sky-600">{roundedDistance} km away</p>
+          <p className="text-sm text-[#7ec3ee]">{roundedDistance} km away</p>
         )}
       </div>
 
       {user.bio && (
-        <p className="text-base leading-relaxed text-gray-700 italic border-l-4 border-sky-200 pl-4">
-          {user.bio}
-        </p>
+        <div className="flex items-center">
+          <span className="inline-block w-1 h-5 bg-[#7ec3ee] rounded mr-2 align-middle"></span>
+          <span className="border-l-0 pl-0 italic text-gray-700 text-base leading-relaxed">{user.bio}</span>
+        </div>
       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-        <p><span className="font-medium text-gray-600">Gender:</span> {user.gender || 'Not specified'}</p>
-        <p><span className="font-medium text-gray-600">Languages:</span> {languages}</p>
-        <p><span className="font-medium text-gray-600">Adventure Style:</span> {user.adventureStyle || 'Not specified'}</p>
+        <p><span className="inline-block w-1 h-5 bg-[#7ec3ee] rounded mr-2 align-middle"></span><span className="text-base text-[#7ec3ee] font-bold tracking-wide align-middle">Gender:</span> <span className="font-normal text-gray-700">{user.gender || 'Not specified'}</span></p>
+        <p><span className="inline-block w-1 h-5 bg-[#7ec3ee] rounded mr-2 align-middle"></span><span className="text-base text-[#7ec3ee] font-bold tracking-wide align-middle">Languages:</span> <span className="font-normal text-gray-700">{languages}</span></p>
+        <p><span className="inline-block w-1 h-5 bg-[#7ec3ee] rounded mr-2 align-middle"></span><span className="text-base text-[#7ec3ee] font-bold tracking-wide align-middle">Adventure Style:</span> <span className="font-normal text-gray-700">{user.adventureStyle || 'Not specified'}</span></p>
       </div>
       {travel?.travelDates && (
         <div className="bg-gradient-to-br from-sky-50 via-blue-50 to-sky-100 p-4 rounded-xl shadow-sm space-y-2 text-sm">
