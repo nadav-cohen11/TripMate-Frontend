@@ -9,11 +9,10 @@ import { adventureStyles, genders } from '../../constants/profile';
 import useProfileSetupForm from '@/hooks/useProfileSetupForm';
 import useProfileDataQueries from '@/hooks/useProfileDataQueries';
 import { FaInstagram, FaFacebook } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom'
-import { Spinner } from '@/components/ui/spinner'; 
+import { useNavigate } from 'react-router-dom';
+import { Spinner } from '@/components/ui/spinner';
 import { useLocation } from 'react-router-dom';
 import DatePicker from '@/components/ui/DatePicker';
-
 
 
 export default function ProfileSetup({ nextStep, formRegister }) {
@@ -37,7 +36,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
       setPreviewURLs([]);
       return;
     }
-
+    
     const urls = Array.from(selectedPhotos).map((file) =>
       URL.createObjectURL(file),
     );
@@ -156,10 +155,8 @@ export default function ProfileSetup({ nextStep, formRegister }) {
                   className='h-full w-full object-cover'
                 />
               </div>
-            ) : photo ? (
-              <div
-                className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'
-              >
+            ) : imgURLs.length > 0 ? (
+              <div className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'>
                 <img
                   src={photo}
                   alt='user profile'
@@ -200,7 +197,6 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           required
           className='input-white bg-white border border-gray-300 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200 text-sm'
         />
-
 
         <select
           name='gender'
