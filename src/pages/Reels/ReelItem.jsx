@@ -35,17 +35,17 @@ const ReelItem = ({ reel, children }) => {
           className="h-full w-full object-contain"
         />
       )}
-      <div className="absolute top-4 right-4 z-10 flex items-center bg-black bg-opacity-40 backdrop-blur-sm px-3 py-1.5 rounded-full">
+      <div className="absolute top-4 right-4 z-10 flex items-center bg-white bg-opacity-40 backdrop-blur-sm px-3 py-1.5 rounded-full">
         <button
           type="button"
-          className="w-10 h-10 flex items-center justify-center rounded-full bg-white hover:bg-gray-100 text-black transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-500 hover:bg-blue-600 text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400"
           title="Create New Reel"
           onClick={() => navigate('/photos')}
         >
-          <Camera className="w-5 h-5" />
+          <Camera className="w-5 h-5 text-white" />
         </button>
       </div>
-      <div className="absolute top-4 left-4 z-10 flex items-center bg-black bg-opacity-40 backdrop-blur-sm px-3 py-1.5 rounded-full space-x-2">
+      <div className="absolute top-4 left-4 z-10 flex items-center bg-blue-500 bg-opacity-40 backdrop-blur-sm px-3 py-1.5 rounded-full space-x-2">
         <span className="text-white text-sm font-medium">
           {getTimeElapsed(reel.createdAt)}
         </span>

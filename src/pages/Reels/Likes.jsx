@@ -45,17 +45,17 @@ const Likes = ({ reelId, reel }) => {
 
   return (
     <div className="flex items-center justify-between w-full">
-      <div className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur bg-white/10">
+      <div className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur bg-blue-50/50">
         {reel?.userProfilePhotoUrl ? (
           <img
             src={reel.userProfilePhotoUrl}
             alt="Profile"
-            className="w-8 h-8 rounded-full object-cover border border-white"
+            className="w-8 h-8 rounded-full object-cover border border-blue-400"
           />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-gray-300 border border-white" />
+          <div className="w-8 h-8 rounded-full bg-blue-100 border border-blue-400" />
         )}
-        <a href={`/profile/${reel?.userId}`} className="text-white font-semibold text-sm truncate max-w-[10rem]">
+        <a href={`/profile/${reel?.userId}`} className="text-blue-700 font-semibold text-sm truncate max-w-[10rem]">
           {reel?.userFullName}
         </a>
       </div>
@@ -66,10 +66,10 @@ const Likes = ({ reelId, reel }) => {
       >
         <Heart
           className="w-5 h-5"
-          color={hasLiked ? "#FF0000" : "rgba(255,255,255,0.7)"}
+          color={hasLiked ? "#FF0000" : "text-blue-400"}
           fill={hasLiked ? "#FF0000" : "none"}
         />
-        <span className="text-sm text-white font-medium">{likes}</span>
+        <span className="text-sm text-blue-700 font-medium">{likes}</span>
       </button>
     </div>
   );

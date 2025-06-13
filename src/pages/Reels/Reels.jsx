@@ -26,15 +26,15 @@ const Reels = () => {
   );
 
   if (isLoading) {
-    return <div className="text-white text-center p-10">Loading reels...</div>;
+    return <div className="text-blue-400 text-center p-10">Loading reels...</div>;
   }
 
   if (error) {
-    return <div className="text-white text-center p-10">Error loading reels</div>;
+    return <div className="text-blue-400 text-center p-10">Error loading reels</div>;
   }
 
   return (
-    <div className="h-screen w-screen overflow-hidden relative touch-none bg-black">
+    <div className="h-screen w-screen overflow-hidden relative touch-none bg-white">
       <motion.div
         className="h-full w-full"
         drag="y"
