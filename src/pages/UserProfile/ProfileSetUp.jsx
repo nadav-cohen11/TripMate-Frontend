@@ -11,6 +11,7 @@ import useProfileDataQueries from '@/hooks/useProfileDataQueries';
 import { FaInstagram, FaFacebook } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom'
 import { Spinner } from '@/components/ui/spinner'; 
+import LoginButton from '@/components/ui/loginButton';
 
 
 export default function ProfileSetup({ nextStep, formRegister }) {
@@ -144,18 +145,35 @@ const mutationUpdate = useMutation({
   };
 
   return (
-    <div className='min-h-screen flex items-center justify-center bg-gradient-to-b from-[#eaf4ff] to-[#dbeeff] px-4 py-8 overflow-auto'>
+    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-[#f0f7ff] to-[#e6f0ff] px-4">
       <form
         onSubmit={onSubmit}
-        className='bg-white rounded-3xl shadow-xl p-4 sm:p-6 w-full max-w-md flex flex-col gap-4 text-[#2D4A53] transition-all duration-300 max-h-[90vh] overflow-y-auto'
-        style={{ minHeight: 'unset' }}
+        className="
+            bg-white
+            rounded-3xl
+            shadow-xl
+            p-6
+            sm:p-8
+            flex
+            flex-col
+            gap-4
+            sm:gap-6
+            text-[#4a90e2]
+            transition-all
+            duration-300
+        "
       >
+        <div className="text-center mb-4">
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#4a90e2]">
+            Setup Your Profile
+          </h1>
+        </div>
         <div className='flex flex-col items-center gap-2'>
           <div className='flex gap-2'> {loading ? (
               <Spinner size={64} color="text-blue-500" />
             ) : previewURLs.length > 0 ? (
               <div
-                className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'
+                className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-blue-300'
               >
                 <img
                   src={previewURLs[0]}
@@ -165,7 +183,7 @@ const mutationUpdate = useMutation({
               </div>
             ) : imgURLs.length > 0 ? (
               <div
-                className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'
+                className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-blue-300'
               >
                 <img
                   src={imgURLs[0]}
@@ -174,10 +192,10 @@ const mutationUpdate = useMutation({
                 />
               </div>
             ) : (
-              <div className='h-20 w-20 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300' />
+              <div className='h-20 w-20 rounded-full bg-gray-200 overflow-hidden shadow-md border border-blue-300' />
             )}
           </div>
-          <label className='text-xs text-blue-600 underline cursor-pointer'>
+          <label className='text-xs text-blue-400 underline cursor-pointer'>
             Upload Profile Picture
             <input
               type='file'
@@ -196,7 +214,20 @@ const mutationUpdate = useMutation({
           disabled={!formRegister}
           placeholder='Full Name'
           required
-          className='input-white bg-white border border-gray-300 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200 text-sm'
+          className="
+                w-full
+                bg-white
+                border
+                border-blue-100
+                rounded-xl
+                px-4
+                py-2
+                focus:outline-none
+                focus:ring-2
+                focus:ring-blue-200
+                text-[#4a90e2]
+                placeholder:text-blue-200
+              "
         />
 
         <div className="flex flex-col gap-1">
@@ -207,7 +238,7 @@ const mutationUpdate = useMutation({
             disabled={!formRegister}
             onChange={handleBirthDateChange}
             required
-            className={`input-white bg-white border ${ageError ? 'border-red-500' : 'border-gray-300'} rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200`}
+            className={`w-full bg-white border ${ageError ? 'border-red-500' : 'border-blue-100'} rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 text-[#4a90e2] placeholder:text-blue-200`}
           />
           {ageError && (
             <p className="text-red-500 text-sm mt-1 bg-red-50 p-2 rounded-lg border border-red-200">
@@ -222,7 +253,20 @@ const mutationUpdate = useMutation({
           disabled={!formRegister}
           onChange={handleInputChange}
           required
-          className='input-white bg-white border border-gray-300 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200 text-sm'
+          className="
+              w-full
+              bg-white
+              border
+              border-blue-100
+              rounded-xl
+              px-4
+              py-2
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-200
+              text-[#4a90e2]
+              placeholder:text-blue-200
+            "
         >
           <option value=''>Gender</option>
           {genders.map((g) => (
@@ -303,41 +347,65 @@ const mutationUpdate = useMutation({
           placeholder='Bio (optional)'
           value={form.bio}
           onChange={handleInputChange}
-          className='input-white bg-white border border-gray-300 rounded-xl px-3 py-1.5 resize-none focus:outline-none focus:ring-2 focus:ring-blue-300 text-sm'
+          className="
+              w-full
+              bg-white
+              border
+              border-blue-100
+              rounded-xl
+              px-4
+              py-2
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-200
+              text-[#4a90e2]
+              placeholder:text-blue-200
+            "
         />
 
-        <div className='flex items-center gap-2 border border-gray-300 rounded-xl px-3 py-1.5 bg-white focus-within:ring-2 focus-within:ring-pink-300 text-sm'>
+        <div className="flex items-center gap-2 border border-blue-100 rounded-xl px-4 py-2 bg-white focus-within:ring-2 focus-within:ring-blue-200 text-[#4a90e2]">
           <FaInstagram className='text-pink-500 text-base' />
-          <span className='text-gray-500 text-xs'>instagram.com/</span>
+          <span className='text-blue-200'>instagram.com/</span>
           <input
             type='text'
             name='instagram'
             value={form.socialLinks?.instagram}
             onChange={handleSocialChange}
             placeholder='your_username'
-            className='flex-1 bg-transparent outline-none text-xs'
+            className='flex-1 bg-transparent outline-none text-[#4a90e2] placeholder:text-blue-200'
           />
         </div>
 
-        <div className='flex items-center gap-2 border border-gray-300 rounded-xl px-3 py-1.5 bg-white focus-within:ring-2 focus-within:ring-blue-300 text-sm'>
+        <div className="flex items-center gap-2 border border-blue-100 rounded-xl px-4 py-2 bg-white focus-within:ring-2 focus-within:ring-blue-200 text-[#4a90e2]">
           <FaFacebook className='text-blue-600 text-base' />
-          <span className='text-gray-500 text-xs'>facebook.com/</span>
+          <span className='text-blue-200'>facebook.com/</span>
           <input
             type='text'
             name='facebook'
             value={form.socialLinks?.facebook}
             onChange={handleSocialChange}
             placeholder='your.username'
-            className='flex-1 bg-transparent outline-none text-xs'
+            className='flex-1 bg-transparent outline-none text-[#4a90e2] placeholder:text-blue-200'
           />
         </div>
 
-        <button
-          type='submit'
-          className='bg-blue-500 hover:bg-blue-600 text-white rounded-xl py-2 font-medium transition text-sm'
+        <LoginButton
+          type="submit"
+          className="
+              w-full
+              !bg-[#4a90e2]
+              !hover:bg-[#4a90e2]
+              text-white
+              rounded-xl
+              py-2
+              font-medium
+              transition
+              shadow-lg
+              shadow-blue-200/25
+            "
         >
           SUBMIT
-        </button>
+        </LoginButton>
       </form>
     </div>
   );
