@@ -16,7 +16,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18'  
+        node-version: '18'
 
     - name: Install Dependencies
       run: npm ci
@@ -29,9 +29,14 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+    - name: Add SSH Host to known_hosts
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan -H 207.154.243.204 >> ~/.ssh/known_hosts
+
     - name: Sync Files to Server
       run: |
         rsync -avz --delete dist/ root@207.154.243.204:/var/www/tripmateapp/
 
     - name: Reload Nginx
-      run: ssh root@207.154.243.204 "sudo systemctl reload nginx"  
+      run: ssh root@207.154.243.204 "sudo systemctl reload nginx"
