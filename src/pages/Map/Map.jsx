@@ -9,26 +9,24 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { EventList } from "./EventList";
 import { FILTER_ICONS } from "@/constants/filters";
 import TripMateTitle from '@/components/ui/TripMateTitle';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogClose
-} from '@/components/ui/dialog';
-import { SlidersHorizontal } from 'lucide-react';
-
+import React from "react";
 export const Map = () => {
   const [filter, setFilter] = useState("Bars");
   const [radius, setRadius] = useState(500);
-  const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
   const [appliedFilter, setAppliedFilter] = useState("Bars");
   const [appliedRadius, setAppliedRadius] = useState(500);
 
   const debouncedRadius = useDebounce(radius, 600);
   const debouncedFilter = useDebounce(filter, 600);
+
+
+  React.useEffect(() => {
+    setAppliedFilter(debouncedFilter);
+  }, [debouncedFilter]);
+
+  React.useEffect(() => {
+    setAppliedRadius(debouncedRadius);
+  }, [debouncedRadius]);
 
   const { userLocations, userLocation, coordinates, loading: loadingUsers } = useUserLocations();
   
@@ -36,40 +34,17 @@ export const Map = () => {
 
   const isLoading = loadingUsers || loadingPlaces;
 
-  const handleApplyFilters = () => {
-    setAppliedFilter(filter);
-    setAppliedRadius(radius);
-    setIsFilterDialogOpen(false);
-  };
-
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#eaf4fd] via-[#eaf4fd] to-[#cbe7fa]">
       <TripMateTitle />
 
-      <div className="z-10 relative flex flex-col gap-2 pt-28 px-4 md:px-12 max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl mx-auto">
+      <div className="z-10 relative flex flex-col gap-4 pt-28 px-4 md:px-12 max-w-screen-lg mx-auto">
         <h2 className="text-3xl font-bold mb-2 text-[#4a90e2] text-center tracking-wide">Find Near You</h2>
-        <Dialog open={isFilterDialogOpen} onOpenChange={setIsFilterDialogOpen}>
-          <DialogTrigger asChild>
-            <button className="flex items-center justify-center gap-2 px-6 py-3 bg-[#4a90e2] text-white rounded-xl font-semibold shadow-lg hover:bg-[#357abd] transition-colors mb-2 mx-auto">
-              <SlidersHorizontal size={20} />
-              <span>Open Filters</span>
-            </button>
-          </DialogTrigger>
-          <DialogContent className="w-full max-w-sm p-2 rounded-2xl bg-white shadow-2xl border-0 z-[1000] pointer-events-auto">
-            <DialogHeader className="mb-2">
-              <DialogTitle className="text-xl font-bold text-gray-900">Filter Search</DialogTitle>
-              <DialogDescription className="text-sm text-gray-500">Adjust your search criteria for places and events.</DialogDescription>
-            </DialogHeader>
-            <FilterSelector activeFilter={filter} setFilter={setFilter} filterIcons={FILTER_ICONS} />
-            <RadiusSlider radius={radius} setRadius={setRadius} />
-            <button 
-              onClick={handleApplyFilters}
-              className="w-full px-6 py-3 mt-2 bg-[#4a90e2] text-white rounded-xl font-semibold shadow-lg hover:bg-[#357abd] transition-colors"
-            >
-              Apply Filters
-            </button>
-          </DialogContent>
-        </Dialog>
+        
+        <div className="flex flex-col items-center gap-3 bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl p-3 border border-[#cbe7fa] max-w-md w-full mx-auto">
+          <FilterSelector activeFilter={filter} setFilter={setFilter} filterIcons={FILTER_ICONS} />
+          <RadiusSlider radius={radius} setRadius={setRadius} />
+        </div>
       </div>
 
       <div className="relative z-0">
@@ -82,7 +57,7 @@ export const Map = () => {
             userLocations={userLocations}
             places={places}
             userLocation={coordinates}
-            filter={filter}
+            filter={appliedFilter}
           />
         )}
       </div>
