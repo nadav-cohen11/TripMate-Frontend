@@ -9,9 +9,9 @@ import { adventureStyles, genders } from '../../constants/profile';
 import useProfileSetupForm from '@/hooks/useProfileSetupForm';
 import useProfileDataQueries from '@/hooks/useProfileDataQueries';
 import { FaInstagram, FaFacebook } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom'
-import { Spinner } from '@/components/ui/spinner'; 
-
+import { useNavigate } from 'react-router-dom';
+import { Spinner } from '@/components/ui/spinner';
+import DatePicker from '@/components/ui/DatePicker';
 
 export default function ProfileSetup({ nextStep, formRegister }) {
   const {
@@ -29,13 +29,12 @@ export default function ProfileSetup({ nextStep, formRegister }) {
   const [previewURLs, setPreviewURLs] = useState([]);
   const [loading, setLoading] = useState(false);
 
-
   useEffect(() => {
     if (!selectedPhotos) {
       setPreviewURLs([]);
       return;
     }
-    
+
     const urls = Array.from(selectedPhotos).map((file) =>
       URL.createObjectURL(file),
     );
@@ -46,15 +45,16 @@ export default function ProfileSetup({ nextStep, formRegister }) {
     };
   }, [selectedPhotos]);
 
-  const { countries, cities, langs } =
-    useProfileDataQueries(form.location?.country);
+  const { countries, cities, langs } = useProfileDataQueries(
+    form.location?.country,
+  );
 
   const mutationRegister = useMutation({
     mutationFn: register,
     onSuccess: async () => {
       toast.success('User registered successfully');
       if (selectedPhotos && selectedPhotos.length > 0) {
-          setLoading(true);
+        setLoading(true);
         try {
           const uploaded = await uploadFiles(
             'upload-profile',
@@ -65,7 +65,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           setLoading(false);
           nextStep;
         } catch (uploadErr) {
-           setLoading(false); 
+          setLoading(false);
           toast.error('Photo upload failed');
           console.error(uploadErr);
         }
@@ -77,22 +77,22 @@ export default function ProfileSetup({ nextStep, formRegister }) {
       toast.error(message);
     },
   });
-const navigate = useNavigate()
-const mutationUpdate = useMutation({
-  mutationFn: async (data) => updateUser(data, { method: 'PUT' }),
-  onSuccess: async (updatedData) => {
-    toast.success('Profile updated successfully');
-    if (updatedData?.profilePhotoURL) {
-      setImgURLs([updatedData.profilePhotoURL]);
-    }
-      navigate(`/profile/${updatedData._id}`); 
-  },
-  onError: (error) => {
-    const msg = extractBackendError(error);
-    toast.error(msg);
-    console.log(error);
-  },
-});
+  const navigate = useNavigate();
+  const mutationUpdate = useMutation({
+    mutationFn: async (data) => updateUser(data, { method: 'PUT' }),
+    onSuccess: async (updatedData) => {
+      toast.success('Profile updated successfully');
+      if (updatedData?.profilePhotoURL) {
+        setImgURLs([updatedData.profilePhotoURL]);
+      }
+      navigate(`/profile/${updatedData._id}`);
+    },
+    onError: (error) => {
+      const msg = extractBackendError(error);
+      toast.error(msg);
+      console.log(error);
+    },
+  });
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -114,7 +114,22 @@ const mutationUpdate = useMutation({
     };
 
     if (!formRegister) mutationUpdate.mutate(payload);
-    else mutationRegister.mutate(payload);
+    else {
+      if (
+        !form.fullName ||
+        !form.gender ||
+        !form.birthDate ||
+        !form.location?.country ||
+        !form.location?.city ||
+        !form.languagesSpoken ||
+        form.languagesSpoken.length === 0 ||
+        !form.adventureStyle
+      ) {
+        toast.error('Please fill in all required fields.');
+        return;
+      }
+      mutationRegister.mutate(payload);
+    }
   };
 
   return (
@@ -125,12 +140,12 @@ const mutationUpdate = useMutation({
         style={{ minHeight: 'unset' }}
       >
         <div className='flex flex-col items-center gap-2'>
-          <div className='flex gap-2'> {loading ? (
-              <Spinner size={64} color="text-blue-500" />
+          <div className='flex gap-2'>
+            {' '}
+            {loading ? (
+              <Spinner size={64} color='text-blue-500' />
             ) : previewURLs.length > 0 ? (
-              <div
-                className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'
-              >
+              <div className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'>
                 <img
                   src={previewURLs[0]}
                   alt='preview'
@@ -138,9 +153,7 @@ const mutationUpdate = useMutation({
                 />
               </div>
             ) : imgURLs.length > 0 ? (
-              <div
-                className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'
-              >
+              <div className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'>
                 <img
                   src={imgURLs[0]}
                   alt='avatar'
@@ -173,16 +186,6 @@ const mutationUpdate = useMutation({
           className='input-white bg-white border border-gray-300 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200 text-sm'
         />
 
-        <input
-          type='date'
-          name='birthDate'
-          value={form.birthDate}
-          disabled={!formRegister}
-          onChange={handleInputChange}
-          required
-          className='input-white bg-white border border-gray-300 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200 text-sm'
-        />
-
         <select
           name='gender'
           value={form.gender}
@@ -199,6 +202,13 @@ const mutationUpdate = useMutation({
           ))}
         </select>
 
+        <DatePicker
+          date={form.birthDate}
+          handleInputChange={handleInputChange}
+          name={'birthDate'}
+          disabled={!formRegister}
+        />
+
         <Select
           placeholder='Country'
           options={countries.map((c) => ({
@@ -208,9 +218,9 @@ const mutationUpdate = useMutation({
           value={
             form.location?.country
               ? {
-                label: form.location.country.name,
-                value: form.location.country,
-              }
+                  label: form.location.country.name,
+                  value: form.location.country,
+                }
               : null
           }
           onChange={(o) => {
