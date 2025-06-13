@@ -21,8 +21,8 @@ const GroupList = ({event,msg})  => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className='absolute bottom-2 right-0 text-blue-600 px-4 py-2 rounded-lg border-none transition'>
-          Share with my trip
+        <button className='flex-1 inline-block bg-[#eaf4fd] text-[#4a90e2] px-4 py-2 rounded-xl font-semibold shadow hover:bg-[#d2eafd] transition text-center'>
+          Share with my TripMates
         </button>
       </DialogTrigger>
       <DialogContent className='w-full max-w-xs sm:max-w-md px-2 sm:px-8 rounded-2xl bg-white shadow-2xl border-0'>
