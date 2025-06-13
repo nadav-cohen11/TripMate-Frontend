@@ -17,6 +17,9 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '18'
+    - name: Inject .env file
+      run: |
+          echo "${{ secrets.FRONTEND_ENV }}" > .env
 
     - name: Install Dependencies
       run: npm ci
