@@ -1,4 +1,4 @@
-import { MdLocalBar, MdRestaurant, MdHotel, MdLocalCafe } from 'react-icons/md';
+import { MdLocalBar, MdRestaurant, MdHotel, MdLocalCafe, MdEvent } from 'react-icons/md';
 
 export const FILTERS = {
     Bars: [
@@ -19,6 +19,11 @@ export const FILTERS = {
     Cafes: [
       `node["amenity"="cafe"]`,
     ],
+    Events: [
+      `node["tourism"="attraction"]`,
+      `node["leisure"="park"]`,
+      `node["amenity"="community_centre"]`,
+    ],
   };
   
   export const FILTER_ICONS = {
@@ -26,4 +31,5 @@ export const FILTERS = {
     Restaurants: MdRestaurant,
     Hotels: MdHotel,
     Cafes: MdLocalCafe,
+    Events: MdEvent,
   };
