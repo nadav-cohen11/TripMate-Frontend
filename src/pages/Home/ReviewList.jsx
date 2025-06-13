@@ -32,7 +32,7 @@ const ReviewList = ({ userId }) => {
 
   return (
     <div className="mt-6">
-      <h3 className="text-lg font-semibold mb-2">Reviews</h3>
+      <h3 className="text-lg font-semibold mb-2 text-[#4a90e2]">Reviews</h3>
       <div className="space-y-4">
         {reviews.map((review) => {
           return (
@@ -44,7 +44,7 @@ const ReviewList = ({ userId }) => {
               />
               <div>
                 <div className="flex items-center justify-between">
-                  <p className="font-medium">{review.reviewerId?.fullName || 'Anonymous'}</p>
+                  <p className="font-medium text-[#4a90e2]">{review.reviewerId?.fullName || 'Anonymous'}</p>
                   <p className="text-xs text-gray-500">
                     {new Date(review.createdAt).toLocaleDateString()}
                   </p>
@@ -54,7 +54,7 @@ const ReviewList = ({ userId }) => {
                     <span key={i}>{i < review.rating ? '★' : '☆'}</span>
                   ))}
                 </div>
-                <p className="text-sm text-gray-700 mt-1">
+                <p className="text-sm text-gray-800 mt-1">
                   {review.comment || <span className="italic text-gray-400">No comment provided.</span>}
                 </p>
               </div>
