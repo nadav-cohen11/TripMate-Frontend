@@ -31,7 +31,7 @@ jobs:
 
     - name: Sync Files to Server
       run: |
-        rsync -avz --delete dist/ root@your_server_ip:/var/www/tripmateapp/
+        rsync -avz --delete dist/ root@207.154.243.204:/var/www/tripmateapp/
 
     - name: Reload Nginx
-      run: ssh root@your_server_ip "sudo systemctl reload nginx"
+      run: ssh root@207.154.243.204 "sudo systemctl reload nginx"  
