@@ -12,6 +12,7 @@ export const login = async (email, password, location) => {
 
 export const register = async (userData) => {
     try {
+        console.log(userData)
         const response = await api.post("/users/register", userData);
         return response;
     } catch (error) {

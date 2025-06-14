@@ -18,8 +18,6 @@ const useProfileSetupForm = (formRegister) => {
     languagesSpoken: [],
     adventureStyle: '',
     bio: '',
-    instagram: '',
-    facebook: '',
     socialLinks: {
       instagram: '',
       facebook: '',

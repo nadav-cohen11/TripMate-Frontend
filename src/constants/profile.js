@@ -4,7 +4,7 @@ export const lookingOptions = [
   "Horseback Riding", "Photography", "Yoga Retreat", "Beach Relaxation", "Volunteering",
 ]
 
-export const genders = ["Female", "Male"];
+export const genders = ["Male","Female"];
 
 export const adventureStyles = [
   { value: 'Relaxed', label: 'Relaxed' },

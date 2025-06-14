@@ -42,3 +42,14 @@ export const deleteFile = async (publicId, mediaType = 'photos') => {
     throw error;
   }
 };
+
+export const uploadToInstagram = async (mediaUrl) => {
+  try {
+    console.log('mediaUrl', mediaUrl)
+    const response = await api.post('/media/upload-instagram', {
+      mediaUrl    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}

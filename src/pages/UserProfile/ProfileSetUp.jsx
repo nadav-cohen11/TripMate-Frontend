@@ -9,9 +9,14 @@ import { adventureStyles, genders } from '../../constants/profile';
 import useProfileSetupForm from '@/hooks/useProfileSetupForm';
 import useProfileDataQueries from '@/hooks/useProfileDataQueries';
 import { FaInstagram, FaFacebook } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+<<<<<<< HEAD
 import { Spinner } from '@/components/ui/spinner';
 import { useLocation } from 'react-router-dom';
+=======
+import { Spinner } from '@/components/ui/spinner'; 
+>>>>>>> 142b675142ec34265d0dd827bdee2c8bc3b22161
+import DatePicker from '@/components/ui/DatePicker';
 
 
 export default function ProfileSetup({ nextStep, formRegister }) {
@@ -29,39 +34,13 @@ export default function ProfileSetup({ nextStep, formRegister }) {
   const [selectedPhotos, setSelectedPhotos] = useState(null);
   const [previewURLs, setPreviewURLs] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [ageError, setAgeError] = useState('');
-  const location = useLocation();
-  const photo = location.state?.photo || null;
-
-  const validateAge = (birthDate) => {
-    const today = new Date();
-    const birth = new Date(birthDate);
-    let age = today.getFullYear() - birth.getFullYear();
-    const monthDiff = today.getMonth() - birth.getMonth();
-
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-      age--;
-    }
-
-    if (age < 16) {
-      setAgeError('We are sorry, but you must be at least 16 years old to register for TripMate.');
-      return false;
-    }
-    setAgeError('');
-    return true;
-  };
-
-  const handleBirthDateChange = (e) => {
-    handleInputChange(e);
-    validateAge(e.target.value);
-  };
 
   useEffect(() => {
     if (!selectedPhotos) {
       setPreviewURLs([]);
       return;
     }
-
+    
     const urls = Array.from(selectedPhotos).map((file) =>
       URL.createObjectURL(file),
     );
@@ -72,8 +51,9 @@ export default function ProfileSetup({ nextStep, formRegister }) {
     };
   }, [selectedPhotos]);
 
-  const { countries, cities, langs } =
-    useProfileDataQueries(form.location?.country);
+  const { countries, cities, langs } = useProfileDataQueries(
+    form.location?.country,
+  );
 
   const mutationRegister = useMutation({
     mutationFn: register,
@@ -103,7 +83,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
       toast.error(message);
     },
   });
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const mutationUpdate = useMutation({
     mutationFn: async (data) => updateUser(data, { method: 'PUT' }),
     onSuccess: async (updatedData) => {
@@ -116,14 +96,12 @@ export default function ProfileSetup({ nextStep, formRegister }) {
     onError: (error) => {
       const msg = extractBackendError(error);
       toast.error(msg);
+      console.log(error);
     },
   });
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (!validateAge(form.birthDate)) {
-      return;
-    }
     const payload = {
       ...form,
       location: {
@@ -142,7 +120,22 @@ export default function ProfileSetup({ nextStep, formRegister }) {
     };
 
     if (!formRegister) mutationUpdate.mutate(payload);
-    else mutationRegister.mutate(payload);
+    else {
+      if (
+        !form.fullName ||
+        !form.gender ||
+        !form.birthDate ||
+        !form.location?.country ||
+        !form.location?.city ||
+        !form.languagesSpoken ||
+        form.languagesSpoken.length === 0 ||
+        !form.adventureStyle
+      ) {
+        toast.error('Please fill in all required fields.');
+        return;
+      }
+      mutationRegister.mutate(payload);
+    }
   };
 
   return (
@@ -154,34 +147,32 @@ export default function ProfileSetup({ nextStep, formRegister }) {
       >
         <div className='flex flex-col items-center gap-2'>
           <div className='flex gap-2'>
+            {' '}
             {loading ? (
-              <Spinner size={64} color="text-blue-500" />
+              <Spinner size={64} color='text-blue-500' />
             ) : previewURLs.length > 0 ? (
-              <div
-                className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'
-              >
+              <div className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'>
                 <img
                   src={previewURLs[0]}
                   alt='preview'
                   className='h-full w-full object-cover'
                 />
               </div>
-            ) : photo ? (
-              <div
-                className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'
-              >
+<<<<<<< HEAD
+            ) : imgURLs.length > 0 ? (
+              <div className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'>
                 <img
                   src={photo}
                   alt='user profile'
                   className='h-full w-full object-cover'
                 />
               </div>
+=======
+>>>>>>> 142b675142ec34265d0dd827bdee2c8bc3b22161
             ) : imgURLs.length > 0 ? (
-              <div
-                className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'
-              >
+              <div className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'>
                 <img
-                  src={photo}
+                  src={imgURLs[0]}
                   alt='avatar'
                   className='h-full w-full object-cover'
                 />
@@ -190,7 +181,6 @@ export default function ProfileSetup({ nextStep, formRegister }) {
               <div className='h-20 w-20 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300' />
             )}
           </div>
-
           <label className='text-xs text-blue-600 underline cursor-pointer'>
             Upload Profile Picture
             <input
@@ -213,23 +203,6 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           className='input-white bg-white border border-gray-300 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200 text-sm'
         />
 
-        <div className="flex flex-col gap-1">
-          <input
-            type='date'
-            name='birthDate'
-            value={form.birthDate}
-            disabled={!formRegister}
-            onChange={handleBirthDateChange}
-            required
-            className={`input-white bg-white border ${ageError ? 'border-red-500' : 'border-gray-300'} rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200`}
-          />
-          {ageError && (
-            <p className="text-red-500 text-sm mt-1 bg-red-50 p-2 rounded-lg border border-red-200">
-              {ageError}
-            </p>
-          )}
-        </div>
-
         <select
           name='gender'
           value={form.gender}
@@ -246,6 +219,13 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           ))}
         </select>
 
+        <DatePicker
+          date={form.birthDate}
+          handleInputChange={handleInputChange}
+          name={'birthDate'}
+          disabled={!formRegister}
+        />
+
         <Select
           placeholder='Country'
           options={countries.map((c) => ({
@@ -255,9 +235,9 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           value={
             form.location?.country
               ? {
-                label: form.location.country.name,
-                value: form.location.country,
-              }
+                  label: form.location.country.name,
+                  value: form.location.country,
+                }
               : null
           }
           onChange={(o) => {
@@ -350,7 +330,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           type='submit'
           className='bg-blue-500 hover:bg-blue-600 text-white rounded-xl py-2 font-medium transition text-sm'
         >
-          SUBMIT
+          Submit
         </button>
       </form>
     </div>
