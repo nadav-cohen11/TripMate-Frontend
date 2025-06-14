@@ -30,6 +30,9 @@ export default function ProfileSetup({ nextStep, formRegister }) {
   const [selectedPhotos, setSelectedPhotos] = useState(null);
   const [previewURLs, setPreviewURLs] = useState([]);
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
+  const photo = location.state?.photo || null;
+
 
   useEffect(() => {
     if (!selectedPhotos) {
