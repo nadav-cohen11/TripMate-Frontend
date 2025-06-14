@@ -59,7 +59,7 @@ const ProfileDetails = ({ user, age, city, country, languages, travel, distance,
         </div>
       )}
       <div className="pt-2">
-        <ReviewList userId={user._id} />
+      <ReviewList reviews={user.reviews} />
       </div>
     </div>
   );

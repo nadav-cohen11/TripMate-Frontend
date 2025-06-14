@@ -1,30 +1,16 @@
-
-import { useEffect, useState, memo, useCallback } from "react";
-import { getReelComments, addCommentToReel } from "../../api/reelsApi";
+import { useState, memo } from "react";
+import { addCommentToReel } from "../../api/reelsApi";
 import { toast } from "react-toastify";
 import { extractBackendError } from "@/utils/errorUtils";
 
-const Comments = ({ reelId }) => {
-  const [comments, setComments] = useState([]);
+const Comments = ({ reel }) => {
+  const [comments, setComments] = useState(reel.comments || []);
   const [newComment, setNewComment] = useState("");
-
-  const fetchComments = useCallback(async () => {
-    try {
-      const data = await getReelComments(reelId);
-      setComments(data);
-    } catch (error) {
-      toast.error(extractBackendError(error));
-    }
-  }, [reelId]);
-
-  useEffect(() => {
-    fetchComments();
-  }, [fetchComments]);
 
   const handleAddComment = async () => {
     if (!newComment.trim()) return;
     try {
-      const res = await addCommentToReel(reelId, newComment);
+      const res = await addCommentToReel(reel._id, newComment);
       setComments((prev) => [res, ...prev]);
       setNewComment("");
     } catch (error) {
@@ -37,7 +23,7 @@ const Comments = ({ reelId }) => {
       <div className="max-h-32 overflow-y-auto space-y-2 text-white text-sm pr-2 custom-scroll">
         {comments.map((comment, idx) => (
           <p key={idx} className="break-words">
-            <strong>{comment.userId.fullName}:</strong> {comment.text}
+            <strong>{comment.userFullName || "User"}:</strong> {comment.text}
           </p>
         ))}
       </div>
