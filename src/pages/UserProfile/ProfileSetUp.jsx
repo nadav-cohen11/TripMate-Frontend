@@ -10,12 +10,8 @@ import useProfileSetupForm from '@/hooks/useProfileSetupForm';
 import useProfileDataQueries from '@/hooks/useProfileDataQueries';
 import { FaInstagram, FaFacebook } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-<<<<<<< HEAD
 import { Spinner } from '@/components/ui/spinner';
 import { useLocation } from 'react-router-dom';
-=======
-import { Spinner } from '@/components/ui/spinner'; 
->>>>>>> 142b675142ec34265d0dd827bdee2c8bc3b22161
 import DatePicker from '@/components/ui/DatePicker';
 
 
@@ -158,7 +154,6 @@ export default function ProfileSetup({ nextStep, formRegister }) {
                   className='h-full w-full object-cover'
                 />
               </div>
-<<<<<<< HEAD
             ) : imgURLs.length > 0 ? (
               <div className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'>
                 <img
@@ -167,8 +162,6 @@ export default function ProfileSetup({ nextStep, formRegister }) {
                   className='h-full w-full object-cover'
                 />
               </div>
-=======
->>>>>>> 142b675142ec34265d0dd827bdee2c8bc3b22161
             ) : imgURLs.length > 0 ? (
               <div className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'>
                 <img
