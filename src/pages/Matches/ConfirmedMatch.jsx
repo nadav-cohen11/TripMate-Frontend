@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { Star, MessageSquare, Shield } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const ConfirmedMatch = ({
   match,
@@ -14,6 +15,7 @@ const ConfirmedMatch = ({
   const friend = match.otherUser;
   const [review, setReview] = useState('');
   const [rating, setRating] = useState(0);
+  const navigate = useNavigate();
 
   const handleOpenReview = (matchId) => {
     setOpenReviewId(matchId);
@@ -48,6 +50,7 @@ const ConfirmedMatch = ({
     >
       <div className="relative">
         <img
+          onClick={() => navigate(`/profile/${friend._id}`)}
           src={
             Array.isArray(friend.photos) && friend.photos.length > 0
               ? friend.photos[0].url

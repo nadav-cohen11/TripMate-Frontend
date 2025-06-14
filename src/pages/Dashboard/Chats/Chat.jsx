@@ -3,6 +3,7 @@ import ChatList from './ChatList';
 import ChatWindow from './ChatWindow';
 import useChatSocket from '@/hooks/useChatSocket';
 import { AuthContext } from '@/context/AuthContext';
+import TripMateTitle from '@/components/ui/TripMateTitle';
 import { useLocation } from 'react-router-dom';
 
 const Chats = () => {
@@ -12,6 +13,7 @@ const Chats = () => {
   const { user } = useContext(AuthContext);
   const userId = user;
   const socketInstance = useChatSocket(userId, setChats);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const location = useLocation();
   const { group, msg } = location.state || {};
@@ -73,15 +75,25 @@ const Chats = () => {
 
   return (
     <div className='relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden'>
-      <div
-        className='absolute top-6 left-6 text-4xl text-black font-bold z-20 tracking-wide'
-        style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}
+      <TripMateTitle />
+      <button
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        className='sm:hidden fixed top-4 right-4 z-30 bg-white/80 rounded-full p-2 shadow-md border border-blue-200'
+        aria-label='Toggle chat list'
       >
-        TripMate
-      </div>
-      <div className='flex justify-center items-center min-h-screen pt-24 px-4 pb-16'>
-        <div className='bg-white rounded-lg shadow-xl w-full max-w-5xl h-[80vh] flex flex-col lg:flex-row overflow-hidden'>
-          <div className='w-full lg:w-1/3 border-r border-gray-200'>
+        <svg
+          width='28'
+          height='28'
+          fill='none'
+          stroke='currentColor'
+          strokeWidth='2'
+        >
+          <path d='M4 8h20M4 14h20M4 20h20' />
+        </svg>
+      </button>
+      <div className='flex flex-col lg:flex-row min-h-screen pt-24 px-4 lg:px-12 gap-6'>
+        {isSidebarOpen && (
+          <div className='w-full lg:w-1/3'>
             <ChatList
               chats={chats}
               selectedChatId={selectedChatId}
@@ -89,29 +101,31 @@ const Chats = () => {
               socket={socketInstance}
               setChats={setChats}
               setSelectedChatId={setSelectedChatId}
+              isSidebarOpen={isSidebarOpen}
+              onCloseSidebar={() => setIsSidebarOpen(false)}
             />
           </div>
-          <div className='w-full lg:w-2/3'>
-            <ChatWindow
-              selectedChat={
-                selectedChatId
-                  ? chats.find((c) => c._id === selectedChatId)
-                  : null
-              }
-              isGroupChat={
-                selectedChatId
-                  ? chats.find((c) => c._id === selectedChatId)?.isGroupChat
-                  : false
-              }
-              message={message}
-              socket={socketInstance}
-              userId={userId}
-              setMessage={setMessage}
-              handleSendMessage={handleSendMessage}
-              setChats={setChats}
-              setSelectedChatId={setSelectedChatId}
-            />
-          </div>
+        )}
+        <div className={`w-full ${isSidebarOpen ? 'lg:w-2/3' : 'lg:w-full'}`}>
+          <ChatWindow
+            selectedChat={
+              selectedChatId
+                ? chats.find((c) => c._id === selectedChatId)
+                : null
+            }
+            isGroupChat={
+              selectedChatId
+                ? chats.find((c) => c._id === selectedChatId)?.isGroupChat
+                : false
+            }
+            message={message}
+            socket={socketInstance}
+            userId={userId}
+            setMessage={setMessage}
+            handleSendMessage={handleSendMessage}
+            setChats={setChats}
+            setSelectedChatId={setSelectedChatId}
+          />
         </div>
       </div>
     </div>

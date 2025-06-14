@@ -10,12 +10,13 @@ const ChatList = ({
   socket,
   setSelectedChatId,
   setChats,
+  isSidebarOpen,
+  onCloseSidebar,
 }) => {
   const [directChats, setDirectChats] = useState([]);
   const [groupChats, setGroupChats] = useState([]);
   const [matches, setMatches] = useState([]);
   const [matchesWithoutChat, setMatchesWithoutChat] = useState([]);
-  const [showSidebar, setShowSidebar] = useState(true);
 
 
   useEffect(() => {
@@ -63,43 +64,15 @@ const ChatList = ({
     setGroupChats(chats.filter((c) => c.isGroupChat));
   }, [chats]);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 640) {
-        setShowSidebar(false);
-      } else {
-        setShowSidebar(true);
-      }
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
   return (
     <>
-      <button
-        className='sm:hidden fixed top-4 right-4 z-30 bg-white/80 rounded-full p-2 shadow-md border border-blue-200'
-        onClick={() => setShowSidebar((prev) => !prev)}
-        aria-label='Toggle chat list'
-      >
-        <svg
-          width='28'
-          height='28'
-          fill='none'
-          stroke='currentColor'
-          strokeWidth='2'
-        >
-          <path d='M4 8h20M4 14h20M4 20h20' />
-        </svg>
-      </button>
       <div
         className={`
           fixed top-0 left-0 h-full z-50 bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 border-r border-blue-200 shadow-xl transition-transform duration-200
           w-72 max-w-full p-6
           sm:static sm:translate-x-0 sm:w-64 sm:p-6
           flex flex-col
-          ${showSidebar ? 'translate-x-0' : '-translate-x-full'}
+          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
         style={{ maxWidth: '90vw' }}
       >
@@ -136,7 +109,7 @@ const ChatList = ({
                   key={chat._id}
                   onClick={() => {
                     setSelectedChatId(chat._id);
-                    if (window.innerWidth < 640) setShowSidebar(false);
+                    if (window.innerWidth < 640) onCloseSidebar();
                   }}
                   className={`px-4 py-3 rounded-xl cursor-pointer transition-colors flex flex-col shadow-sm border border-blue-100
                     ${
@@ -165,7 +138,7 @@ const ChatList = ({
                   key={chat._id}
                   onClick={() => {
                     setSelectedChatId(chat._id);
-                    if (window.innerWidth < 640) setShowSidebar(false);
+                    if (window.innerWidth < 640) onCloseSidebar();
                   }}
                   className={`px-4 py-3 rounded-xl cursor-pointer transition-colors flex flex-col shadow-sm border border-blue-100
                     ${
@@ -185,13 +158,13 @@ const ChatList = ({
           </div>
         </div>
       </div>
-      {showSidebar && (
+      {isSidebarOpen && (
         <div
           className='fixed inset-0 z-10 sm:hidden'
           style={{
             background: 'rgb(28 25 25 / 42%)',
           }}
-          onClick={() => setShowSidebar(false)}
+          onClick={onCloseSidebar}
         />
       )}
     </>

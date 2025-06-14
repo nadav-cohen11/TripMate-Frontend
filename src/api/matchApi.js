@@ -75,7 +75,7 @@ export const unmatchUsers = async ({ user2Id }) => {
   }
 };
 
-export const NonMatchedUsers = async () => {
+export const getNonMatchedNearbyUsersWithReviews = async () => {
   const response = await api.get('/matches/home/NonMatchedUsers');
   return response.data;
 };

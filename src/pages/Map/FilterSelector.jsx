@@ -6,7 +6,7 @@ export const FilterSelector = ({ activeFilter, setFilter, filterIcons = [] }) =>
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="flex flex-wrap justify-center gap-3 mb-4"
+      className="flex flex-col gap-1 mb-4 overflow-y-auto max-h-48 p-1 rounded-xl border border-gray-200 shadow-inner max-w-xs mx-auto"
     >
       {Object.entries(filterIcons).map(([label, Icon]) => {
         const isActive = activeFilter === label;
@@ -15,18 +15,18 @@ export const FilterSelector = ({ activeFilter, setFilter, filterIcons = [] }) =>
             key={label}
             onClick={() => setFilter(label)}
             whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileTap={{ scale: 0.98 }}
             className={`
-              flex items-center gap-2 px-4 py-2.5 rounded-full 
-              transition-all duration-200 ease-in-out
+              flex items-center justify-center gap-1 px-2 py-1 rounded-xl w-full
+              transition-all duration-200 ease-in-out shadow-sm
               ${isActive 
-                ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/30" 
-                : "bg-white text-gray-800 hover:bg-gray-50 shadow-md hover:shadow-lg"
+                ? "bg-[#4a90e2] text-white border border-[#4a90e2] shadow-lg" 
+                : "bg-white text-[#4a90e2] border border-gray-300 hover:bg-[#eaf4fd] hover:text-[#4a90e2]"
               }
             `}
           >
-            <Icon className={`text-xl ${isActive ? "text-white" : "text-blue-600"}`} />
-            <span className="text-sm font-medium">{label}</span>
+            <Icon className={`text-base ${isActive ? "text-white" : "text-[#4a90e2]"}`} />
+            <span className="text-xs font-semibold tracking-wide">{label}</span>
           </motion.button>
         );
       })}

@@ -12,6 +12,7 @@ import { FaInstagram, FaFacebook } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { Spinner } from '@/components/ui/spinner';
 import DatePicker from '@/components/ui/DatePicker';
+import { useLocation } from 'react-router-dom';
 
 export default function ProfileSetup({ nextStep, formRegister }) {
   const {
@@ -28,7 +29,32 @@ export default function ProfileSetup({ nextStep, formRegister }) {
   const [selectedPhotos, setSelectedPhotos] = useState(null);
   const [previewURLs, setPreviewURLs] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [ageError, setAgeError] = useState('');
+  const location = useLocation();
+  const photo = location.state?.photo || null;
 
+//   const validateAge = (birthDate) => {
+//     const today = new Date();
+//     const birth = new Date(birthDate);
+//     let age = today.getFullYear() - birth.getFullYear();
+//     const monthDiff = today.getMonth() - birth.getMonth();
+
+//     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+//       age--;
+//     }
+
+//     if (age < 16) {
+//       setAgeError('We are sorry, but you must be at least 16 years old to register for TripMate.');
+//       return false;
+//     }
+//     setAgeError('');
+//     return true;
+//   };
+
+//   const handleBirthDateChange = (e) => {
+//     handleInputChange(e);
+//     validateAge(e.target.value);
+//   };
   useEffect(() => {
     if (!selectedPhotos) {
       setPreviewURLs([]);
@@ -77,7 +103,8 @@ export default function ProfileSetup({ nextStep, formRegister }) {
       toast.error(message);
     },
   });
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+  
   const mutationUpdate = useMutation({
     mutationFn: async (data) => updateUser(data, { method: 'PUT' }),
     onSuccess: async (updatedData) => {
@@ -90,12 +117,14 @@ export default function ProfileSetup({ nextStep, formRegister }) {
     onError: (error) => {
       const msg = extractBackendError(error);
       toast.error(msg);
-      console.log(error);
     },
   });
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    if (!validateAge(form.birthDate)) {
+      return;
+    }
     const payload = {
       ...form,
       location: {
@@ -141,9 +170,8 @@ export default function ProfileSetup({ nextStep, formRegister }) {
       >
         <div className='flex flex-col items-center gap-2'>
           <div className='flex gap-2'>
-            {' '}
             {loading ? (
-              <Spinner size={64} color='text-blue-500' />
+              <Spinner size={64} color="text-blue-500" />
             ) : previewURLs.length > 0 ? (
               <div className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'>
                 <img
@@ -152,10 +180,20 @@ export default function ProfileSetup({ nextStep, formRegister }) {
                   className='h-full w-full object-cover'
                 />
               </div>
+            ) : photo ? (
+              <div
+                className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'
+              >
+                <img
+                  src={photo}
+                  alt='user profile'
+                  className='h-full w-full object-cover'
+                />
+              </div>
             ) : imgURLs.length > 0 ? (
               <div className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'>
                 <img
-                  src={imgURLs[0]}
+                  src={photo}
                   alt='avatar'
                   className='h-full w-full object-cover'
                 />
@@ -164,6 +202,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
               <div className='h-20 w-20 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300' />
             )}
           </div>
+
           <label className='text-xs text-blue-600 underline cursor-pointer'>
             Upload Profile Picture
             <input
@@ -185,7 +224,22 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           required
           className='input-white bg-white border border-gray-300 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200 text-sm'
         />
-
+//         <div className="flex flex-col gap-1">
+//           <input
+//             type='date'
+//             name='birthDate'
+//             value={form.birthDate}
+//             disabled={!formRegister}
+//             onChange={handleBirthDateChange}
+//             required
+//             className={`input-white bg-white border ${ageError ? 'border-red-500' : 'border-gray-300'} rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200`}
+//           />
+//           {ageError && (
+//             <p className="text-red-500 text-sm mt-1 bg-red-50 p-2 rounded-lg border border-red-200">
+//               {ageError}
+//             </p>
+//           )}
+//         </div>
         <select
           name='gender'
           value={form.gender}
