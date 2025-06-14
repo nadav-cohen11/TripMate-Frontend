@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import TinderCard from 'react-tinder-card';
 import ProfileCard from './ProfileCard';
-import { NonMatchedUsers } from '../../api/matchApi';
+import { getNonMatchedNearbyUsersWithReviews } from '../../api/matchApi';
 import { extractBackendError } from '../../utils/errorUtils';
 import { handleCardSwipe } from '../../utils/matchHandlersUtils';
 import { getUserLocation } from '../../api/userApi';
@@ -18,7 +18,7 @@ const COMPATIBILITY_THRESHOLD = 70;
 const fetchUsers = async () => {
   try {
     const [displayUsers, currentUserLocation] = await Promise.all([
-      NonMatchedUsers(),
+      getNonMatchedNearbyUsersWithReviews(), 
       getUserLocation(),
     ]);
 
@@ -42,6 +42,7 @@ const fetchUsers = async () => {
         distance: distance ? Math.round(distance) : null,
         compatibilityScore,
         aiSuggested: compatibilityScore >= COMPATIBILITY_THRESHOLD,
+        reviews: user.reviews || [],
       };
     });
   } catch (err) {

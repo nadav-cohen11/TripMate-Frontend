@@ -61,7 +61,7 @@ const UserProfilePage = () => {
         <div className="absolute top-6 right-6 flex gap-4 z-50">
           <button
             onClick={() => navigate('/matches')}
-            className="group relative flex items-center gap-3 px-5 py-2.5 bg-gradient-to-r from-blue-500 to-sky-400 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+            className="group relative flex items-center gap-3 px-3 py-2.5 bg-gradient-to-r from-blue-500 to-sky-400 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
           >
             <div className="flex items-center gap-3">
               <div className="relative">
