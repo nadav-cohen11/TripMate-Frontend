@@ -86,6 +86,22 @@ export default function ProfileSetup({ nextStep, formRegister }) {
   const mutationUpdate = useMutation({
     mutationFn: async (data) => updateUser(data, { method: 'PUT' }),
     onSuccess: async (updatedData) => {
+      if (selectedPhotos && selectedPhotos.length > 0) {
+        setLoading(true);
+        try {
+          const uploaded = await uploadFiles(
+            'upload-profile',
+            selectedPhotos,
+            false,
+          );
+          setImgURLs(uploaded);
+          setLoading(false);
+        } catch (uploadErr) {
+          setLoading(false);
+          toast.error('Photo upload failed');
+          console.error(uploadErr);
+        }
+      }
       toast.success('Profile updated successfully');
       if (updatedData?.profilePhotoURL) {
         setImgURLs([updatedData.profilePhotoURL]);
