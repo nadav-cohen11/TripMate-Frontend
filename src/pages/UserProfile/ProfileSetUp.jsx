@@ -315,7 +315,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           type='submit'
           className='bg-blue-500 hover:bg-blue-600 text-white rounded-xl py-2 font-medium transition text-sm'
         >
-          SUBMIT
+          Submit
         </button>
       </form>
     </div>
