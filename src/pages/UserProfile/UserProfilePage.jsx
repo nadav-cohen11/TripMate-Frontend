@@ -10,7 +10,7 @@ import UserQRCode from './UserQRCode';
 import TripMateTitle from '@/components/ui/TripMateTitle';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Heart, Users, Bell } from 'lucide-react';
+import { Users } from 'lucide-react';
 import useFetchMyMatches from '@/hooks/useFetchMyMatches';
 
 const UserProfilePage = () => {
