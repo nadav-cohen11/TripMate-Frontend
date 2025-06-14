@@ -1,8 +1,8 @@
-import { decline, createOrAcceptMatch } from '@/api/matchApi';
-import { useMutation } from '@tanstack/react-query';
 import { Check, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const PendingMatch = ({ match, acceptMutation, declineMutation }) => {
+  const navigate = useNavigate();
   const user = match.user1Id;
   if (!user) return null;
 
@@ -20,6 +20,7 @@ const PendingMatch = ({ match, acceptMutation, declineMutation }) => {
     >
       <div className="relative">
         <img
+        onClick={() => navigate(`/profile/${user._id}`)}
           src={
             Array.isArray(user.photos) && user.photos.length > 0
               ? user.photos[0].url

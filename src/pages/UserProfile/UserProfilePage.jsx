@@ -35,8 +35,10 @@ const UserProfilePage = () => {
   const languages = userProfile?.languagesSpoken?.join(', ') || '';
   const country = userProfile?.location?.country || '';
   const city = userProfile?.location?.city || '';
-  const photo =
-    userProfile?.photos?.[0]?.url || '/assets/images/Annonymos_picture.jpg';
+  const cloudinaryBaseUrl = 'https://res.cloudinary.com/dnpsnkuyi/image/upload/';
+  const photo = userProfile?.profilePhotoId
+    ? `${cloudinaryBaseUrl}${userProfile.profilePhotoId}`
+    : userProfile?.photos?.[0]?.url || '/assets/images/Annonymos_picture.jpg';
 
   if (isLoading) {
     return (
@@ -79,7 +81,7 @@ const UserProfilePage = () => {
             </div>
           </button>
           <button
-            onClick={() => navigate('/setup')}
+            onClick={() => navigate('/setup', { state: { photo: photo } })}
             className="p-2 rounded-full hover:bg-gray-100 transition duration-150 group relative"
           >
             <IoSettingsOutline className="text-4xl text-gray-600 cursor-pointer hover:text-gray-800 transition-colors duration-200" />
@@ -91,7 +93,7 @@ const UserProfilePage = () => {
       )}
       <div className='w-full max-w-sm space-y-6 mt-20 mb-8'>
         <div className='bg-white rounded-3xl border border-blue-100 shadow-lg overflow-hidden relative'>
-          {userId === user && (
+        {userId === user &&(
             <button
               onClick={() => navigate('/photos', { state: { photos: userProfile.photos, reels: userProfile.reels } })}
               className="absolute top-2 right-2 p-2 rounded-full bg-white hover:bg-gray-100 transition duration-150 z-10"

@@ -107,7 +107,6 @@ export const getUserByEmail = async (email) => {
 
 export const translate = async (prompt) => {
     try {
-        console.log(prompt)
         const user = await getUser();
         const toLang = user.languagesSpoken[0];
         const detectRes = await axios.get('https://api.mymemory.translated.net/get', {
