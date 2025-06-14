@@ -1,3 +1,6 @@
+import ISO6391 from 'iso-639-1';
+
+
 export const HOME_FILTERS = {
   Age: [
     { label: "Under 18", query: `user.age < 18` },
@@ -6,11 +9,10 @@ export const HOME_FILTERS = {
     { label: "50 and above", query: `user.age >= 50` },
   ],
   Language: [
-    { label: "English", query: `user.languages.includes("english")` },
-    { label: "Spanish", query: `user.languages.includes("spanish")` },
-    { label: "French", query: `user.languages.includes("french")` },
-    { label: "German", query: `user.languages.includes("german")` },
-    { label: "Chinese", query: `user.languages.includes("chinese")` },
+    ...ISO6391.getAllNames().map((lang) => ({
+      label: lang,
+      query: `user.languages.includes("${lang.toLowerCase()}")`
+    }))
   ],
   Gender: [
     { label: "Male", query: `user.gender === "male"` },
