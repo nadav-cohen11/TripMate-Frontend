@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import Match from './Match';
+import DatePicker from '@/components/ui/DatePicker';
 
 const CreateTrip = ({ userId, socket, setChats, matches }) => {
   const [step, setStep] = useState(1);
@@ -47,10 +48,10 @@ const CreateTrip = ({ userId, socket, setChats, matches }) => {
   };
 
   const handleChange = (e) => {
-    const { id, value } = e.target;
+    const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
-      [id]: value,
+      [name]: value,
     }));
   };
 
@@ -59,7 +60,6 @@ const CreateTrip = ({ userId, socket, setChats, matches }) => {
     today.setHours(0, 0, 0, 0);
     const startDate = new Date(form.startDate);
     const endDate = new Date(form.endDate);
-
     if (
       !form.tripName ||
       !form.country ||
@@ -198,6 +198,7 @@ const CreateTrip = ({ userId, socket, setChats, matches }) => {
                     <Label htmlFor='tripName'>Trip Name</Label>
                     <Input
                       id='tripName'
+                      name='tripName'
                       placeholder='Our trip'
                       value={form.tripName}
                       onChange={handleChange}
@@ -208,6 +209,7 @@ const CreateTrip = ({ userId, socket, setChats, matches }) => {
                     <Label htmlFor='country'>Country</Label>
                     <Input
                       id='country'
+                      name='country'
                       placeholder='e.g. France'
                       value={form.country}
                       onChange={handleChange}
@@ -218,6 +220,7 @@ const CreateTrip = ({ userId, socket, setChats, matches }) => {
                     <Label htmlFor='city'>City</Label>
                     <Input
                       id='city'
+                      name='city'
                       placeholder='e.g. Paris'
                       value={form.city}
                       onChange={handleChange}
@@ -226,28 +229,39 @@ const CreateTrip = ({ userId, socket, setChats, matches }) => {
                   </div>
                   <div>
                     <Label htmlFor='startDate'>Start Date</Label>
-                    <Input
+                    {/* <Input
                       id='startDate'
                       type='date'
                       value={form.startDate}
                       onChange={handleChange}
                       required
+                    /> */}
+                    <DatePicker
+                      date={form.startDate}
+                      handleInputChange={handleChange}
+                      name={'startDate'}
                     />
                   </div>
                   <div>
                     <Label htmlFor='endDate'>End Date</Label>
-                    <Input
+                    {/* <Input
                       id='endDate'
                       type='date'
                       value={form.endDate}
                       onChange={handleChange}
                       required
+                    /> */}
+                    <DatePicker
+                      date={form.endDate}
+                      handleInputChange={handleChange}
+                      name={'endDate'}
                     />
                   </div>
                   <div>
                     <Label htmlFor='description'>Notes</Label>
                     <Textarea
                       id='description'
+                      name='description'
                       placeholder='Trip details...'
                       value={form.description}
                       onChange={handleChange}
@@ -324,6 +338,6 @@ const CreateTrip = ({ userId, socket, setChats, matches }) => {
       </Dialog>
     </>
   );
-}
+};
 
-export default CreateTrip
+export default CreateTrip;

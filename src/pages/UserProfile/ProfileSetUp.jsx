@@ -10,8 +10,10 @@ import useProfileSetupForm from '@/hooks/useProfileSetupForm';
 import useProfileDataQueries from '@/hooks/useProfileDataQueries';
 import { FaInstagram, FaFacebook } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom'
-import { Spinner } from '@/components/ui/spinner';
+import { Spinner } from '@/components/ui/spinner'; 
 import { useLocation } from 'react-router-dom';
+import DatePicker from '@/components/ui/DatePicker';
+
 
 
 export default function ProfileSetup({ nextStep, formRegister }) {
@@ -29,32 +31,6 @@ export default function ProfileSetup({ nextStep, formRegister }) {
   const [selectedPhotos, setSelectedPhotos] = useState(null);
   const [previewURLs, setPreviewURLs] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [ageError, setAgeError] = useState('');
-  const location = useLocation();
-  const photo = location.state?.photo || null;
-
-  const validateAge = (birthDate) => {
-    const today = new Date();
-    const birth = new Date(birthDate);
-    let age = today.getFullYear() - birth.getFullYear();
-    const monthDiff = today.getMonth() - birth.getMonth();
-
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-      age--;
-    }
-
-    if (age < 16) {
-      setAgeError('We are sorry, but you must be at least 16 years old to register for TripMate.');
-      return false;
-    }
-    setAgeError('');
-    return true;
-  };
-
-  const handleBirthDateChange = (e) => {
-    handleInputChange(e);
-    validateAge(e.target.value);
-  };
 
   useEffect(() => {
     if (!selectedPhotos) {
@@ -72,8 +48,9 @@ export default function ProfileSetup({ nextStep, formRegister }) {
     };
   }, [selectedPhotos]);
 
-  const { countries, cities, langs } =
-    useProfileDataQueries(form.location?.country);
+  const { countries, cities, langs } = useProfileDataQueries(
+    form.location?.country,
+  );
 
   const mutationRegister = useMutation({
     mutationFn: register,
@@ -142,7 +119,22 @@ export default function ProfileSetup({ nextStep, formRegister }) {
     };
 
     if (!formRegister) mutationUpdate.mutate(payload);
-    else mutationRegister.mutate(payload);
+    else {
+      if (
+        !form.fullName ||
+        !form.gender ||
+        !form.birthDate ||
+        !form.location?.country ||
+        !form.location?.city ||
+        !form.languagesSpoken ||
+        form.languagesSpoken.length === 0 ||
+        !form.adventureStyle
+      ) {
+        toast.error('Please fill in all required fields.');
+        return;
+      }
+      mutationRegister.mutate(payload);
+    }
   };
 
   return (
@@ -157,9 +149,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
             {loading ? (
               <Spinner size={64} color="text-blue-500" />
             ) : previewURLs.length > 0 ? (
-              <div
-                className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'
-              >
+              <div className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'>
                 <img
                   src={previewURLs[0]}
                   alt='preview'
@@ -177,9 +167,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
                 />
               </div>
             ) : imgURLs.length > 0 ? (
-              <div
-                className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'
-              >
+              <div className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'>
                 <img
                   src={photo}
                   alt='avatar'
@@ -213,22 +201,6 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           className='input-white bg-white border border-gray-300 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200 text-sm'
         />
 
-        <div className="flex flex-col gap-1">
-          <input
-            type='date'
-            name='birthDate'
-            value={form.birthDate}
-            disabled={!formRegister}
-            onChange={handleBirthDateChange}
-            required
-            className={`input-white bg-white border ${ageError ? 'border-red-500' : 'border-gray-300'} rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200`}
-          />
-          {ageError && (
-            <p className="text-red-500 text-sm mt-1 bg-red-50 p-2 rounded-lg border border-red-200">
-              {ageError}
-            </p>
-          )}
-        </div>
 
         <select
           name='gender'
@@ -246,6 +218,13 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           ))}
         </select>
 
+        <DatePicker
+          date={form.birthDate}
+          handleInputChange={handleInputChange}
+          name={'birthDate'}
+          disabled={!formRegister}
+        />
+
         <Select
           placeholder='Country'
           options={countries.map((c) => ({
@@ -255,9 +234,9 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           value={
             form.location?.country
               ? {
-                label: form.location.country.name,
-                value: form.location.country,
-              }
+                  label: form.location.country.name,
+                  value: form.location.country,
+                }
               : null
           }
           onChange={(o) => {
