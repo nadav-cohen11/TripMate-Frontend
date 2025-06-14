@@ -133,6 +133,19 @@ export default function ProfileSetup({ nextStep, formRegister }) {
         toast.error('Please fill in all required fields.');
         return;
       }
+      
+      const birthDate = new Date(form.birthDate);
+      const today = new Date();
+      const age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+      const is18 =
+        age > 18 ||
+        (age === 18 &&
+          (m > 0 || (m === 0 && today.getDate() >= birthDate.getDate())));
+      if (!is18) {
+        toast.error('You must be at least 18 years old.');
+        return;
+      }
       mutationRegister.mutate(payload);
     }
   };
