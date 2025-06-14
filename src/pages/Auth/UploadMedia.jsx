@@ -227,11 +227,6 @@ const UploadMediaPage = () => {
 
   const { isPending } = instagramMutation;
 
-
-  useEffect(() => {
-    console.log(isPending);
-  }, [isPending]);
-
   const uploadImgToInstagram = (mediaUrl) => {
     const confirmation = window.confirm(
       'Are you sure you want to publish this media in our Instagram page?',

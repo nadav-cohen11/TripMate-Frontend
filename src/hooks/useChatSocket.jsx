@@ -32,5 +32,4 @@ const useChatSocket = (userId, setChats = undefined) => {
   return socketInstance;
 };
 
-
 export default useChatSocket;
