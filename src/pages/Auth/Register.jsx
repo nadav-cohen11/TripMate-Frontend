@@ -36,7 +36,6 @@ const Register = ({ nextStep, form, setForm }) => {
       schema.parse(form);
       nextStep();
     } catch (err) {
-      console.log(err);
       toast.error(err.errors?.[0]?.message || 'Invalid input');
     }
   };

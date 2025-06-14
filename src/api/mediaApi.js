@@ -11,7 +11,6 @@ export const uploadFiles = async (endpoint, files, isMultiple = false, tripId = 
     for (let i = 0; i < fileArray.length; i++) {
       formData.append('photos', fileArray[i]);
     }
-    console.log("FormData with multiple files:", formData);
   } else {
     const fieldName = endpoint === 'upload-profile' ? 'profile' : 'reel';
     formData.append(fieldName, fileArray[0]);

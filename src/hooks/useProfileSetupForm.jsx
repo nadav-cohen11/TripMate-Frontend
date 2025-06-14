@@ -71,6 +71,7 @@ const useProfileSetupForm = (formRegister) => {
         })),
         adventureStyle: user.adventureStyle || '',
         bio: user.bio || '',
+        profilePhotoId: user.profilePhotoId || '',
         socialLinks: {
           instagram: user.socialLinks?.instagram
         ? user.socialLinks.instagram.replace(/^https?:\/\/(www\.)?instagram\.com\//, '').replace(/\/$/, '')
