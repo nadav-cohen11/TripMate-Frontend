@@ -31,7 +31,7 @@ const UserQRCode = () => {
         </span>
       </div>
       {isPopupOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 bg-opacity-95 z-50">
           <div className="bg-white rounded-2xl shadow-2xl p-6 w-80 relative animate-fade-in">
             <button
               onClick={togglePopup}
