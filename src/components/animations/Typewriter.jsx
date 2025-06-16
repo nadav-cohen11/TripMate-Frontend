@@ -1,22 +1,23 @@
-import { motion } from 'framer-motion';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-const Typewriter = ({ text, className }) => {
+const Typewriter = ({ text, className, style }) => {
+  const [currentText, setCurrentText] = useState('');
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (currentIndex < text.length) {
+      const timeout = setTimeout(() => {
+        setCurrentText(prevText => prevText + text[currentIndex]);
+        setCurrentIndex(prevIndex => prevIndex + 1);
+      }, 100);
+      return () => clearTimeout(timeout);
+    }
+  }, [currentIndex, text]);
+
   return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-    >
-      <motion.span
-        initial={{ width: 0 }}
-        animate={{ width: "100%" }}
-        transition={{ duration: 1, ease: "easeInOut" }}
-        style={{ display: "inline-block", overflow: "hidden", whiteSpace: "nowrap" }}
-      >
-        {text}
-      </motion.span>
-    </motion.div>
+    <span className={className} style={style}>
+      {currentText}
+    </span>
   );
 };
 

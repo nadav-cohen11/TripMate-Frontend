@@ -9,7 +9,9 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { EventList } from "./EventList";
 import { FILTER_ICONS } from "@/constants/filters";
 import TripMateTitle from '@/components/ui/TripMateTitle';
+import CreateEvent from './CreateEvent';
 import React from "react";
+
 export const Map = () => {
   const [filter, setFilter] = useState("Bars");
   const [radius, setRadius] = useState(500);
@@ -34,6 +36,10 @@ export const Map = () => {
 
   const isLoading = loadingUsers || loadingPlaces;
 
+  const handleEventCreated = () => {
+    
+  };
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#eaf4fd] via-[#eaf4fd] to-[#cbe7fa]">
       <TripMateTitle />
@@ -44,6 +50,9 @@ export const Map = () => {
         <div className="flex flex-col items-center gap-3 bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl p-3 border border-[#cbe7fa] w-full">
           <FilterSelector activeFilter={filter} setFilter={setFilter} filterIcons={FILTER_ICONS} />
           <RadiusSlider radius={radius} setRadius={setRadius} />
+          <div className="mt-4">
+            <CreateEvent onEventCreated={handleEventCreated} />
+          </div>
         </div>
       </div>
 
