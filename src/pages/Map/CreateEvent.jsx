@@ -126,38 +126,38 @@ const CreateEvent = ({ onEventCreated }) => {
           <span>Add Personal Event</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="rounded-lg bg-white shadow-xl max-w-md p-6">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-bold text-gray-900">Create Personal Event</DialogTitle>
-          <DialogDescription className="text-sm text-gray-600">
+      <DialogContent className="rounded-lg bg-white shadow-xl max-w-lg p-8">
+        <DialogHeader className="mb-4">
+          <DialogTitle className="text-2xl font-bold text-[#4a90e2]">Create Personal Event</DialogTitle>
+          <DialogDescription className="text-md text-[#4a90e2]">
             Add your own event to the map. Fill in the details below.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <Label htmlFor="name" className="block text-gray-800 font-semibold mb-1">Event Name <span className="text-red-500">*</span></Label>
+            <Label htmlFor="name" className="block text-[#4a90e2] font-semibold mb-2">Event Name <span className="text-red-500">*</span></Label>
             <Input
               id="name"
               name="name"
               value={form.name}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
             />
           </div>
           <div>
-            <Label htmlFor="description" className="block text-gray-800 font-semibold mb-1">Description</Label>
+            <Label htmlFor="description" className="block text-[#4a90e2] font-semibold mb-2">Description</Label>
             <Textarea
               id="description"
               name="description"
               value={form.description}
               onChange={handleChange}
               placeholder="Tell us about your event..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
             />
           </div>
           <div>
-            <Label htmlFor="date" className="block text-gray-800 font-semibold mb-1">Event Date <span className="text-red-500">*</span></Label>
+            <Label htmlFor="date" className="block text-[#4a90e2] font-semibold mb-2">Event Date <span className="text-red-500">*</span></Label>
             <DatePicker
               date={form.date}
               handleInputChange={handleChange}
@@ -165,7 +165,7 @@ const CreateEvent = ({ onEventCreated }) => {
             />
           </div>
           <div>
-            <Label htmlFor="time" className="block text-gray-800 font-semibold mb-1">Event Time <span className="text-red-500">*</span></Label>
+            <Label htmlFor="time" className="block text-[#4a90e2] font-semibold mb-2">Event Time <span className="text-red-500">*</span></Label>
             <Input
               id="time"
               name="time"
@@ -173,54 +173,54 @@ const CreateEvent = ({ onEventCreated }) => {
               value={form.time}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
             />
           </div>
           <div>
-            <Label htmlFor="location.address" className="block text-gray-800 font-semibold mb-1">Address <span className="text-red-500">*</span></Label>
+            <Label htmlFor="location.address" className="block text-[#4a90e2] font-semibold mb-2">Address <span className="text-red-500">*</span></Label>
             <Input
               id="location.address"
               name="location.address"
               value={form.location.address}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
             />
           </div>
           <div>
-            <Label htmlFor="location.city" className="block text-gray-800 font-semibold mb-1">City <span className="text-red-500">*</span></Label>
+            <Label htmlFor="location.city" className="block text-[#4a90e2] font-semibold mb-2">City <span className="text-red-500">*</span></Label>
             <Input
               id="location.city"
               name="location.city"
               value={form.location.city}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
             />
           </div>
           <div>
-            <Label htmlFor="location.country" className="block text-gray-800 font-semibold mb-1">Country <span className="text-red-500">*</span></Label>
+            <Label htmlFor="location.country" className="block text-[#4a90e2] font-semibold mb-2">Country <span className="text-red-500">*</span></Label>
             <Input
               id="location.country"
               name="location.country"
               value={form.location.country}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
             />
           </div>
           <div>
-            <Label htmlFor="image" className="block text-gray-800 font-semibold mb-1">Event Image</Label>
+            <Label htmlFor="image" className="block text-[#4a90e2] font-semibold mb-2">Event Image</Label>
             <Input
               id="image"
               type="file"
               accept="image/*"
               onChange={handleImageChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
             />
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
-          <Button type="submit" className="w-full bg-gray-900 text-white py-2 rounded-md hover:bg-gray-800 transition-colors" disabled={loading}>
+          <Button type="submit" className="w-full bg-[#4a90e2] text-white py-3 rounded-xl hover:bg-[#357abd] transition-colors text-lg" disabled={loading}>
             {loading ? 'Creating...' : 'Create Event'}
           </Button>
         </form>
