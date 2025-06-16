@@ -65,13 +65,13 @@ export const EventList = ({ lat, lon, keyword: externalKeyword }) => {
             onClick={() =>
               setSelectedFilter((prev) => (prev === label ? '' : label))
             }
-            className={`px-3 py-2 rounded-xl border transition text-xs font-semibold tracking-wide shadow-sm ${
+            className={`px-3 py-2 rounded-xl border transition text-2xl font-bold relative z-50 overflow-visible ${
               selectedFilter === label
-                ? 'bg-[#4a90e2] text-white border-[#4a90e2] shadow-lg'
+                ? 'bg-purple-700 text-yellow-300'
                 : 'bg-white text-[#4a90e2] border-[#4a90e2]/30 hover:bg-[#eaf4fd]'
             }`}
           >
-            <span className="mr-1 text-lg">{icon}</span> {label}
+            {label}
           </button>
         ))}
       </div>

@@ -20,13 +20,13 @@ export const FilterSelector = ({ activeFilter, setFilter, filterIcons = [] }) =>
               flex flex-col items-center justify-center gap-0.5 px-4 py-1.5 rounded-lg w-full
               transition-all duration-200 ease-in-out
               ${isActive 
-                ? "bg-[#4a90e2] text-white shadow-md" 
+                ? "bg-white text-[#4a90e2] font-bold shadow-md border-[#4a90e2]" 
                 : "bg-white text-[#4a90e2] hover:bg-[#eaf4fd]"
               }
               ${label === 'Events' ? 'col-span-2 mx-auto' : ''}
             `}
           >
-            <Icon className={`text-base ${isActive ? "text-white" : "text-[#4a90e2]"}`} />
+            <Icon className={`text-base ${isActive ? "text-[#4a90e2]" : "text-[#4a90e2]"}`} />
             <span className="text-xs font-medium tracking-wide text-center mt-0.5">{label}</span>
           </motion.button>
         );

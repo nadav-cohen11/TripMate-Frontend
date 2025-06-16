@@ -38,7 +38,7 @@ export const Map = () => {
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#eaf4fd] via-[#eaf4fd] to-[#cbe7fa]">
       <TripMateTitle />
 
-      <div className="z-10 relative flex flex-col gap-4 pt-28">
+      <div className="z-10 relative flex flex-col gap-4 pt-28 mx-auto max-w-screen-xl px-4 md:px-8">
         <h2 className="text-3xl font-bold mb-2 text-[#4a90e2] text-center tracking-wide">Find Near You</h2>
         
         <div className="flex flex-col items-center gap-3 bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl p-3 border border-[#cbe7fa] w-full">
