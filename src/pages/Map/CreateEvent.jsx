@@ -23,6 +23,7 @@ const CreateEvent = ({ onEventCreated }) => {
     name: '',
     description: '',
     date: '',
+    time: '',
     location: {
       address: '',
       city: '',
@@ -65,7 +66,7 @@ const CreateEvent = ({ onEventCreated }) => {
     setError('');
     setLoading(true);
 
-    if (!form.name || !form.date || !form.location.address || !form.location.city || !form.location.country) {
+    if (!form.name || !form.date || !form.time || !form.location.address || !form.location.city || !form.location.country) {
       setError('Please fill in all required fields.');
       setLoading(false);
       return;
@@ -75,7 +76,7 @@ const CreateEvent = ({ onEventCreated }) => {
       const formData = new FormData();
       formData.append('name', form.name);
       formData.append('description', form.description);
-      formData.append('date', form.date);
+      formData.append('date', `${form.date}T${form.time}:00`);
       formData.append('address', form.location.address);
       formData.append('city', form.location.city);
       formData.append('country', form.location.country);
@@ -91,6 +92,7 @@ const CreateEvent = ({ onEventCreated }) => {
           name: '',
           description: '',
           date: '',
+          time: '',
           location: {
             address: '',
             city: '',
@@ -103,7 +105,14 @@ const CreateEvent = ({ onEventCreated }) => {
         }
       }
     } catch (err) {
-      setError('Failed to create event. Please try again.');
+      console.error('Error creating event:', err);
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
+      } else if (err.message) {
+        setError(`Failed to create event: ${err.message}`);
+      } else {
+        setError('Failed to create event. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -117,36 +126,38 @@ const CreateEvent = ({ onEventCreated }) => {
           <span>Add Personal Event</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="rounded-lg bg-white shadow-xl max-w-md p-6">
         <DialogHeader>
-          <DialogTitle>Create Personal Event</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-xl font-bold text-gray-900">Create Personal Event</DialogTitle>
+          <DialogDescription className="text-sm text-gray-600">
             Add your own event to the map. Fill in the details below.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div>
-            <Label htmlFor="name">Event Name *</Label>
+            <Label htmlFor="name" className="block text-gray-800 font-semibold mb-1">Event Name <span className="text-red-500">*</span></Label>
             <Input
               id="name"
               name="name"
               value={form.name}
               onChange={handleChange}
               required
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div>
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description" className="block text-gray-800 font-semibold mb-1">Description</Label>
             <Textarea
               id="description"
               name="description"
               value={form.description}
               onChange={handleChange}
               placeholder="Tell us about your event..."
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div>
-            <Label htmlFor="date">Event Date *</Label>
+            <Label htmlFor="date" className="block text-gray-800 font-semibold mb-1">Event Date <span className="text-red-500">*</span></Label>
             <DatePicker
               date={form.date}
               handleInputChange={handleChange}
@@ -154,46 +165,62 @@ const CreateEvent = ({ onEventCreated }) => {
             />
           </div>
           <div>
-            <Label htmlFor="location.address">Address *</Label>
+            <Label htmlFor="time" className="block text-gray-800 font-semibold mb-1">Event Time <span className="text-red-500">*</span></Label>
+            <Input
+              id="time"
+              name="time"
+              type="time"
+              value={form.time}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <Label htmlFor="location.address" className="block text-gray-800 font-semibold mb-1">Address <span className="text-red-500">*</span></Label>
             <Input
               id="location.address"
               name="location.address"
               value={form.location.address}
               onChange={handleChange}
               required
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div>
-            <Label htmlFor="location.city">City *</Label>
+            <Label htmlFor="location.city" className="block text-gray-800 font-semibold mb-1">City <span className="text-red-500">*</span></Label>
             <Input
               id="location.city"
               name="location.city"
               value={form.location.city}
               onChange={handleChange}
               required
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div>
-            <Label htmlFor="location.country">Country *</Label>
+            <Label htmlFor="location.country" className="block text-gray-800 font-semibold mb-1">Country <span className="text-red-500">*</span></Label>
             <Input
               id="location.country"
               name="location.country"
               value={form.location.country}
               onChange={handleChange}
               required
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <div>
-            <Label htmlFor="image">Event Image</Label>
+            <Label htmlFor="image" className="block text-gray-800 font-semibold mb-1">Event Image</Label>
             <Input
               id="image"
               type="file"
               accept="image/*"
               onChange={handleImageChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
-          <Button type="submit" className="w-full" disabled={loading}>
+          <Button type="submit" className="w-full bg-gray-900 text-white py-2 rounded-md hover:bg-gray-800 transition-colors" disabled={loading}>
             {loading ? 'Creating...' : 'Create Event'}
           </Button>
         </form>
