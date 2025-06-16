@@ -67,7 +67,7 @@ export const EventList = ({ lat, lon, keyword: externalKeyword }) => {
             }
             className={`px-3 py-2 rounded-xl border transition text-2xl font-bold relative z-50 overflow-visible ${
               selectedFilter === label
-                ? 'bg-purple-700 text-yellow-300'
+                ? 'bg-[#4a90e2] text-white'
                 : 'bg-white text-[#4a90e2] border-[#4a90e2]/30 hover:bg-[#eaf4fd]'
             }`}
           >
