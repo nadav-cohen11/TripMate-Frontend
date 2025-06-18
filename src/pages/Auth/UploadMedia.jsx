@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { uploadFiles, deleteFile } from '@/api/mediaApi';
 import { toast } from 'react-toastify';
 import { extractBackendError } from '@/utils/errorUtils';
 import { Spinner } from '@/components/ui/spinner';
-import { X, Image, Film, Upload, Trash2, Users } from 'lucide-react';
+import { Image, Film, Upload, Trash2, Users } from 'lucide-react';
 import { getAllTripsForUser } from '@/api/userApi';
+import { getUserById } from '@/api/userApi';
+import { useAuth } from '@/context/AuthContext';
 
 const UploadMediaPage = () => {
   const [mediaType, setMediaType] = useState('photos');
@@ -17,10 +19,8 @@ const UploadMediaPage = () => {
   const [selectedTrip, setSelectedTrip] = useState(null);
   const [tagParticipants, setTagParticipants] = useState(false);
   const [tripParticipants, setTripParticipants] = useState([]);
-
+  const { user } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
-  const { photos, reels } = location.state || { photos: [], reels: [] };
 
   useEffect(() => {
     const fetchTrips = async () => {
@@ -36,6 +36,19 @@ const UploadMediaPage = () => {
       fetchTrips();
     }
   }, [mediaType]);
+
+  const refetchUserMedia = async () => {
+    try {
+      const userData = await getUserById(user);
+      if (mediaType === 'photos') {
+        setExistingMedia(userData.photos || []);
+      } else {
+        setExistingMedia(userData.reels || []);
+      }
+    } catch (err) {
+      toast.error('Failed to refetch media');
+    }
+  };
 
   const handleTripChange = async (tripId) => {
     setSelectedTrip(tripId);
@@ -81,14 +94,8 @@ const UploadMediaPage = () => {
   };
 
   useEffect(() => {
-    if (mediaType === 'photos' && location.state?.photos &&
-      JSON.stringify(existingMedia) !== JSON.stringify(location.state.photos)) {
-      setExistingMedia(location.state.photos);
-    } else if (mediaType === 'reels' && location.state?.reels &&
-      JSON.stringify(existingMedia) !== JSON.stringify(location.state.reels)) {
-      setExistingMedia(location.state.reels);
-    }
-  }, [location.state, mediaType]);
+    refetchUserMedia();
+  }, [mediaType]);
 
   const uploadMutation = useMutation({
     mutationFn: () => {
@@ -143,8 +150,9 @@ const UploadMediaPage = () => {
       }
       console.error('Delete error:', error);
     },
-    onSuccess: (_, mediaId) => {
+    onSuccess: async () => {
       toast.success(`${mediaType === 'photos' ? 'Photo' : 'Reel'} deleted successfully!`);
+      await refetchUserMedia();
     },
   });
 
@@ -156,22 +164,68 @@ const UploadMediaPage = () => {
   };
 
   const removeFile = (index) => {
-    if (window.confirm(`Are you sure you want to remove this ${mediaType === 'photos' ? 'photo' : 'reel'}?`)) {
-      const updatedFiles = [...selectedFiles];
-      const updatedPreviews = [...previewURLs];
-      updatedFiles.splice(index, 1);
-      URL.revokeObjectURL(updatedPreviews[index]);
-      updatedPreviews.splice(index, 1);
-      setSelectedFiles(updatedFiles);
-      setPreviewURLs(updatedPreviews);
-    }
+    toast.info(
+      <div>
+        <span>
+          Are you sure you want to remove this {mediaType === 'photos' ? 'photo' : 'reel'}?
+        </span>
+        <div className="mt-2 flex gap-2">
+          <button
+            onClick={() => toast.dismiss()}
+            className="px-3 py-1 bg-gray-300 rounded"
+          >
+            <button
+              onClick={() => {
+                const updatedFiles = [...selectedFiles];
+                const updatedPreviews = [...previewURLs];
+                updatedFiles.splice(index, 1);
+                URL.revokeObjectURL(updatedPreviews[index]);
+                updatedPreviews.splice(index, 1);
+                setSelectedFiles(updatedFiles);
+                setPreviewURLs(updatedPreviews);
+                toast.dismiss();
+                toast.success(`${mediaType === 'photos' ? 'Photo' : 'Reel'} removed`);
+              }}
+              className="px-3 py-1 bg-red-600 text-white rounded"
+            >
+              Remove
+            </button>
+            Cancel
+          </button>
+        </div>
+      </div>,
+      { autoClose: false, closeOnClick: false }
+    );
   };
 
   const deleteExistingMedia = (mediaId) => {
-    if (window.confirm(`Are you sure you want to delete this ${mediaType === 'photos' ? 'photo' : 'reel'}?`)) {
-      deleteMutation.mutate(mediaId);
-    }
+    toast.info(
+      <div>
+        <span>
+          Are you sure you want to delete this {mediaType === 'photos' ? 'photo' : 'reel'}?
+        </span>
+        <div className="mt-2 flex gap-2">
+          <button
+            onClick={() => toast.dismiss()}
+            className="px-3 py-1 bg-gray-300 rounded"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => {
+              deleteMutation.mutate(mediaId);
+              toast.dismiss();
+            }}
+            className="px-3 py-1 bg-red-600 text-white rounded"
+          >
+            Delete
+          </button>
+        </div>
+      </div>,
+      { autoClose: false, closeOnClick: false }
+    );
   };
+
 
   const MediaPreviewCard = ({ url, index, isExisting, mediaId, mediaType }) => {
     const isDeleting = deleteMutation.isLoading && deleteMutation.variables === mediaId;
@@ -220,8 +274,8 @@ const UploadMediaPage = () => {
             {mediaType === 'photos' ? '📸 Photo Gallery' : '🎥 Reel Collection'}
           </h1>
           <p className="text-lg text-gray-600">
-            {mediaType === 'photos' 
-              ? 'Share your favorite moments from your trips' 
+            {mediaType === 'photos'
+              ? 'Share your favorite moments from your trips'
               : 'Create and share your travel stories'}
           </p>
         </div>
@@ -229,41 +283,31 @@ const UploadMediaPage = () => {
         <div className="flex justify-center mb-8">
           <div className="bg-white rounded-full p-1.5 shadow-lg">
             <button
-              className={`px-6 py-2.5 rounded-full flex items-center gap-2 transition-all duration-300 ${
-                mediaType === 'photos' 
-                  ? 'bg-blue-500 text-white shadow-md' 
+              className={`px-6 py-2.5 rounded-full flex items-center gap-2 transition-all duration-300 ${mediaType === 'photos'
+                  ? 'bg-blue-500 text-white shadow-md'
                   : 'text-gray-700 hover:bg-gray-100'
-              }`}
+                }`}
               onClick={() => {
                 setMediaType('photos');
                 setSelectedFiles([]);
                 setPreviewURLs([]);
                 setSelectedTrip(null);
-                if (location.state?.photos) {
-                  setExistingMedia(location.state.photos);
-                } else {
-                  setExistingMedia([]);
-                }
+                refetchUserMedia();
               }}
             >
               <Image size={20} />
               Photos
             </button>
             <button
-              className={`px-6 py-2.5 rounded-full flex items-center gap-2 transition-all duration-300 ${
-                mediaType === 'reels' 
-                  ? 'bg-blue-500 text-white shadow-md' 
+              className={`px-6 py-2.5 rounded-full flex items-center gap-2 transition-all duration-300 ${mediaType === 'reels'
+                  ? 'bg-blue-500 text-white shadow-md'
                   : 'text-gray-700 hover:bg-gray-100'
-              }`}
+                }`}
               onClick={() => {
                 setMediaType('reels');
                 setSelectedFiles([]);
                 setPreviewURLs([]);
-                if (location.state?.reels) {
-                  setExistingMedia(location.state.reels);
-                } else {
-                  setExistingMedia([]);
-                }
+                refetchUserMedia();
               }}
             >
               <Film size={20} />
