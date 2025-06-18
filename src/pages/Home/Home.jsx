@@ -11,7 +11,6 @@ import { useQuery } from '@tanstack/react-query';
 import TripMateTitle from '@/components/ui/TripMateTitle';
 import { Spinner } from '@/components/ui/spinner';
 import HomeFilters from './HomeFilters';
-import { HOME_FILTERS } from '@/constants/HomeFilters';
 const STALE_TIME = 1000 * 60 * 5;
 const SWIPE_ANIMATION_DURATION = 1000;
 const COMPATIBILITY_THRESHOLD = 70;
@@ -75,13 +74,20 @@ const Home = () => {
     const usersWithAge = users.map((user) => ({
       ...user,
       age: user.birthDate
-      ? Math.floor(
-        (Date.now() - new Date(user.birthDate).getTime()) / (1000 * 60 * 60 * 24 * 365.25)
-        )
-      : null,
-    }))
-    setFilterdUsers(usersWithAge);
-    setOriginalUsers(usersWithAge);
+        ? Math.floor(
+            (Date.now() - new Date(user.birthDate).getTime()) /
+              (1000 * 60 * 60 * 24 * 365.25),
+          )
+        : null,
+    }));
+
+    const isSame =
+      JSON.stringify(usersWithAge) === JSON.stringify(originalUsers);
+
+    if (!isSame) {
+      setFilterdUsers(usersWithAge);
+      setOriginalUsers(usersWithAge);
+    }
   }, [users]);
 
   const handleSwipe = useCallback((dir, userId) => {
