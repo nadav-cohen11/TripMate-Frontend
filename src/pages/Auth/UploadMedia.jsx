@@ -378,6 +378,7 @@ const UploadMediaPage = () => {
                 Reels
               </button>
             </div>
+
           </div>
 
           <div className='space-y-5 sm:space-y-7'>
@@ -505,6 +506,7 @@ const UploadMediaPage = () => {
             </div>
             <p className='mt-5 text-gray-800 font-medium text-base'>
               Uploading your {mediaType}...
+
             </p>
             <p className='text-sm text-gray-500 mt-2'>
               Please wait while we process your files

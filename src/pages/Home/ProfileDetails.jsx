@@ -1,4 +1,4 @@
-import { Globe2, CalendarDays, Users, Sparkles, User, Star } from 'lucide-react';
+import { Globe2, CalendarDays, Sparkles, User, Star } from 'lucide-react';
 import TravelPreferencesModal from '../Auth/TravelPreferencesModal';
 import { IoPencil } from 'react-icons/io5';
 import ReviewList from './ReviewList';
@@ -7,11 +7,11 @@ import { useAuth } from '../../context/AuthContext';
 import { useState } from 'react';
 import { FaSuitcase } from 'react-icons/fa';
 
-const ProfileDetails = ({ user, birthDate, city, country, travel, distance, compatibilityScore }) => {
+const ProfileDetails = ({ user, birthDate, city, country, travel, distance, compatibilityScore, gender }) => {
   const [isEditingPreferences, setIsEditingPreferences] = useState(false);
   const { userId } = useParams();
   const { user: currUser } = useAuth();
-  
+
   const roundedDistance = distance ? Math.round(distance) : null;
   const age = birthDate
     ? Math.floor((new Date() - new Date(birthDate)) / (1000 * 60 * 60 * 24 * 365.25))
@@ -46,7 +46,7 @@ const ProfileDetails = ({ user, birthDate, city, country, travel, distance, comp
         </div>
       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-        <p><span className="inline-block w-1 h-5 bg-[#7ec3ee] rounded mr-2 align-middle"></span><span className="text-base text-[#7ec3ee] font-bold tracking-wide align-middle">Gender:</span> <span className="font-normal text-gray-700">{user.gender || 'Not specified'}</span></p>
+        <p><span className="inline-block w-1 h-5 bg-[#7ec3ee] rounded mr-2 align-middle"></span><span className="text-base text-[#7ec3ee] font-bold tracking-wide align-middle">Gender:</span> <span className="font-normal text-gray-700">{gender || 'Not specified'}</span></p>
         <p>
           <span className="inline-block w-1 h-5 bg-[#7ec3ee] rounded mr-2 align-middle"></span>
           <span className="text-base text-[#7ec3ee] font-bold tracking-wide align-middle">Languages:</span>
@@ -69,7 +69,6 @@ const ProfileDetails = ({ user, birthDate, city, country, travel, distance, comp
             </button>
           )}
 
-          {/* Travel Dates */}
           <div className="flex items-center gap-2 text-[#4a90e2]">
             <CalendarDays size={18} />
             <span>
@@ -116,7 +115,7 @@ const ProfileDetails = ({ user, birthDate, city, country, travel, distance, comp
             </span>
           </div>
           <div className="flex items-center gap-2 text-[#4a90e2]">
-            <FaSuitcase size={18} /> {/* or any icon representing style */}
+            <FaSuitcase size={18} /> 
             <span>
               <span className="font-semibold text-[#4a90e2]">Travel Style:</span>{' '}
               {travel.travelStyle || 'N/A'}

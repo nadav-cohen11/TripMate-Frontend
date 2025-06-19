@@ -65,19 +65,22 @@ const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences })
     }
   };
 
-  const handleSubmit = () => {
-    const formatted = {
-      destinations: formData.destinations.split(',').map((d) => d.trim()),
-      travelStyle: formData.travelStyle,
-      groupSize: Number(formData.groupSize),
-      travelDates: formData.travelDates,
-      ageRange: {
-        min: Number(formData.ageRange.min),
-        max: Number(formData.ageRange.max),
-      },
-      interests: formData.interests.split(',').map((i) => i.trim().toLowerCase()),
-    };
+  const formatted = {
+    destinations: formData.destinations.split(',').map((d) => d.trim()),
+    travelStyle: formData.travelStyle,
+    groupSize: Number(formData.groupSize),
+    travelDates: {
+      start: new Date(formData.travelDates.start),
+      end: new Date(formData.travelDates.end),
+    },
+    ageRange: {
+      min: Number(formData.ageRange.min),
+      max: Number(formData.ageRange.max),
+    },
+    interests: formData.interests.split(',').map((i) => i.trim().toLowerCase()),
+  };
 
+  const handleSubmit = () => {
     mutation.mutate(formatted);
   };
 
@@ -109,7 +112,6 @@ const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences })
             >
               <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all space-y-4 relative">
 
-                {/* Optional: Overlay spinner while loading */}
                 {mutation.isLoading && (
                   <div className="absolute inset-0 bg-white bg-opacity-70 flex items-center justify-center rounded-2xl z-20">
                     <Spinner size={64} color="text-blue-500" />
@@ -121,8 +123,6 @@ const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences })
                 </Dialog.Title>
 
                 <div className="space-y-4">
-                  {/* Your inputs here (same as before) */}
-                  {/* Destinations */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Destinations</label>
                     <input
@@ -140,98 +140,117 @@ const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences })
                       <label className="block text-sm font-medium text-gray-700">Start Date</label>
                       <DatePicker
                         date={formData.travelDates.start}
-                        handleInputChange={(val) =>
+                        handleInputChange={(e) =>
                           setFormData((prev) => ({
                             ...prev,
-                            travelDates: { ...prev.travelDates, start: val },
+                            travelDates: { ...prev.travelDates, start: e.target.value },
                           }))
                         }
                         name="start"
                         disabled={mutation.isLoading}
                       />
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">End Date</label>
+                        <DatePicker
+                          date={formData.travelDates.end}
+                          handleInputChange={(e) =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              travelDates: { ...prev.travelDates, end: e.target.value },
+                            }))
+                          }
+                          name="end"
+                          disabled={mutation.isLoading}
+                        />
+                      </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">End Date</label>
-                      <DatePicker
-                        date={formData.travelDates.end}
-                        handleInputChange={(val) =>
-                          setFormData((prev) => ({
-                            ...prev,
-                            travelDates: { ...prev.travelDates, end: val },
-                          }))
-                        }
-                        name="end"
-                        disabled={mutation.isLoading}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Group Size</label>
-                    <input
-                      type="number"
-                      name="groupSize"
-                      value={formData.groupSize}
-                      onChange={handleChange}
-                      className="input w-full"
-                      min={1}
-                      disabled={mutation.isLoading}
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Age Min</label>
+                      <label className="block text-sm font-medium text-gray-700">Group Size</label>
                       <input
                         type="number"
-                        name="min"
-                        value={formData.ageRange.min}
+                        name="groupSize"
+                        value={formData.groupSize}
                         onChange={handleChange}
                         className="input w-full"
-                        min={0}
+                        min={1}
+                        disabled={mutation.isLoading}
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Age Min</label>
+                        <input
+                          type="number"
+                          name="min"
+                          value={formData.ageRange.min}
+                          onChange={handleChange}
+                          className="input w-full"
+                          min={0}
+                          disabled={mutation.isLoading}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Age Max</label>
+                        <input
+                          type="number"
+                          name="max"
+                          value={formData.ageRange.max}
+                          onChange={handleChange}
+                          className="input w-full"
+                          min={0}
+                          disabled={mutation.isLoading}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Interests</label>
+                      <input
+                        type="text"
+                        name="interests"
+                        value={formData.interests}
+                        onChange={handleChange}
+                        placeholder="e.g. hiking, museums"
+                        className="input w-full"
                         disabled={mutation.isLoading}
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Age Max</label>
-                      <input
-                        type="number"
-                        name="max"
-                        value={formData.ageRange.max}
+                      <label className="block text-sm font-medium text-gray-700">Travel Style</label>
+                      <select
+                        name="travelStyle"
+                        value={formData.travelStyle}
                         onChange={handleChange}
                         className="input w-full"
-                        min={0}
                         disabled={mutation.isLoading}
-                      />
+                      >
+                        <option value="">Select</option>
+                        <option value="budget">Budget</option>
+                        <option value="luxury">Luxury</option>
+                        <option value="adventure">Adventure</option>
+                        <option value="cultural">Cultural</option>
+                        <option value="nature">Nature</option>
+                        <option value="social">Social</option>
+                      </select>
                     </div>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Interests</label>
-                    <input
-                      type="text"
-                      name="interests"
-                      value={formData.interests}
-                      onChange={handleChange}
-                      placeholder="e.g. hiking, museums"
-                      className="input w-full"
-                      disabled={mutation.isLoading}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Travel Style</label>
-                    <select
-                      name="travelStyle"
-                      value={formData.travelStyle}
-                      onChange={handleChange}
-                      className="input w-full"
+
+                  <div className="flex justify-end gap-3 pt-6">
+                    <button
+                      type="button"
+                      onClick={onClose}
+                      className="px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200 text-sm font-medium text-gray-700"
                       disabled={mutation.isLoading}
                     >
-                      <option value="">Select</option>
-                      <option value="budget">Budget</option>
-                      <option value="luxury">Luxury</option>
-                      <option value="adventure">Adventure</option>
-                      <option value="cultural">Cultural</option>
-                      <option value="nature">Nature</option>
-                      <option value="social">Social</option>
-                    </select>
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleSubmit}
+                      disabled={mutation.isLoading}
+                      className="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold disabled:opacity-50"
+                    >
+                      {mutation.isLoading ? 'Saving...' : 'Save'}
+                    </button>
                   </div>
                 </div>
 
@@ -253,6 +272,7 @@ const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences })
                     {mutation.isLoading ? 'Saving...' : 'Save'}
                   </button>
                 </div>
+
 
               </Dialog.Panel>
             </Transition.Child>
