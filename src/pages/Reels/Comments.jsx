@@ -20,7 +20,7 @@ const Comments = ({ reel }) => {
 
   return (
     <div className="w-full mt-2 bg-white/10 rounded-xl px-4 py-3 backdrop-blur-md">
-      <div className="max-h-32 overflow-y-auto space-y-2 text-white text-sm pr-2 custom-scroll">
+      <div className="max-h-32 overflow-y-auto space-y-2 text-black text-sm pr-2 custom-scroll">
         {comments.map((comment, idx) => (
           <p key={idx} className="break-words">
             <strong>{comment.userFullName || "User"}:</strong> {comment.text}
