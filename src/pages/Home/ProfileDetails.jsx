@@ -1,4 +1,4 @@
-import { Globe2, CalendarDays, Users, Sparkles, User, Star } from 'lucide-react';
+import { Globe2, CalendarDays, Sparkles, User, Star } from 'lucide-react';
 import TravelPreferencesModal from '../Auth/TravelPreferencesModal';
 import { IoPencil } from 'react-icons/io5';
 import ReviewList from './ReviewList';
@@ -7,7 +7,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useState } from 'react';
 import { FaSuitcase } from 'react-icons/fa';
 
-const ProfileDetails = ({ user, birthDate, city, country, travel, distance, compatibilityScore,gender }) => {
+const ProfileDetails = ({ user, birthDate, city, country, travel, distance, compatibilityScore, gender }) => {
   const [isEditingPreferences, setIsEditingPreferences] = useState(false);
   const { userId } = useParams();
   const { user: currUser } = useAuth();
@@ -69,7 +69,6 @@ const ProfileDetails = ({ user, birthDate, city, country, travel, distance, comp
             </button>
           )}
 
-          {/* Travel Dates */}
           <div className="flex items-center gap-2 text-[#4a90e2]">
             <CalendarDays size={18} />
             <span>
