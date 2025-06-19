@@ -78,7 +78,7 @@ const Chats = () => {
       <TripMateTitle />
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        className='sm:hidden fixed top-4 right-4 z-30 bg-white/80 rounded-full p-2 shadow-md border border-blue-200'
+        className='sm:hidden fixed top-4 right-4 z-30 bg-white/80 rounded-full p-2 shadow-md border border-[#4a90e2]/20'
         aria-label='Toggle chat list'
       >
         <svg
@@ -91,22 +91,20 @@ const Chats = () => {
           <path d='M4 8h20M4 14h20M4 20h20' />
         </svg>
       </button>
-      <div className='flex flex-col lg:flex-row min-h-screen pt-24 px-4 lg:px-12 gap-6'>
-        {isSidebarOpen && (
-          <div className='w-full lg:w-1/3'>
-            <ChatList
-              chats={chats}
-              selectedChatId={selectedChatId}
-              userId={userId}
-              socket={socketInstance}
-              setChats={setChats}
-              setSelectedChatId={setSelectedChatId}
-              isSidebarOpen={isSidebarOpen}
-              onCloseSidebar={() => setIsSidebarOpen(false)}
-            />
-          </div>
-        )}
-        <div className={`w-full ${isSidebarOpen ? 'lg:w-2/3' : 'lg:w-full'}`}>
+      <div className='flex flex-col-reverse sm:flex-row min-h-screen pt-20 sm:pt-24 px-2 sm:px-4 lg:px-12 gap-2 sm:gap-6 pb-24'>
+        <div className={`w-full sm:w-1/3 max-w-full ${isSidebarOpen ? '' : 'hidden sm:block'}`}>
+          <ChatList
+            chats={chats}
+            selectedChatId={selectedChatId}
+            userId={userId}
+            socket={socketInstance}
+            setChats={setChats}
+            setSelectedChatId={setSelectedChatId}
+            isSidebarOpen={isSidebarOpen}
+            onCloseSidebar={() => setIsSidebarOpen(false)}
+          />
+        </div>
+        <div className={`w-full sm:w-2/3 max-w-full min-w-0`}>
           <ChatWindow
             selectedChat={
               selectedChatId

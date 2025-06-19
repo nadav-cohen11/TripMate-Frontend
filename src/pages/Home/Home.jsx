@@ -135,7 +135,7 @@ const Home = () => {
         <p className='mt-2'>Check back later or adjust your preferences.</p>
         <button
           onClick={() => refetch()}
-          className='mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors'
+          className='mt-4 px-4 py-2 bg-white text-blue-500 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors'
         >
           Refresh
         </button>

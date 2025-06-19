@@ -33,10 +33,10 @@ const Likes = ({ reel }) => {
       >
         <Heart
           className="w-5 h-5"
-          color={hasLiked ? "#FF0000" : "rgba(255,255,255,0.7)"}
+          color={hasLiked ? "#FF0000" : "#222"}
           fill={hasLiked ? "#FF0000" : "none"}
         />
-        <span className="text-sm text-white font-medium">{likesCount}</span>
+        <span className="text-sm font-medium" style={{ color: hasLiked ? '#FF0000' : '#222' }}>{likesCount}</span>
       </button>
     </div>
   );

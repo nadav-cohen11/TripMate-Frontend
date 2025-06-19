@@ -18,13 +18,14 @@ const FriendsList = ({ userId, socket, setChats, matches })  => {
             w-full sm:w-auto
             px-6 py-3
             rounded-xl
-            bg-gradient-to-r from-blue-500 to-indigo-600
-            text-white
+            bg-white
+            text-blue-500
+            border border-blue-200
             font-semibold
             shadow-lg
-            hover:from-blue-600 hover:to-indigo-700
+            hover:bg-blue-50
             transition-all duration-200
-            focus:outline-none focus:ring-2 focus:ring-blue-400
+            focus:outline-none focus:ring-2 focus:ring-blue-200
             flex items-center gap-2
           "
         >

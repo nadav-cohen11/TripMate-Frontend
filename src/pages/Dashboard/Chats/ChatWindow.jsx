@@ -138,7 +138,7 @@ const ChatWindow = ({
           onClick={handleHeaderClick}
           tabIndex={0}
           role='button'
-          className='mb-4 border-b pb-3 relative cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-blue-500 rounded'
+          className='mb-4 border-b pb-3 relative cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-[#4a90e2]/50 rounded'
           aria-label={
             isGroupChat ? 'Open group details' : `Chat with ${chatTitle}`
           }
@@ -232,7 +232,7 @@ const ChatWindow = ({
                           <div className='flex justify-between mt-2 items-end gap-2'>
                             {!translated && (
                               <button
-                                className='flex text-xs cursor-pointer text-blue-600 hover:underline'
+                                className='flex text-xs cursor-pointer text-[#4a90e2] hover:underline'
                                 onClick={async () => {
                                   const result = await translate(msg.content);
                                   setTranslatedMsgs((prev) => ({
@@ -279,12 +279,12 @@ const ChatWindow = ({
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder='Type a message...'
-            className='flex-1 px-3 py-2 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base'
+            className='flex-1 px-3 py-2 rounded-2xl border border-[#4a90e2]/20 focus:outline-none focus:ring-2 focus:ring-[#4a90e2]/50 text-sm sm:text-base'
             aria-label='Type your message'
           />
           <button
             type='submit'
-            className='px-4 py-2 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base transition'
+            className='px-4 py-2 rounded-2xl bg-[#4a90e2] hover:bg-[#4a90e2]/90 text-white text-sm sm:text-base transition'
             aria-label='Send message'
           >
             Send
