@@ -248,7 +248,7 @@ const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences })
                     type="button"
                     onClick={handleSubmit}
                     disabled={mutation.isLoading}
-                    className="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold disabled:opacity-50"
+                    className="px-4 py-2 rounded-md bg-white text-blue-500 border border-blue-200 hover:bg-blue-50 text-sm font-semibold disabled:opacity-50"
                   >
                     {mutation.isLoading ? 'Saving...' : 'Save'}
                   </button>

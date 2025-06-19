@@ -156,13 +156,14 @@ const CreateTrip = ({ userId, socket, setChats, matches }) => {
               w-full sm:w-auto
               px-6 py-3
               rounded-xl
-              bg-gradient-to-r from-blue-500 to-indigo-600
-              text-white
+              bg-white
+              text-[#4a90e2]
+              border border-[#4a90e2]/20
               font-semibold
               shadow-lg
-              hover:from-blue-600 hover:to-indigo-700
+              hover:bg-[#4a90e2]/5
               transition-all duration-200
-              focus:outline-none focus:ring-2 focus:ring-blue-400
+              focus:outline-none focus:ring-2 focus:ring-[#4a90e2]/20
               flex items-center gap-2
             '
             onClick={() => setOpen(true)}
@@ -274,13 +275,14 @@ const CreateTrip = ({ userId, socket, setChats, matches }) => {
                       w-full
                       px-6 py-3
                       rounded-xl
-                      bg-gradient-to-r from-blue-500 to-indigo-600
-                      text-white
+                      bg-white
+                      text-[#4a90e2]
+                      border border-[#4a90e2]/20
                       font-semibold
                       shadow-lg
-                      hover:from-blue-600 hover:to-indigo-700
+                      hover:bg-[#4a90e2]/5
                       transition-all duration-200
-                      focus:outline-none focus:ring-2 focus:ring-blue-400
+                      focus:outline-none focus:ring-2 focus:ring-[#4a90e2]/20
                       flex items-center gap-2
                     '
                     onClick={handleStepOneValidation}

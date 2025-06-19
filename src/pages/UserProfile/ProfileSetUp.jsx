@@ -177,9 +177,9 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           <div className='flex gap-2'>
             {' '}
             {loading ? (
-              <Spinner size={64} color='text-blue-500' />
+              <Spinner size={64} color='text-[#4a90e2]' />
             ) : previewURLs.length > 0 ? (
-              <div className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'>
+              <div className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-[#4a90e2]/20'>
                 <img
                   src={previewURLs[0]}
                   alt='preview'
@@ -187,7 +187,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
                 />
               </div>
             ) : imgURLs.length > 0 ? (
-              <div className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'>
+              <div className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-[#4a90e2]/20'>
                 <img
                   src={photo}
                   alt='user profile'
@@ -195,7 +195,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
                 />
               </div>
             ) : imgURLs.length > 0 ? (
-              <div className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300'>
+              <div className='h-16 w-16 rounded-full bg-gray-200 overflow-hidden shadow-md border border-[#4a90e2]/20'>
                 <img
                   src={imgURLs[0]}
                   alt='avatar'
@@ -203,10 +203,10 @@ export default function ProfileSetup({ nextStep, formRegister }) {
                 />
               </div>
             ) : (
-              <div className='h-20 w-20 rounded-full bg-gray-200 overflow-hidden shadow-md border border-gray-300' />
+              <div className='h-20 w-20 rounded-full bg-gray-200 overflow-hidden shadow-md border border-[#4a90e2]/20' />
             )}
           </div>
-          <label className='text-xs text-blue-600 underline cursor-pointer'>
+          <label className='text-xs text-[#4a90e2] underline cursor-pointer'>
             Upload Profile Picture
             <input
               type='file'
@@ -225,7 +225,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           disabled={!formRegister}
           placeholder='Full Name'
           required
-          className='input-white bg-white border border-gray-300 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200 text-sm'
+          className='input-white bg-white border border-[#4a90e2]/20 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#4a90e2]/30 disabled:bg-gray-200 text-sm'
         />
 
         <select
@@ -234,7 +234,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           disabled={!formRegister}
           onChange={handleInputChange}
           required
-          className='input-white bg-white border border-gray-300 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-200 text-sm'
+          className='input-white bg-white border border-[#4a90e2]/20 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#4a90e2]/30 disabled:bg-gray-200 text-sm'
         >
           <option value=''>Gender</option>
           {genders.map((g) => (
@@ -322,10 +322,10 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           placeholder='Bio (optional)'
           value={form.bio}
           onChange={handleInputChange}
-          className='input-white bg-white border border-gray-300 rounded-xl px-3 py-1.5 resize-none focus:outline-none focus:ring-2 focus:ring-blue-300 text-sm'
+          className='input-white bg-white border border-[#4a90e2]/20 rounded-xl px-3 py-1.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#4a90e2]/30 text-sm'
         />
 
-        <div className='flex items-center gap-2 border border-gray-300 rounded-xl px-3 py-1.5 bg-white focus-within:ring-2 focus-within:ring-pink-300 text-sm'>
+        <div className='flex items-center gap-2 border border-[#4a90e2]/20 rounded-xl px-3 py-1.5 bg-white focus-within:ring-2 focus-within:ring-[#4a90e2]/30 text-sm'>
           <FaInstagram className='text-pink-500 text-base' />
           <span className='text-gray-500 text-xs'>instagram.com/</span>
           <input
@@ -338,8 +338,8 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           />
         </div>
 
-        <div className='flex items-center gap-2 border border-gray-300 rounded-xl px-3 py-1.5 bg-white focus-within:ring-2 focus-within:ring-blue-300 text-sm'>
-          <FaFacebook className='text-blue-600 text-base' />
+        <div className='flex items-center gap-2 border border-[#4a90e2]/20 rounded-xl px-3 py-1.5 bg-white focus-within:ring-2 focus-within:ring-[#4a90e2]/30 text-sm'>
+          <FaFacebook className='text-[#4a90e2] text-base' />
           <span className='text-gray-500 text-xs'>facebook.com/</span>
           <input
             type='text'
@@ -353,7 +353,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
 
         <button
           type='submit'
-          className='bg-blue-500 hover:bg-blue-600 text-white rounded-xl py-2 font-medium transition text-sm'
+          className='bg-[#4a90e2] hover:bg-[#4a90e2]/90 text-white rounded-xl py-2 font-medium transition text-sm'
         >
           Submit
         </button>

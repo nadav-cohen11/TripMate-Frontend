@@ -78,7 +78,7 @@ const Chats = () => {
       <TripMateTitle />
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        className='sm:hidden fixed top-4 right-4 z-30 bg-white/80 rounded-full p-2 shadow-md border border-blue-200'
+        className='sm:hidden fixed top-4 right-4 z-30 bg-white/80 rounded-full p-2 shadow-md border border-[#4a90e2]/20'
         aria-label='Toggle chat list'
       >
         <svg

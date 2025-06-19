@@ -120,20 +120,20 @@ const UserProfilePage = () => {
         {userId === user && (
           <button
             onClick={() => navigate('/matches')}
-            className="w-full group relative flex items-center gap-3 px-3 py-2.5 bg-gradient-to-r from-blue-500 to-sky-400 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+            className="w-3/4 mx-auto group relative flex items-center justify-center px-3 py-2 bg-white border border-[#4a90e2]/20 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
           >
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <Users className="text-2xl text-white" />
+            <div className="flex items-center gap-2">
+              <div className="relative shrink-0">
+                <Users className="text-xl text-[#4a90e2]" />
                 {pendingMatches?.length > 0 && (
                   <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full border-2 border-white flex items-center justify-center">
                     <span className="text-[10px] font-bold text-white">{pendingMatches.length}</span>
                   </div>
                 )}
               </div>
-              <div className="flex flex-col items-start">
-                <span className="text-white font-medium">My Matches</span>
-                <span className="text-white/80 text-xs">{matches?.length || 0} confirmed</span>
+              <div className="flex flex-col items-start min-w-0">
+                <span className="text-[#4a90e2] text-sm font-medium whitespace-normal break-words w-full">My Matches</span>
+                <span className="text-[#4a90e2]/80 text-xs whitespace-normal break-words w-full">{matches?.length || 0} confirmed</span>
               </div>
             </div>
           </button>

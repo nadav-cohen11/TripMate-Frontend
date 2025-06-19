@@ -122,7 +122,7 @@ const ConfirmedMatch = ({
                 Cancel
               </button>
               <button
-                className='px-4 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition disabled:opacity-50 disabled:cursor-not-allowed'
+                className='px-4 py-1.5 bg-white text-blue-500 border border-blue-200 rounded-lg text-sm font-medium transition disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-50'
                 onClick={() => handleSubmitReview(friend._id)}
                 disabled={rating === 0}
               >
@@ -142,9 +142,9 @@ const ConfirmedMatch = ({
             <button
               disabled={!hadTrip}
               onClick={() => handleOpenReview(match._id)}
-              className='px-4 py-1.5 text-sm font-medium rounded-lg transition text-white flex items-center gap-1.5
-                bg-blue-500 hover:bg-blue-600
-                disabled:bg-gray-300 disabled:cursor-not-allowed disabled:hover:bg-gray-300'
+              className='px-4 py-1.5 text-sm font-medium rounded-lg transition flex items-center gap-1.5
+                bg-white text-blue-500 border border-blue-200 hover:bg-blue-50
+                disabled:bg-gray-100 disabled:text-gray-400 disabled:border-gray-200 disabled:cursor-not-allowed'
             >
               <MessageSquare size={14} />
               {!hadTrip ? 'Trip Required' : 'Write Review'}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Spinner = ({ size = 40, color = 'text-blue-500', speed = 'animate-spin' }) => {
+export const Spinner = ({ size = 40, color = 'text-[#4a90e2]', speed = 'animate-spin' }) => {
   return (
     <div className="flex justify-center items-center z-40">
       <svg

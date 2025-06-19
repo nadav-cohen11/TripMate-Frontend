@@ -34,7 +34,7 @@ const Reels = () => {
   }
 
   return (
-    <div className="h-screen w-screen overflow-hidden relative touch-none bg-black">
+    <div className="h-screen w-screen overflow-hidden relative touch-none bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200">
       <motion.div
         className="h-full w-full"
         drag="y"
