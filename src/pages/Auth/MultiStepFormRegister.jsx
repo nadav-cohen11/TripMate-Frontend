@@ -22,7 +22,7 @@ const MultiStepFormRegister = () => {
       />
     );
   }
-   else if( step === 2) {
+   else if(step === 2) {
     return <ProfileSetup nextStep={nextStep} formRegister={formRegister} />;
   } else if (step === 3) {
     return <UploadMediaPage nextStep={nextStep} />;

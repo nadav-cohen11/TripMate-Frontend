@@ -284,8 +284,8 @@ const UploadMediaPage = () => {
           <div className="bg-white rounded-full p-1.5 shadow-lg">
             <button
               className={`px-6 py-2.5 rounded-full flex items-center gap-2 transition-all duration-300 ${mediaType === 'photos'
-                  ? 'bg-blue-500 text-white shadow-md'
-                  : 'text-gray-700 hover:bg-gray-100'
+                ? 'bg-blue-500 text-white shadow-md'
+                : 'text-gray-700 hover:bg-gray-100'
                 }`}
               onClick={() => {
                 setMediaType('photos');
@@ -300,8 +300,8 @@ const UploadMediaPage = () => {
             </button>
             <button
               className={`px-6 py-2.5 rounded-full flex items-center gap-2 transition-all duration-300 ${mediaType === 'reels'
-                  ? 'bg-blue-500 text-white shadow-md'
-                  : 'text-gray-700 hover:bg-gray-100'
+                ? 'bg-blue-500 text-white shadow-md'
+                : 'text-gray-700 hover:bg-gray-100'
                 }`}
               onClick={() => {
                 setMediaType('reels');
@@ -461,10 +461,10 @@ const UploadMediaPage = () => {
       </div>
 
       {uploadMutation.isLoading && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex flex-col items-center justify-center transition-all duration-300 animate-fade-in">
-          <div className="bg-white/95 p-8 rounded-2xl shadow-2xl flex flex-col items-center max-w-sm mx-4 transform transition-all duration-300">
-            <Spinner size={64} color="text-blue-600" speed="animate-spin-slow" />
-            <p className="mt-6 text-gray-800 font-medium text-lg text-center">
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9999] flex flex-col items-center justify-center">
+          <div className="bg-white/95 p-8 rounded-2xl shadow-2xl flex flex-col items-center max-w-sm mx-4">
+            <Spinner size={64} color="text-blue-600" />
+            <p className="mt-6 text-gray-800 font-medium text-lg text-center" z-index={1000}>
               {mediaType === 'photos' ? 'Uploading your photos...' : 'Uploading your reels...'}
             </p>
             <p className="text-sm text-gray-500 mt-2 text-center">
