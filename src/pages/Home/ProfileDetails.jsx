@@ -7,7 +7,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useState } from 'react';
 import { FaSuitcase } from 'react-icons/fa';
 
-const ProfileDetails = ({ user, birthDate, city, country, travel, distance, compatibilityScore, gender }) => {
+const ProfileDetails = ({ user, birthDate, city, country, travel, distance, compatibilityScore }) => {
   const [isEditingPreferences, setIsEditingPreferences] = useState(false);
   const { userId } = useParams();
   const { user: currUser } = useAuth();
@@ -19,15 +19,13 @@ const ProfileDetails = ({ user, birthDate, city, country, travel, distance, comp
 
   return (
     <div className="flex-1 overflow-y-auto bg-white/90 backdrop-blur-md rounded-3xl px-6 py-6 shadow-xl text-gray-800 space-y-6">
-      {
+      {compatibilityScore && (
         <div className="flex items-center gap-2 bg-gradient-to-r from-[#eaf4fd] via-[#eaf4fd] to-[#eaf4fd] text-[#4a90e2] px-3 py-2 rounded-xl w-max shadow">
           <Sparkles className="w-4 h-4 text-[#4a90e2]" />
           <span className="text-sm font-medium text-[#4a90e2]">AI-Suggested Match</span>
-          {compatibilityScore && (
-            <span className="ml-2 text-xs text-[#4a90e2] opacity-70">Score: {compatibilityScore}%</span>
-          )}
+          <span className="ml-2 text-xs text-[#4a90e2] opacity-70">Score: {compatibilityScore}%</span>
         </div>
-      }
+      )}
 
       <div className="space-y-1">
         <h1 className="text-3xl font-bold tracking-tight text-[#7ec3ee]">
@@ -45,12 +43,12 @@ const ProfileDetails = ({ user, birthDate, city, country, travel, distance, comp
           <span className="border-l-0 pl-0 italic text-gray-700 text-base leading-relaxed">{user.bio}</span>
         </div>
       )}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-        <p><span className="inline-block w-1 h-5 bg-[#7ec3ee] rounded mr-2 align-middle"></span><span className="text-base text-[#7ec3ee] font-bold tracking-wide align-middle">Gender:</span> <span className="font-normal text-gray-700">{gender || 'Not specified'}</span></p>
+      <div  className='flex flex-col gap-2'>
+        <p><span className="inline-block w-1 h-5 bg-[#7ec3ee] rounded mr-2 align-middle"></span><span className="text-base text-[#7ec3ee] font-bold tracking-wide align-middle">Gender:</span> <span className="font-normal text-gray-700">{user.gender || 'Not specified'}</span></p>
         <p>
           <span className="inline-block w-1 h-5 bg-[#7ec3ee] rounded mr-2 align-middle"></span>
           <span className="text-base text-[#7ec3ee] font-bold tracking-wide align-middle">Languages:</span>
-          <span className="font-normal text-gray-700">
+          <span className="font-normal text-gray-700">&nbsp;
             {Array.isArray(user.languages) && user.languages.length > 0
               ? user.languages.join(', ')
               : 'Not specified'}
