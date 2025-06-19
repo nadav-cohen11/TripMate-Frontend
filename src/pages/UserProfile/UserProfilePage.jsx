@@ -93,7 +93,7 @@ const UserProfilePage = () => {
       )}
       <div className='w-full max-w-sm space-y-6 mt-20 mb-8'>
         <div className='bg-white rounded-3xl border border-blue-100 shadow-lg overflow-hidden relative'>
-        {userId === user &&(
+          {userId === user &&(
             <button
               onClick={() => navigate('/photos', { state: { photos: userProfile.photos, reels: userProfile.reels } })}
               className="absolute top-2 right-2 p-2 rounded-full bg-white hover:bg-gray-100 transition duration-150 z-10"
@@ -109,13 +109,19 @@ const UserProfilePage = () => {
           <UserQRCode />
         </div>
         <ProfileDetails
-          user={user}
-          age={user.age}
-          country={country}
+          user={{
+            ...userProfile,
+            languages: userProfile.languagesSpoken || [],
+          }}
+          birthDate={userProfile.birthDate}
           city={city}
-          languages={languages}
+          country={country}
           travel={travel}
+          distance={userProfile.distance}
+          compatibilityScore={userProfile.compatibilityScore}
+          gender={userProfile.gender} 
         />
+
       </div>
     </div>
   );
