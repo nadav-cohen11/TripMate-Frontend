@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import { uploadFiles, deleteFile } from '@/api/mediaApi';
+import { uploadFiles, deleteFile, uploadToInstagram } from '@/api/mediaApi';
 import { toast } from 'react-toastify';
 import { extractBackendError } from '@/utils/errorUtils';
 import { Spinner } from '@/components/ui/spinner';
@@ -9,6 +9,8 @@ import { Image, Film, Upload, Trash2, Users } from 'lucide-react';
 import { getAllTripsForUser } from '@/api/userApi';
 import { getUserById } from '@/api/userApi';
 import { useAuth } from '@/context/AuthContext';
+import { FaInstagram } from 'react-icons/fa';
+import { confirmToast } from '@/components/ui/ToastConfirm';
 
 const UploadMediaPage = () => {
   const [mediaType, setMediaType] = useState('photos');
@@ -55,21 +57,25 @@ const UploadMediaPage = () => {
     if (tripId) {
       try {
         const userTrips = await getAllTripsForUser();
-        const selectedTripData = userTrips.find((trip) => trip.tripId === tripId);
+        const selectedTripData = userTrips.find(
+          (trip) => trip.tripId === tripId,
+        );
         if (selectedTripData) {
           const participants = selectedTripData.participants || [];
           setTripParticipants(participants);
 
           toast.info(
             <div>
-              <span>Do you want to tag participants from this trip in the reel?</span>
-              <div className="mt-2 flex gap-2">
+              <span>
+                Do you want to tag participants from this trip in the reel?
+              </span>
+              <div className='mt-2 flex gap-2'>
                 <button
                   onClick={() => {
                     setTagParticipants(true);
                     toast.dismiss();
                   }}
-                  className="px-3 py-1 bg-blue-600 text-white rounded"
+                  className='px-3 py-1 bg-blue-600 text-white rounded'
                 >
                   Yes
                 </button>
@@ -78,13 +84,13 @@ const UploadMediaPage = () => {
                     setTagParticipants(false);
                     toast.dismiss();
                   }}
-                  className="px-3 py-1 bg-gray-300 rounded"
+                  className='px-3 py-1 bg-gray-300 rounded'
                 >
                   No
                 </button>
               </div>
             </div>,
-            { autoClose: false, closeOnClick: false }
+            { autoClose: false, closeOnClick: false },
           );
         }
       } catch (error) {
@@ -101,22 +107,26 @@ const UploadMediaPage = () => {
     mutationFn: () => {
       const firstComment = tagParticipants
         ? `Tagged participants: ${tripParticipants
-          .map((p) => `${import.meta.env.VITE_FRONTEND_URL}/profile/${p.userId._id}`)
-          .join(', ')}` : null;
+            .map(
+              (p) =>
+                `${import.meta.env.VITE_FRONTEND_URL}/profile/${p.userId._id}`,
+            )
+            .join(', ')}`
+        : null;
 
       return uploadFiles(
         mediaType === 'photos' ? 'upload-photos' : 'upload-reel',
         selectedFiles,
         mediaType === 'photos',
         selectedTrip,
-        firstComment
+        firstComment,
       );
     },
     onSuccess: () => {
       toast.success(
         mediaType === 'photos'
           ? 'Photos uploaded successfully!'
-          : 'Reels uploaded successfully!'
+          : 'Reels uploaded successfully!',
       );
       setSelectedFiles([]);
       setPreviewURLs([]);
@@ -133,16 +143,21 @@ const UploadMediaPage = () => {
   const deleteMutation = useMutation({
     mutationFn: (mediaId) => deleteFile(mediaId, mediaType),
     onMutate: async (mediaId) => {
-      setExistingMedia((prev) => prev.filter((item) => item.public_id !== mediaId));
+      setExistingMedia((prev) =>
+        prev.filter((item) => item.public_id !== mediaId),
+      );
       return { mediaId };
     },
     onError: (error, mediaId, context) => {
       const errorMsg = extractBackendError(error);
-      toast.error(errorMsg || `Failed to delete ${mediaType === 'photos' ? 'photo' : 'reel'}`);
+      toast.error(
+        errorMsg ||
+          `Failed to delete ${mediaType === 'photos' ? 'photo' : 'reel'}`,
+      );
 
       if (context?.mediaId) {
         setExistingMedia((prev) => {
-          if (!prev.some(item => item.public_id === context.mediaId)) {
+          if (!prev.some((item) => item.public_id === context.mediaId)) {
             return [...prev, { public_id: context.mediaId }];
           }
           return prev;
@@ -151,7 +166,9 @@ const UploadMediaPage = () => {
       console.error('Delete error:', error);
     },
     onSuccess: async () => {
-      toast.success(`${mediaType === 'photos' ? 'Photo' : 'Reel'} deleted successfully!`);
+      toast.success(
+        `${mediaType === 'photos' ? 'Photo' : 'Reel'} deleted successfully!`,
+      );
       await refetchUserMedia();
     },
   });
@@ -167,12 +184,13 @@ const UploadMediaPage = () => {
     toast.info(
       <div>
         <span>
-          Are you sure you want to remove this {mediaType === 'photos' ? 'photo' : 'reel'}?
+          Are you sure you want to remove this{' '}
+          {mediaType === 'photos' ? 'photo' : 'reel'}?
         </span>
-        <div className="mt-2 flex gap-2">
+        <div className='mt-2 flex gap-2'>
           <button
             onClick={() => toast.dismiss()}
-            className="px-3 py-1 bg-gray-300 rounded"
+            className='px-3 py-1 bg-gray-300 rounded'
           >
             <button
               onClick={() => {
@@ -184,9 +202,11 @@ const UploadMediaPage = () => {
                 setSelectedFiles(updatedFiles);
                 setPreviewURLs(updatedPreviews);
                 toast.dismiss();
-                toast.success(`${mediaType === 'photos' ? 'Photo' : 'Reel'} removed`);
+                toast.success(
+                  `${mediaType === 'photos' ? 'Photo' : 'Reel'} removed`,
+                );
               }}
-              className="px-3 py-1 bg-red-600 text-white rounded"
+              className='px-3 py-1 bg-red-600 text-white rounded'
             >
               Remove
             </button>
@@ -194,50 +214,60 @@ const UploadMediaPage = () => {
           </button>
         </div>
       </div>,
-      { autoClose: false, closeOnClick: false }
+      { autoClose: false, closeOnClick: false },
     );
   };
 
-  const deleteExistingMedia = (mediaId) => {
-    toast.info(
-      <div>
-        <span>
-          Are you sure you want to delete this {mediaType === 'photos' ? 'photo' : 'reel'}?
-        </span>
-        <div className="mt-2 flex gap-2">
-          <button
-            onClick={() => toast.dismiss()}
-            className="px-3 py-1 bg-gray-300 rounded"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={() => {
-              deleteMutation.mutate(mediaId);
-              toast.dismiss();
-            }}
-            className="px-3 py-1 bg-red-600 text-white rounded"
-          >
-            Delete
-          </button>
-        </div>
-      </div>,
-      { autoClose: false, closeOnClick: false }
+  const deleteExistingMedia = async (mediaId) => {
+    const confirm = await confirmToast(
+      `Are you sure you want to delete this ${
+        mediaType === 'photos' ? 'photo' : 'reel'
+      }?`,
+      'red',
     );
+    if (confirm) {
+      deleteMutation.mutate(mediaId);
+    }
   };
 
+  const instagramMutation = useMutation({
+    mutationFn: (mediaUrl) => uploadToInstagram(mediaUrl),
+    onSuccess: () => {
+      toast.success('Photo uploaded successfully');
+    },
+    onError: () => {
+      toast.error('Something went wrong');
+    },
+  });
+
+  const uploadImgToInstagram = async (mediaUrl) => {
+    const confirm = await confirmToast(
+      `Are you sure you want to upload this image to our instagram?`,
+    );
+    if (!confirm) return;
+    instagramMutation.mutate(mediaUrl);
+  };
 
   const MediaPreviewCard = ({ url, index, isExisting, mediaId, mediaType }) => {
-    const isDeleting = deleteMutation.isLoading && deleteMutation.variables === mediaId;
-    const isVideo = url.includes('.mp4') || url.includes('.mov') || url.includes('.webm') ||
-      (!isExisting && selectedFiles[index] && selectedFiles[index].type && selectedFiles[index].type.includes('video'));
+    const isDeleting =
+      deleteMutation.isLoading && deleteMutation.variables === mediaId;
+    const isVideo =
+      url.includes('.mp4') ||
+      url.includes('.mov') ||
+      url.includes('.webm') ||
+      (!isExisting &&
+        selectedFiles[index] &&
+        selectedFiles[index].type &&
+        selectedFiles[index].type.includes('video'));
 
     return (
-      <div className="relative group rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+      <div className='relative group rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300'>
         {isVideo ? (
           <video
             src={url}
-            className={`w-full h-48 object-cover ${isDeleting ? 'opacity-50' : 'group-hover:opacity-90'} transition-all duration-300`}
+            className={`w-full h-48 object-cover ${
+              isDeleting ? 'opacity-50' : 'group-hover:opacity-90'
+            } transition-all duration-300`}
             controls
             muted
           />
@@ -245,43 +275,64 @@ const UploadMediaPage = () => {
           <img
             src={url}
             alt={`Preview ${index}`}
-            className={`w-full h-48 object-cover ${isDeleting ? 'opacity-50' : 'group-hover:opacity-90'} transition-all duration-300`}
+            className={`w-full h-48 object-cover ${
+              isDeleting ? 'opacity-50' : 'group-hover:opacity-90'
+            } transition-all duration-300`}
           />
         )}
         {isDeleting ? (
-          <div className="absolute inset-0 flex justify-center items-center bg-black/50 backdrop-blur-sm">
-            <Spinner size={24} color="text-white" />
+          <div className='absolute inset-0 flex justify-center items-center bg-black/50 backdrop-blur-sm'>
+            <Spinner size={24} color='text-white' />
           </div>
         ) : (
-          <button
-            onClick={() => (isExisting ? deleteExistingMedia(mediaId) : removeFile(index))}
-            className="absolute top-2 right-2 bg-black/60 text-white rounded-full p-2 hover:bg-red-600 transition-all duration-300 transform hover:scale-110"
-            title="Remove"
-            aria-label={`Remove ${mediaType === 'photos' ? 'photo' : 'reel'} ${index + 1}`}
-          >
-            <Trash2 size={16} />
-          </button>
+          <div className='absolute top-2 left-2 right-2 flex flex-row justify-between items-center px-2'>
+            <button
+              onClick={() =>
+                isExisting ? deleteExistingMedia(mediaId) : removeFile(index)
+              }
+              className='bg-black/60 text-white rounded-full p-2 hover:bg-red-600 transition-all duration-300 transform hover:scale-110'
+              title='Remove'
+              aria-label={`Remove ${
+                mediaType === 'photos' ? 'photo' : 'reel'
+              } ${index + 1}`}
+            >
+              <Trash2 size={16} />
+            </button>
+
+            {url.includes('image') && (
+              <button
+                onClick={() => uploadImgToInstagram(url)}
+                className='bg-black/60 text-white rounded-full p-2 hover:bg-red-600 transition-all duration-300 transform hover:scale-110'
+                title='Upload'
+                aria-label={`Upload ${
+                  mediaType === 'photos' ? 'photo' : 'reel'
+                } ${index + 1}`}
+              >
+                <FaInstagram />
+              </button>
+            )}
+          </div>
         )}
       </div>
     );
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+    <div className='min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 py-12 px-4 sm:px-6 lg:px-8'>
+      <div className='max-w-7xl mx-auto'>
+        <div className='text-center mb-12'>
+          <h1 className='text-4xl font-bold text-gray-900 mb-4'>
             {mediaType === 'photos' ? '📸 Photo Gallery' : '🎥 Reel Collection'}
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className='text-lg text-gray-600'>
             {mediaType === 'photos'
               ? 'Share your favorite moments from your trips'
               : 'Create and share your travel stories'}
           </p>
         </div>
 
-        <div className="flex justify-center mb-8">
-          <div className="bg-white rounded-full p-1.5 shadow-lg">
+        <div className='flex justify-center mb-8'>
+          <div className='bg-white rounded-full p-1.5 shadow-lg'>
             <button
               className={`px-6 py-2.5 rounded-full flex items-center gap-2 transition-all duration-300 ${mediaType === 'photos'
                 ? 'bg-blue-500 text-white shadow-md'
@@ -316,26 +367,31 @@ const UploadMediaPage = () => {
           </div>
         </div>
 
-        <section className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 space-y-8">
-          <div className="space-y-4">
+        <section className='bg-white p-8 rounded-2xl shadow-xl border border-gray-100 space-y-8'>
+          <div className='space-y-4'>
             <label
-              htmlFor="media-upload"
-              className="flex flex-col items-center justify-center w-full p-12 border-3 border-dashed border-gray-300 rounded-xl cursor-pointer hover:bg-gray-50 transition-all duration-300 hover:border-blue-400 group"
+              htmlFor='media-upload'
+              className='flex flex-col items-center justify-center w-full p-12 border-3 border-dashed border-gray-300 rounded-xl cursor-pointer hover:bg-gray-50 transition-all duration-300 hover:border-blue-400 group'
             >
               <input
-                id="media-upload"
-                type="file"
-                accept={mediaType === 'photos' ? "image/*" : "video/*,image/*"}
+                id='media-upload'
+                type='file'
+                accept={mediaType === 'photos' ? 'image/*' : 'video/*,image/*'}
                 multiple
                 onChange={handleFileChange}
-                className="hidden"
+                className='hidden'
               />
-              <div className="text-center">
-                <Upload size={48} className="mx-auto text-gray-400 group-hover:text-blue-500 transition-colors duration-300" />
-                <span className="block text-xl font-medium text-gray-700 mt-4 group-hover:text-blue-600 transition-colors duration-300">
-                  {mediaType === 'photos' ? 'Drop your photos here' : 'Drop your reels here'}
+              <div className='text-center'>
+                <Upload
+                  size={48}
+                  className='mx-auto text-gray-400 group-hover:text-blue-500 transition-colors duration-300'
+                />
+                <span className='block text-xl font-medium text-gray-700 mt-4 group-hover:text-blue-600 transition-colors duration-300'>
+                  {mediaType === 'photos'
+                    ? 'Drop your photos here'
+                    : 'Drop your reels here'}
                 </span>
-                <span className="block text-sm text-gray-500 mt-2">
+                <span className='block text-sm text-gray-500 mt-2'>
                   or click to browse files
                 </span>
               </div>
@@ -343,12 +399,12 @@ const UploadMediaPage = () => {
           </div>
 
           {existingMedia.length > 0 && (
-            <div className="space-y-4">
-              <h2 className="text-2xl font-semibold text-gray-800 flex items-center gap-2">
+            <div className='space-y-4'>
+              <h2 className='text-2xl font-semibold text-gray-800 flex items-center gap-2'>
                 <Users size={24} />
                 Existing {mediaType === 'photos' ? 'Photos' : 'Reels'}
               </h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+              <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6'>
                 {existingMedia.map((item, index) => (
                   <MediaPreviewCard
                     key={item.public_id}
@@ -364,12 +420,12 @@ const UploadMediaPage = () => {
           )}
 
           {previewURLs.length > 0 && (
-            <div className="space-y-4">
-              <h2 className="text-2xl font-semibold text-gray-800 flex items-center gap-2">
+            <div className='space-y-4'>
+              <h2 className='text-2xl font-semibold text-gray-800 flex items-center gap-2'>
                 <Upload size={24} />
                 New {mediaType === 'photos' ? 'Photos' : 'Reels'}
               </h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+              <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6'>
                 {previewURLs.map((url, index) => (
                   <MediaPreviewCard
                     key={index}
@@ -384,46 +440,65 @@ const UploadMediaPage = () => {
           )}
 
           {mediaType === 'reels' && (
-            <div className="space-y-2">
+            <div className='space-y-2'>
               {trips.length > 0 ? (
                 <>
-                  <label htmlFor="trip-select" className="block text-lg font-medium text-gray-700">
+                  <label
+                    htmlFor='trip-select'
+                    className='block text-lg font-medium text-gray-700'
+                  >
                     Select Trip
                   </label>
                   <select
-                    id="trip-select"
+                    id='trip-select'
                     value={selectedTrip || ''}
                     onChange={(e) => handleTripChange(e.target.value)}
-                    className="mt-1 block w-full pl-4 pr-10 py-3 text-base border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-xl shadow-sm transition-all duration-300"
+                    className='mt-1 block w-full pl-4 pr-10 py-3 text-base border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-xl shadow-sm transition-all duration-300'
                   >
-                    <option value="" disabled>
+                    <option value='' disabled>
                       Choose a trip
                     </option>
                     {trips.map((trip) => (
                       <option key={trip.tripId} value={trip.tripId}>
-                        {trip.tripName} - {trip.destination.city}, {trip.destination.country}{' '}
+                        {trip.tripName} - {trip.destination.city},{' '}
+                        {trip.destination.country}{' '}
                         {trip.travelDates.start
-                          ? `(${new Date(trip.travelDates.start).toLocaleDateString()} - ${new Date(
-                            trip.travelDates.end
-                          ).toLocaleDateString()})`
+                          ? `(${new Date(
+                              trip.travelDates.start,
+                            ).toLocaleDateString()} - ${new Date(
+                              trip.travelDates.end,
+                            ).toLocaleDateString()})`
                           : ''}
                       </option>
                     ))}
                   </select>
                 </>
               ) : (
-                <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg">
-                  <div className="flex">
-                    <div className="flex-shrink-0">
-                      <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                <div className='bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg'>
+                  <div className='flex'>
+                    <div className='flex-shrink-0'>
+                      <svg
+                        className='h-5 w-5 text-yellow-400'
+                        viewBox='0 0 20 20'
+                        fill='currentColor'
+                      >
+                        <path
+                          fillRule='evenodd'
+                          d='M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z'
+                          clipRule='evenodd'
+                        />
                       </svg>
                     </div>
-                    <div className="ml-3">
-                      <p className="text-sm text-yellow-700">
-                        You need to create a trip before uploading reels. Reels must be associated with a specific trip to help organize your travel memories.
+                    <div className='ml-3'>
+                      <p className='text-sm text-yellow-700'>
+                        You need to create a trip before uploading reels. Reels
+                        must be associated with a specific trip to help organize
+                        your travel memories.
                         <br />
-                        <a href="/chat" className="font-medium underline text-yellow-700 hover:text-yellow-600 mt-1 inline-block">
+                        <a
+                          href='/chat'
+                          className='font-medium underline text-yellow-700 hover:text-yellow-600 mt-1 inline-block'
+                        >
                           Create a new trip →
                         </a>
                       </p>
@@ -434,7 +509,7 @@ const UploadMediaPage = () => {
             </div>
           )}
 
-          <div className="flex justify-end pt-4">
+          <div className='flex justify-end pt-4'>
             <button
               onClick={() => uploadMutation.mutate()}
               disabled={
@@ -442,17 +517,19 @@ const UploadMediaPage = () => {
                 uploadMutation.isLoading ||
                 (mediaType === 'reels' && !selectedTrip)
               }
-              className="px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              className='px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
             >
               {uploadMutation.isLoading ? (
                 <>
-                  <Spinner size={20} color="text-white" />
+                  <Spinner size={20} color='text-white' />
                   <span>Uploading...</span>
                 </>
               ) : (
                 <>
                   <Upload size={20} />
-                  <span>Upload {mediaType === 'photos' ? 'Photos' : 'Reels'}</span>
+                  <span>
+                    Upload {mediaType === 'photos' ? 'Photos' : 'Reels'}
+                  </span>
                 </>
               )}
             </button>
@@ -467,7 +544,7 @@ const UploadMediaPage = () => {
             <p className="mt-6 text-gray-800 font-medium text-lg text-center" z-index={1000}>
               {mediaType === 'photos' ? 'Uploading your photos...' : 'Uploading your reels...'}
             </p>
-            <p className="text-sm text-gray-500 mt-2 text-center">
+            <p className='text-sm text-gray-500 mt-2 text-center'>
               Please wait while we process your files
             </p>
           </div>

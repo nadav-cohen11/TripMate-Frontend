@@ -57,7 +57,6 @@ const Reels = () => {
                 <div className="absolute bottom-24 z-10 space-y-4 w-full px-4">
                   <Likes reel={reel} />
                   <Comments reel={reel} />
-
                 </div>
               </ReelItem>
             </div>
