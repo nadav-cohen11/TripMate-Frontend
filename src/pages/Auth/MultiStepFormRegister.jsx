@@ -25,7 +25,7 @@ const MultiStepFormRegister = () => {
    else if(step === 2) {
     return <ProfileSetup nextStep={nextStep} formRegister={formRegister} />;
   } else if (step === 3) {
-    return <UploadMediaPage nextStep={nextStep} />;
+    return <UploadMediaPage nextStep={nextStep} register={true} />;
   } else {
     return <Home></Home>
   }
