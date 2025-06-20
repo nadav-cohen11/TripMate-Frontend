@@ -143,6 +143,20 @@ const Home = () => {
     );
   }
 
+  const filteredUsers = displayedUsers.filter((user) => {
+    if (!filters) return true;
+    return Object.values(filters).every((filter) => {
+      try {
+        if (!filter.query || !filter.query.trim()) return true;
+        const fn = new Function('user', `return ${filter.query};`);
+        return fn(user);
+      } catch (err) {
+        console.error('Filter error:', err);
+        return true;
+      }
+    });
+  });
+
   return (
     <div className='relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden'>
       <TripMateTitle />
@@ -155,21 +169,15 @@ const Home = () => {
       </div>
 
       <div className='flex items-center justify-center min-h-screen px-4 z-10'>
-        {displayedUsers
-          .filter((user) => {
-            if (!filters) return true;
-            return Object.values(filters).every((filter) => {
-              try {
-                if (!filter.query || !filter.query.trim()) return true;
-                const fn = new Function('user', `return ${filter.query};`);
-                return fn(user);
-              } catch (err) {
-                console.error('Filter error:', err);
-                return true;
-              }
-            });
-          })
-          .map((user, index) => (
+        {filteredUsers.length === 0 ? (
+          <div className='flex flex-col items-center justify-center text-center text-gray-800'>
+            <h1 className='text-2xl font-semibold'>
+              No users match your filters!
+            </h1>
+            <p className='mt-2'>Try adjusting your filters.</p>
+          </div>
+        ) : (
+          filteredUsers.map((user, index) => (
             <TinderCard
               key={user._id}
               preventSwipe={['up', 'down']}
@@ -178,12 +186,13 @@ const Home = () => {
             >
               <div
                 className='tinder-card-wrapper w-full h-full flex justify-center items-center px-4'
-                style={{ zIndex: displayedUsers.length - index }}
+                style={{ zIndex: filteredUsers.length - index }}
               >
                 <ProfileCard user={user} swipeInfo={swipeInfo} />
               </div>
             </TinderCard>
-          ))}
+          ))
+        )}
       </div>
     </div>
   );
