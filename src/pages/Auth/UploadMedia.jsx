@@ -12,7 +12,7 @@ import { useAuth } from '@/context/AuthContext';
 import { FaInstagram } from 'react-icons/fa';
 import { confirmToast } from '@/components/ui/ToastConfirm';
 
-const UploadMediaPage = () => {
+const UploadMediaPage = ({ register = false }) => {
   const [mediaType, setMediaType] = useState('photos');
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [previewURLs, setPreviewURLs] = useState([]);
@@ -64,34 +64,14 @@ const UploadMediaPage = () => {
           const participants = selectedTripData.participants || [];
           setTripParticipants(participants);
 
-          toast.info(
-            <div>
-              <span>
-                Do you want to tag participants from this trip in the reel?
-              </span>
-              <div className='mt-2 flex gap-2'>
-                <button
-                  onClick={() => {
-                    setTagParticipants(true);
-                    toast.dismiss();
-                  }}
-                  className='px-3 py-1 bg-blue-600 text-white rounded'
-                >
-                  Yes
-                </button>
-                <button
-                  onClick={() => {
-                    setTagParticipants(false);
-                    toast.dismiss();
-                  }}
-                  className='px-3 py-1 bg-gray-300 rounded'
-                >
-                  No
-                </button>
-              </div>
-            </div>,
-            { autoClose: false, closeOnClick: false },
+          const confirm = await confirmToast(
+            'Do you want to tag participants from this trip in the reel?',
           );
+          if (confirm) {
+            setTagParticipants(true);
+          } else {
+            setTagParticipants(false);
+          }
         }
       } catch (error) {
         toast.error('Failed to fetch trip participants');
@@ -100,7 +80,7 @@ const UploadMediaPage = () => {
   };
 
   useEffect(() => {
-    refetchUserMedia();
+    if (!register) refetchUserMedia();
   }, [mediaType]);
 
   const uploadMutation = useMutation({
@@ -320,21 +300,23 @@ const UploadMediaPage = () => {
   return (
     <div className='min-h-screen bg-[#f8faff] py-2 sm:py-4 md:py-8 px-1 sm:px-4 flex items-center justify-center pb-8 sm:pb-0'>
       <div className='w-full max-w-[420px] sm:max-w-[520px] bg-white/70 backdrop-blur-md rounded-[32px] shadow-[0_20px_70px_-10px_rgba(112,144,176,0.15)] relative border border-white mx-auto'>
-        <button
-          onClick={() => navigate('/reels')}
-          className="absolute -top-3 -right-3 p-2.5 bg-white rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.08)] text-gray-400 hover:text-gray-600 z-50 hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all duration-300 border border-gray-50"
-          aria-label="Skip to reels"
-        >
-          <X className="w-5 h-5" />
-        </button>
+        {!register && (
+          <button
+            onClick={() => navigate('/reels')}
+            className='absolute -top-3 -right-3 p-2.5 bg-white rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.08)] text-gray-400 hover:text-gray-600 z-50 hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all duration-300 border border-gray-50'
+            aria-label='Skip to reels'
+          >
+            <X className='w-5 h-5' />
+          </button>
+        )}
 
         <div className='p-4 sm:p-8 space-y-6 sm:space-y-8'>
           <div className='text-center space-y-2.5'>
-            <div className="flex items-center justify-center gap-3">
+            <div className='flex items-center justify-center gap-3'>
               <h1 className='text-xl sm:text-2xl font-semibold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent'>
                 Photo Gallery
               </h1>
-              <Image className="w-6 h-6 text-gray-700" />
+              <Image className='w-6 h-6 text-gray-700' />
             </div>
             <p className='text-xs sm:text-sm text-gray-500/90'>
               Share your favorite moments from your trips
@@ -378,7 +360,6 @@ const UploadMediaPage = () => {
                 Reels
               </button>
             </div>
-
           </div>
 
           <div className='space-y-5 sm:space-y-7'>
@@ -395,8 +376,11 @@ const UploadMediaPage = () => {
                 className='hidden'
               />
               <div className='text-center transform group-hover:scale-105 transition-transform duration-300'>
-                <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-gray-50 flex items-center justify-center shadow-sm group-hover:shadow group-hover:bg-white transition-all duration-300">
-                  <Upload size={26} className='text-gray-400 group-hover:text-blue-500 transition-colors duration-300' />
+                <div className='w-14 h-14 mx-auto mb-4 rounded-2xl bg-gray-50 flex items-center justify-center shadow-sm group-hover:shadow group-hover:bg-white transition-all duration-300'>
+                  <Upload
+                    size={26}
+                    className='text-gray-400 group-hover:text-blue-500 transition-colors duration-300'
+                  />
                 </div>
                 <span className='block text-sm font-medium text-gray-700'>
                   Drop your {mediaType} here
@@ -410,7 +394,7 @@ const UploadMediaPage = () => {
             {existingMedia.length > 0 && (
               <div className='space-y-3 sm:space-y-4'>
                 <h2 className='text-xs sm:text-sm font-medium text-gray-700 flex items-center gap-2.5'>
-                  <Users size={16} className="text-gray-500" />
+                  <Users size={16} className='text-gray-500' />
                   Existing {mediaType === 'photos' ? 'Photos' : 'Reels'}
                 </h2>
                 <div className='grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 gap-2 sm:gap-4'>
@@ -431,7 +415,7 @@ const UploadMediaPage = () => {
             {previewURLs.length > 0 && (
               <div className='space-y-3 sm:space-y-4'>
                 <h2 className='text-xs sm:text-sm font-medium text-gray-700 flex items-center gap-2.5'>
-                  <Upload size={16} className="text-gray-500" />
+                  <Upload size={16} className='text-gray-500' />
                   New {mediaType === 'photos' ? 'Photos' : 'Reels'}
                 </h2>
                 <div className='grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 gap-2 sm:gap-4'>
@@ -488,7 +472,10 @@ const UploadMediaPage = () => {
                   </>
                 ) : (
                   <>
-                    <Upload size={20} className="text-blue-500 group-hover:scale-110 transition-transform duration-300" />
+                    <Upload
+                      size={20}
+                      className='text-blue-500 group-hover:scale-110 transition-transform duration-300'
+                    />
                     <span>Upload {mediaType}</span>
                   </>
                 )}
@@ -501,12 +488,11 @@ const UploadMediaPage = () => {
       {uploadMutation.isLoading && (
         <div className='fixed inset-0 bg-white/10 backdrop-blur-sm z-50 flex flex-col items-center justify-center'>
           <div className='bg-white/95 backdrop-blur-xl p-8 rounded-3xl shadow-[0_20px_70px_-10px_rgba(112,144,176,0.2)] flex flex-col items-center max-w-sm mx-4 border border-white'>
-            <div className="bg-blue-50/50 p-4 rounded-2xl">
+            <div className='bg-blue-50/50 p-4 rounded-2xl'>
               <Spinner size={52} color='text-blue-500' />
             </div>
             <p className='mt-5 text-gray-800 font-medium text-base'>
               Uploading your {mediaType}...
-
             </p>
             <p className='text-sm text-gray-500 mt-2'>
               Please wait while we process your files

@@ -14,7 +14,6 @@ import { Spinner } from '@/components/ui/spinner';
 import { useLocation } from 'react-router-dom';
 import DatePicker from '@/components/ui/DatePicker';
 
-
 export default function ProfileSetup({ nextStep, formRegister }) {
   const {
     form,
@@ -25,6 +24,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
     handleLocationChange,
     handleLanguagesChange,
     handleAdventureStyleChange,
+    reftechUser,
   } = useProfileSetupForm(formRegister);
 
   const [selectedPhotos, setSelectedPhotos] = useState(null);
@@ -33,13 +33,12 @@ export default function ProfileSetup({ nextStep, formRegister }) {
   const location = useLocation();
   const photo = location.state?.photo || null;
 
-
   useEffect(() => {
     if (!selectedPhotos) {
       setPreviewURLs([]);
       return;
     }
-    
+
     const urls = Array.from(selectedPhotos).map((file) =>
       URL.createObjectURL(file),
     );
@@ -86,6 +85,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
   const mutationUpdate = useMutation({
     mutationFn: async (data) => updateUser(data, { method: 'PUT' }),
     onSuccess: async (updatedData) => {
+      reftechUser();
       if (selectedPhotos && selectedPhotos.length > 0) {
         setLoading(true);
         try {
@@ -149,7 +149,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
         toast.error('Please fill in all required fields.');
         return;
       }
-      
+
       const birthDate = new Date(form.birthDate);
       const today = new Date();
       const age = today.getFullYear() - birthDate.getFullYear();

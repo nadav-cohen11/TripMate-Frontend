@@ -1,5 +1,4 @@
 import { toast } from 'react-toastify';
-import ReactDOM from 'react-dom';
 
 export function confirmToast(message,color) {
   return new Promise((resolve) => {
