@@ -1,21 +1,21 @@
-import Typewriter from '@/components/animations/Typewriter';
 import { useNavigate } from 'react-router-dom';
 
 const TripMateTitle = () => {
   const navigate = useNavigate();
 
   return (
-    <div 
-      className="absolute top-6 left-6 z-20 cursor-pointer hover:opacity-80 transition-opacity"
+    <div
+      className='absolute top-6 left-6 z-20 cursor-pointer hover:opacity-80 transition-opacity flex items-center'
       onClick={() => navigate('/home')}
     >
-      <Typewriter
-        text="TripMate"
-        className="text-4xl text-[#4a90e2] tracking-wide"
-        style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 140 }}
+      <img
+        src='/assets/images/logo.png'
+        alt='TripMate Logo'
+        className='h-14 w-auto object-contain'
+        style={{ display: 'block' }}
       />
     </div>
   );
 };
 
-export default TripMateTitle; 
+export default TripMateTitle;

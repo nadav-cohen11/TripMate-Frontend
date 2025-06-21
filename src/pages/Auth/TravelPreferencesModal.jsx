@@ -254,25 +254,6 @@ const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences })
                   </div>
                 </div>
 
-                <div className="flex justify-end gap-3 pt-6">
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    className="px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200 text-sm font-medium text-gray-700"
-                    disabled={mutation.isLoading}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleSubmit}
-                    disabled={mutation.isLoading}
-                    className="px-4 py-2 rounded-md bg-white text-blue-500 border border-blue-200 hover:bg-blue-50 text-sm font-semibold disabled:opacity-50"
-                  >
-                    {mutation.isLoading ? 'Saving...' : 'Save'}
-                  </button>
-                </div>
-
 
               </Dialog.Panel>
             </Transition.Child>

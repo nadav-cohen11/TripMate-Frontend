@@ -7,22 +7,28 @@ import SwipeStatus from './SwipeStatus';
 const ProfileCard = ({ user, swipeInfo }) => {
   const [photoIndex, setPhotoIndex] = useState(0);
 
-  const nextPhoto = () => setPhotoIndex((prev) => (prev + 1) % (user.photos?.length || 1));
-  const prevPhoto = () => setPhotoIndex((prev) => (prev - 1 + (user.photos?.length || 1)) % (user.photos?.length || 1));
+  const nextPhoto = () =>
+    setPhotoIndex((prev) => (prev + 1) % (user.photos?.length || 1));
+  const prevPhoto = () =>
+    setPhotoIndex(
+      (prev) =>
+        (prev - 1 + (user.photos?.length || 1)) % (user.photos?.length || 1),
+    );
   const travel = user.travelPreferences || {};
   const country = user.location?.country || '';
   const city = user.location?.city || '';
-  const photo = user.photos?.[photoIndex]?.url || '/assets/images/Annonymos_picture.jpg';
+  const photo =
+    user.photos?.[photoIndex]?.url || '/assets/images/Annonymos_picture.jpg';
 
   return (
-    <div className='relative flex flex-col bg-white/90 shadow-xl backdrop-blur-sm text-gray-900 rounded-3xl overflow-hidden w-[90vw] max-w-md h-[80vh] mx-auto my-4 border border-blue-100'>
+    <div className='relative flex flex-col bg-white shadow-lg text-black rounded-2xl overflow-hidden w-[90vw] max-w-md h-[75vh] mx-auto my-8 border border-gray-200 p-0 transition-all duration-300'>
       <SwipeStatus swipeInfo={swipeInfo} userId={user._id} />
-      <ProfileImage photo={photo} photoIndex={photoIndex} />
-      <PhotoNavigation
-        user={user}
+      <ProfileImage
+        photo={photo}
         photoIndex={photoIndex}
         nextPhoto={nextPhoto}
         prevPhoto={prevPhoto}
+        photoCount={user.photos?.length || 1}
         setPhotoIndex={setPhotoIndex}
       />
       <ProfileDetails
