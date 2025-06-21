@@ -70,8 +70,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           nextStep;
         } catch (uploadErr) {
           setLoading(false);
-          toast.error('Photo upload failed');
-          console.error(uploadErr);
+          toast.error(extractBackendError(uploadErr));
         }
       }
       nextStep();
@@ -98,8 +97,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           setLoading(false);
         } catch (uploadErr) {
           setLoading(false);
-          toast.error('Photo upload failed');
-          console.error(uploadErr);
+          toast.error(extractBackendError(uploadErr));
         }
       }
       toast.success('Profile updated successfully');
@@ -111,7 +109,6 @@ export default function ProfileSetup({ nextStep, formRegister }) {
     onError: (error) => {
       const msg = extractBackendError(error);
       toast.error(msg);
-      console.log(error);
     },
   });
 

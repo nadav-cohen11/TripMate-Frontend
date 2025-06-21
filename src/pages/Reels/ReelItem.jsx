@@ -10,7 +10,7 @@ const ReelItem = ({ reel, children }) => {
     const now = new Date();
     const uploaded = new Date(timestamp);
     const diffInSeconds = Math.floor((now - uploaded) / 1000);
-    console.log('reel', reel, 'child', children);
+    
     if (diffInSeconds < 60) return `${diffInSeconds}s`;
     if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m`;
     if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h`;

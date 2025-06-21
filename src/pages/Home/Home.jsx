@@ -46,7 +46,7 @@ const fetchUsers = async () => {
       };
     });
   } catch (err) {
-    console.error('Error fetching users:', err);
+    toast.error(extractBackendError(err));
     throw err;
   }
 };
@@ -151,7 +151,7 @@ const Home = () => {
         const fn = new Function('user', `return ${filter.query};`);
         return fn(user);
       } catch (err) {
-        console.error('Filter error:', err);
+        toast.error(extractBackendError(err));
         return true;
       }
     });

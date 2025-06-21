@@ -143,7 +143,7 @@ const UploadMediaPage = ({ register = false }) => {
           return prev;
         });
       }
-      console.error('Delete error:', error);
+      
     },
     onSuccess: async () => {
       toast.success(

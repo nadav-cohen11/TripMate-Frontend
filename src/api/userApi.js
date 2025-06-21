@@ -127,7 +127,6 @@ export const translate = async (prompt) => {
         
         return response.data.responseData.translatedText;
     } catch (error) {
-        console.error('Error in translate:', error);
         throw error;
     }
 }

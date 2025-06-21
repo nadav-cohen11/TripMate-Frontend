@@ -9,7 +9,7 @@ export const handleCardSwipe = async (direction, userId) => {
       await unmatchUsers({ user2Id: userId });
     }
   } catch (err) {
-    console.error(`Swipe ${direction} failed for user ${userId}:`, err);
+    toast.error(extractBackendError(err));
   }
 };
 

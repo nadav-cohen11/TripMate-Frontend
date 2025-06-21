@@ -31,7 +31,7 @@ export const useUserLocations = () => {
       } catch (error) {
         setUserLocation(null);
         setCoordinates([]);
-        console.error("Error fetching user location or all users locations:", error);
+        toast.error(extractBackendError(error));
       } finally {
         setLoading(false);
       }
