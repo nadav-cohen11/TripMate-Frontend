@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { IoSettingsOutline, IoPencil } from 'react-icons/io5';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { getUserById } from '../../api/userApi';
+import { createOrAcceptMatch} from '../../api/matchApi'
 import { toast } from 'react-toastify';
 import ProfileImage from '../Home/ProfileImage';
 import ProfileDetails from '../Home/ProfileDetails';
@@ -10,8 +11,9 @@ import UserQRCode from './UserQRCode';
 import TripMateTitle from '@/components/ui/TripMateTitle';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { LogOut, LogOutIcon, Users } from 'lucide-react';
+import { LogOut, Users } from 'lucide-react';
 import useFetchMyMatches from '@/hooks/useFetchMyMatches';
+
 import {
   Dialog,
   DialogTrigger,
@@ -22,12 +24,13 @@ import {
   DialogFooter,
   DialogClose,
 } from '@/components/ui/dialog';
+import { confirmToast } from '@/components/ui/ToastConfirm';
 
 const UserProfilePage = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
-  const { matches, pendingMatches } = useFetchMyMatches();
+  const { matches, pendingMatches } = useFetchMyMatches(); // must always run!
   const [openSignOut, setOpenSignOut] = useState(false);
 
   const {
@@ -52,6 +55,79 @@ const UserProfilePage = () => {
     ? `${cloudinaryBaseUrl}${userProfile.profilePhotoId}`
     : userProfile?.photos?.[0]?.url || '/assets/images/Annonymos_picture.jpg';
 
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
+
+  const sendMatchMutation = useMutation({
+    mutationFn: ({ user2Id }) => createOrAcceptMatch({ user2Id }),
+    onSuccess: () => toast.info(`Your match was sent`),
+    onError: (error) => {
+      if (error.status === 409) {
+        toast.error('You already have match');
+      } else {
+        toast.error('Something went wrong');
+      }
+    },
+  });
+
+  const handleSendMatch = async (userId) => {
+    const confirmation = await confirmToast(
+      `You confirm to send this match with ${userProfile.fullName}?`,
+    );
+    if (!confirmation) return;
+    sendMatchMutation.mutate({ user2Id: userId });
+  };
+
+  const userQRCodeComponent = <UserQRCode />;
+
+  const matchMeButton = (
+    <button
+      onClick={() => handleSendMatch(userId)}
+      className='w-3/4 mx-auto group relative flex items-center justify-center px-3 py-2 bg-white border border-[#4a90e2]/20 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105'
+    >
+      <div className='flex items-center gap-2'>
+        <div className='relative shrink-0'>
+          <Users className='text-xl text-[#4a90e2]' />
+        </div>
+        <div className='flex flex-col items-start min-w-0'>
+          <span className='text-[#4a90e2] text-sm font-medium whitespace-normal break-words w-full'>
+            Match me
+          </span>
+        </div>
+      </div>
+    </button>
+  );
+
+  const myMatchesButton = (
+    <button
+      onClick={() => navigate('/matches')}
+      className='w-3/4 mx-auto group relative flex items-center justify-center px-3 py-2 bg-white border border-[#4a90e2]/20 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105'
+    >
+      <div className='flex items-center gap-2'>
+        <div className='relative shrink-0'>
+          <Users className='text-xl text-[#4a90e2]' />
+          {pendingMatches?.length > 0 && (
+            <div className='absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full border-2 border-white flex items-center justify-center'>
+              <span className='text-[10px] font-bold text-white'>
+                {pendingMatches.length}
+              </span>
+            </div>
+          )}
+        </div>
+        <div className='flex flex-col items-start min-w-0'>
+          <span className='text-[#4a90e2] text-sm font-medium whitespace-normal break-words w-full'>
+            My Matches
+          </span>
+          <span className='text-[#4a90e2]/80 text-xs whitespace-normal break-words w-full'>
+            {matches?.length || 0} confirmed
+          </span>
+        </div>
+      </div>
+    </button>
+  );
+
   if (isLoading) {
     return (
       <div className='flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-sky-100'>
@@ -71,11 +147,6 @@ const UserProfilePage = () => {
       </div>
     );
   }
-
-  const handleSignOut = async () => {
-    await signOut();
-    navigate('/');
-  };
 
   return (
     <div className='relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden flex flex-col items-center py-12'>
@@ -125,6 +196,7 @@ const UserProfilePage = () => {
           </Dialog>
         </div>
       )}
+
       <div className='w-full max-w-sm space-y-6 mt-20 mb-8'>
         <div className='bg-white rounded-3xl border border-blue-100 shadow-lg overflow-hidden relative'>
           {userId === user && (
@@ -144,38 +216,16 @@ const UserProfilePage = () => {
           )}
           <ProfileImage photo={photo} />
         </div>
-        {userId === user && (
-          <button
-            onClick={() => navigate('/matches')}
-            className='w-3/4 mx-auto group relative flex items-center justify-center px-3 py-2 bg-white border border-[#4a90e2]/20 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105'
-          >
-            <div className='flex items-center gap-2'>
-              <div className='relative shrink-0'>
-                <Users className='text-xl text-[#4a90e2]' />
-                {pendingMatches?.length > 0 && (
-                  <div className='absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full border-2 border-white flex items-center justify-center'>
-                    <span className='text-[10px] font-bold text-white'>
-                      {pendingMatches.length}
-                    </span>
-                  </div>
-                )}
-              </div>
-              <div className='flex flex-col items-start min-w-0'>
-                <span className='text-[#4a90e2] text-sm font-medium whitespace-normal break-words w-full'>
-                  My Matches
-                </span>
-                <span className='text-[#4a90e2]/80 text-xs whitespace-normal break-words w-full'>
-                  {matches?.length || 0} confirmed
-                </span>
-              </div>
-            </div>
-          </button>
-        )}
+
+        {userId !== user && matchMeButton}
+        {userId === user && myMatchesButton}
       </div>
+
       <div className='w-full max-w-md bg-white rounded-3xl shadow-xl border border-blue-100 p-8 flex flex-col gap-8 relative'>
-        <div className='absolute top-4 right-4'>
-          <UserQRCode />
-        </div>
+        {userId === user && (
+          <div className='absolute top-4 right-4'>{userQRCodeComponent}</div>
+        )}
+
         <ProfileDetails
           user={{
             ...userProfile,

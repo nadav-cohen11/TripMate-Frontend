@@ -21,7 +21,6 @@ const GroupDetails = ({ handleLeaveTrip, group, onBack, socket }) => {
           const { data } = await getWeather(trip.destination.city, trip.destination.country);
           setWeather(data);
         } catch (error) {
-         toast.error(extractBackendError(error));
         }
       }
     };

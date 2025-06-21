@@ -45,20 +45,20 @@ export const EventList = ({ lat, lon, keyword: externalKeyword }) => {
 
   return (
     <motion.div
-      className="mt-10 bg-white/90 backdrop-blur-md p-8 rounded-3xl shadow-2xl border border-[#4a90e2]/10"
-      initial="hidden"
-      animate="show"
+      className='mt-10 bg-white/90 backdrop-blur-md p-8 rounded-3xl shadow-2xl border border-[#00BFFF]/10'
+      initial='hidden'
+      animate='show'
       variants={containerVariants}
     >
       <motion.h2
-        className="text-3xl font-bold mb-4 text-[#4a90e2] text-center tracking-wide"
+        className='text-3xl font-bold mb-4 text-black text-center tracking-wide'
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0, transition: { duration: 0.4 } }}
       >
-         Nearby Events Just for You 🎉
+        Nearby Events Just for You 🎉
       </motion.h2>
 
-      <div className="flex flex-wrap justify-center gap-2 mb-4">
+      <div className='flex flex-wrap justify-center gap-2 mb-4'>
         {FILTER_OPTIONS.map(({ label, icon }) => (
           <button
             key={label}
@@ -67,32 +67,32 @@ export const EventList = ({ lat, lon, keyword: externalKeyword }) => {
             }
             className={`px-3 py-2 rounded-xl border transition text-xs font-semibold tracking-wide shadow-sm ${
               selectedFilter === label
-                ? 'bg-[#4a90e2] text-white border-[#4a90e2] shadow-lg'
-                : 'bg-white text-[#4a90e2] border-[#4a90e2]/30 hover:bg-[#eaf4fd]'
+                ? 'bg-[#00BFFF] text-black border-[#00BFFF] shadow-lg'
+                : 'bg-white text-black border-[#4a90e2]/30 hover:bg-[#eaf4fd]'
             }`}
           >
-            <span className="mr-1 text-lg">{icon}</span> {label}
+            <span className='mr-1 text-lg'>{icon}</span> {label}
           </button>
         ))}
       </div>
 
       {isLoading && (
-        <p className="text-center text-gray-600 animate-pulse">
+        <p className='text-center text-gray-600 animate-pulse'>
           Loading events near you...
         </p>
       )}
 
       {error && (
-        <p className="text-center text-red-500">
+        <p className='text-center text-red-500'>
           Error fetching events. Please try again later.
         </p>
       )}
 
       {!isLoading && !events?.length && (
-        <p className="text-center text-gray-500">No events found nearby.</p>
+        <p className='text-center text-gray-500'>No events found nearby.</p>
       )}
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-3'>
         {events?.map((event) => (
           <motion.div key={event.id} whileHover={{ scale: 1.02 }}>
             <EventCard event={event} />

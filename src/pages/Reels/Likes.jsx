@@ -28,15 +28,15 @@ const Likes = ({ reel }) => {
     <div className="flex items-center justify-between w-full">
       <button
         onClick={handleLike}
-        className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur bg-white/10 hover:bg-white/20 transition"
+        className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur bg-white/10 hover:bg-white/20 transition text-white"
         aria-label="Like reel"
       >
         <Heart
           className="w-5 h-5"
-          color={hasLiked ? "#FF0000" : "#222"}
+          color={hasLiked ? "#FF0000" : "white"}
           fill={hasLiked ? "#FF0000" : "none"}
         />
-        <span className="text-sm font-medium" style={{ color: hasLiked ? '#FF0000' : '#222' }}>{likesCount}</span>
+        <span className=" text-sm font-medium" style={{ color: hasLiked ? '#FF0000' : 'white' }}>{likesCount}</span>
       </button>
     </div>
   );

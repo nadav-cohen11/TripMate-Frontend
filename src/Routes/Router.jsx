@@ -5,6 +5,7 @@ import MultiStepFormRegister from '../pages/Auth/MultiStepFormRegister';
 import protectedRoutes from './ProtectedRoutes';
 import Navbar from '../components/ui/NavBar';
 import MainPage from '../pages/Main/MainPage';
+import NotFound from './NotFound';
 
 const ProtectedLayout = () => (
   <>
@@ -15,14 +16,20 @@ const ProtectedLayout = () => (
 
 const AppRoutes = () => (
   <Routes>
-    <Route path="/" element={<MainPage />} />
-    <Route path="/login" element={<Login />} />
+    <Route path='/' element={<MainPage />} />
+    <Route path='/login' element={<Login />} />
     <Route path='/register' element={<MultiStepFormRegister />} />
-    <Route element={<ProtectedLayout />} >
-    {protectedRoutes().map((route, index) => (
-      <Route key={index} path={route.path} element={route.element} />
-    ))}
+    <Route element={<ProtectedLayout />}>
+      {protectedRoutes().map((route, index) => (
+        <Route key={index} path={route.path} element={route.element} />
+      ))}
     </Route>
+    <Route
+      path='*'
+      element={
+          <NotFound />
+      }
+    />
   </Routes>
 );
 

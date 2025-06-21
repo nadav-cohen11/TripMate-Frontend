@@ -19,14 +19,19 @@ export const FilterSelector = ({ activeFilter, setFilter, filterIcons = [] }) =>
             className={`
               flex items-center justify-center gap-1 px-2 py-1 rounded-xl w-full
               transition-all duration-200 ease-in-out shadow-sm
-              ${isActive 
-                ? "bg-[#4a90e2] text-white border border-[#4a90e2] shadow-lg" 
-                : "bg-white text-[#4a90e2] border border-gray-300 hover:bg-[#eaf4fd] hover:text-[#4a90e2]"
+              ${
+                isActive
+                  ? 'bg-[#00BFFF] text-white border border-[#00BFFF] shadow-lg'
+                  : 'bg-white text-[#00BFFF] border border-gray-300 hover:bg-[#eaf4fd] hover:text-[#4a90e2]'
               }
             `}
           >
-            <Icon className={`text-base ${isActive ? "text-white" : "text-[#4a90e2]"}`} />
-            <span className="text-xs font-semibold tracking-wide">{label}</span>
+            <Icon
+              className={`text-base ${
+                isActive ? 'text-white' : 'text-[#00BFFF]'
+              }`}
+            />
+            <span className='text-xs font-semibold tracking-wide'>{label}</span>
           </motion.button>
         );
       })}

@@ -71,7 +71,6 @@ const Home = () => {
     retry: 2,
   });
 
-
   useEffect(() => {
     const usersWithAge = users.map((user) => ({
       ...user,
@@ -111,7 +110,7 @@ const Home = () => {
 
   if (isLoading) {
     return (
-      <div className='flex items-center justify-center min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200'>
+      <div className=' bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200  flex items-center justify-center min-h-screen bg-white'>
         <Spinner />
       </div>
     );
@@ -119,7 +118,7 @@ const Home = () => {
 
   if (error) {
     return (
-      <div className='flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 text-center text-gray-800'>
+      <div className='bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200  flex flex-col items-center justify-center min-h-screen bg-white text-center text-black'>
         <h1 className='text-2xl font-semibold'>Something went wrong</h1>
         <p className='mt-2'>Please try again later</p>
       </div>
@@ -128,14 +127,14 @@ const Home = () => {
 
   if (!originalUsers.length || !displayedUsers.length) {
     return (
-      <div className='flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 text-center text-gray-800'>
+      <div className=' bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200  flex flex-col items-center justify-center min-h-screen bg-white text-center text-black'>
         <h1 className='text-2xl font-semibold'>
           No more matches at the moment!
         </h1>
         <p className='mt-2'>Check back later or adjust your preferences.</p>
         <button
           onClick={() => refetch()}
-          className='mt-4 px-4 py-2 bg-white text-blue-500 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors'
+          className='mt-4 px-4 py-2 bg-[#00BFFF] text-white border border-[#00BFFF] rounded-lg hover:bg-[#e6f7ff] hover:text-[#00BFFF] transition-colors'
         >
           Refresh
         </button>
@@ -158,7 +157,7 @@ const Home = () => {
   });
 
   return (
-    <div className='relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden'>
+    <div className='relative min-h-screen bg-white overflow-hidden bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 '>
       <TripMateTitle />
       <div className='absolute top-6 right-4 z-50'>
         <HomeFilters
@@ -170,7 +169,7 @@ const Home = () => {
 
       <div className='flex items-center justify-center min-h-screen px-4 z-10'>
         {filteredUsers.length === 0 ? (
-          <div className='flex flex-col items-center justify-center text-center text-gray-800'>
+          <div className='flex flex-col items-center justify-center text-center text-black'>
             <h1 className='text-2xl font-semibold'>
               No users match your filters!
             </h1>
