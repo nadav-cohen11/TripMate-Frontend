@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getUserLocation, getUsersLocations } from '@/api/userApi';
+import { toast } from 'react-toastify';
+import { extractBackendError } from '@/utils/errorUtils';
 
 export const useUserLocations = () => {
   const [userLocations, setUserLocations] = useState([]);

@@ -5,9 +5,10 @@ export const getCurrentLocation = (options = {}) => {
     maximumAge: 60000, 
   };
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     if (!navigator.geolocation) {
-      reject(new Error("Geolocation is not supported by this browser."));
+      console.warn("Geolocation is not supported by this browser.");
+      resolve(null);
       return;
     }
 
@@ -18,25 +19,30 @@ export const getCurrentLocation = (options = {}) => {
         const { latitude, longitude } = position.coords;
 
         if (typeof latitude !== 'number' || typeof longitude !== 'number') {
-          reject(new Error("Invalid coordinates received."));
+          console.warn("Invalid coordinates received.");
+          resolve(null);
         } else {
           resolve({ latitude, longitude });
         }
       },
       (error) => {
+        let errorMessage = '';
         switch (error.code) {
           case error.PERMISSION_DENIED:
-            reject(new Error("Permission denied by the user."));
+            errorMessage = "Permission denied by the user.";
             break;
           case error.POSITION_UNAVAILABLE:
-            reject(new Error("Position unavailable."));
+            errorMessage = "Position unavailable.";
             break;
           case error.TIMEOUT:
-            reject(new Error("Geolocation request timed out."));
+            errorMessage = "Geolocation request timed out.";
             break;
           default:
-            reject(new Error(`Unknown geolocation error: ${error.message}`));
+            errorMessage = `Unknown geolocation error: ${error.message}`;
         }
+        
+        console.warn(`Location error: ${errorMessage}`);
+        resolve(null);
       },
       mergedOptions
     );

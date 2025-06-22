@@ -34,9 +34,12 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let location = await getCurrentLocation();
-    if (!location) location = [];
-    mutation.mutate({ email, password, location });
+    try {
+      const location = await getCurrentLocation();
+      mutation.mutate({ email, password, location });
+    } catch (error) {
+      mutation.mutate({ email, password, location: [] });
+    }
   };
 
   return (
