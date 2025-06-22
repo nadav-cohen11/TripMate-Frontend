@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { Spinner } from '@/components/ui/spinner';
 import { useLocation } from 'react-router-dom';
 import DatePicker from '@/components/ui/DatePicker';
+import { useAuth } from '@/context/AuthContext';
 
 export default function ProfileSetup({ nextStep, formRegister }) {
   const {
@@ -26,6 +27,8 @@ export default function ProfileSetup({ nextStep, formRegister }) {
     handleAdventureStyleChange,
     reftechUser,
   } = useProfileSetupForm(formRegister);
+
+  const { checkAuth } = useAuth();
 
   const [selectedPhotos, setSelectedPhotos] = useState(null);
   const [previewURLs, setPreviewURLs] = useState([]);
@@ -57,6 +60,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
     mutationFn: register,
     onSuccess: async () => {
       toast.success('User registered successfully');
+      await checkAuth();
       if (selectedPhotos && selectedPhotos.length > 0) {
         setLoading(true);
         try {

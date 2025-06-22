@@ -28,14 +28,25 @@ const useProfileSetupForm = (formRegister) => {
 
   useEffect(() => {
     const getLocations = async () => {
-      const loc = await getCurrentLocation();
-      setForm((prevForm) => ({
-        ...prevForm,
-        location: {
-          ...prevForm.location,
-          coordinates: loc,
-        },
-      }));
+      try {
+        const loc = await getCurrentLocation();
+        setForm((prevForm) => ({
+          ...prevForm,
+          location: {
+            ...prevForm.location,
+            coordinates: loc,
+          },
+        }));
+      } catch (error) {
+        console.warn("Could not get location:", error);
+        setForm((prevForm) => ({
+          ...prevForm,
+          location: {
+            ...prevForm.location,
+            coordinates: [],
+          },
+        }));
+      }
     };
     getLocations();
   }, []);
