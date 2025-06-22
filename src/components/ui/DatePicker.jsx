@@ -37,7 +37,7 @@ export default function DatePicker({
           >
             {convertedDate
               ? convertedDate?.toLocaleDateString()
-              : 'Birth Date'}
+              : 'Date of Birth'}
             <ChevronDownIcon />
           </Button>
         </PopoverTrigger>
