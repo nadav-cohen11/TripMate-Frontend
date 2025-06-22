@@ -11,6 +11,7 @@ import { getUserById } from '@/api/userApi';
 import { useAuth } from '@/context/AuthContext';
 import { FaInstagram } from 'react-icons/fa';
 import { confirmToast } from '@/components/ui/ToastConfirm';
+import TripMateTitle from '@/components/ui/TripMateTitle';
 
 const UploadMediaPage = ({ register = false }) => {
   const [mediaType, setMediaType] = useState('photos');
@@ -23,7 +24,7 @@ const UploadMediaPage = ({ register = false }) => {
   const [tripParticipants, setTripParticipants] = useState([]);
   const { user } = useAuth();
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     const fetchTrips = async () => {
       try {
@@ -41,11 +42,13 @@ const UploadMediaPage = ({ register = false }) => {
 
   const refetchUserMedia = async () => {
     try {
+      if (!register) {
       const userData = await getUserById(user);
       if (mediaType === 'photos') {
         setExistingMedia(userData.photos || []);
-      } else {
-        setExistingMedia(userData.reels || []);
+        } else {
+          setExistingMedia(userData.reels || []);
+        }
       }
     } catch (err) {
       toast.error('Failed to refetch media');
@@ -113,7 +116,7 @@ const UploadMediaPage = ({ register = false }) => {
       setSelectedTrip(null);
       setTagParticipants(false);
       setTripParticipants([]);
-      navigate('/reels');
+      navigate(`/profile/${user}`);
     },
     onError: (error) => {
       toast.error(extractBackendError(error));
@@ -299,10 +302,11 @@ const UploadMediaPage = ({ register = false }) => {
 
   return (
     <div className='min-h-screen bg-[#f8faff] py-2 sm:py-4 md:py-8 px-1 sm:px-4 flex items-center justify-center pb-8 sm:pb-0'>
+      <TripMateTitle />
       <div className='w-full max-w-[420px] sm:max-w-[520px] bg-white/70 backdrop-blur-md rounded-[32px] shadow-[0_20px_70px_-10px_rgba(112,144,176,0.15)] relative border border-white mx-auto'>
         {!register && (
           <button
-            onClick={() => navigate('/reels')}
+            onClick={() => navigate(`/profile/${user}`)}
             className='absolute -top-3 -right-3 p-2.5 bg-white rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.08)] text-gray-400 hover:text-gray-600 z-50 hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all duration-300 border border-gray-50'
             aria-label='Skip to reels'
           >
@@ -342,6 +346,7 @@ const UploadMediaPage = ({ register = false }) => {
                 <Image size={18} />
                 Photos
               </button>
+              {!register && (
               <button
                 className={`flex-1 px-4 py-3 rounded-xl flex items-center justify-center gap-2.5 text-sm font-medium transition-all duration-300 ${
                   mediaType === 'reels'
@@ -357,8 +362,9 @@ const UploadMediaPage = ({ register = false }) => {
                 }}
               >
                 <Film size={18} />
-                Reels
-              </button>
+                  Reels
+                </button>
+              )}
             </div>
           </div>
 

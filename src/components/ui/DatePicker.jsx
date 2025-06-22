@@ -37,7 +37,7 @@ export default function DatePicker({
           >
             {convertedDate
               ? convertedDate?.toLocaleDateString()
-              : 'Select date'}
+              : 'Birth Date'}
             <ChevronDownIcon />
           </Button>
         </PopoverTrigger>
@@ -55,7 +55,7 @@ export default function DatePicker({
               setOpen(false);
             }}
             disabled={disabled}
-            withFutureYears={name == "birthDate" ? false : true}
+            withFutureYears={name == "birthDate" ? false : true}  
           />
         </PopoverContent>
       </Popover>

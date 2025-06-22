@@ -30,7 +30,7 @@ const UserProfilePage = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
-  const { matches, pendingMatches } = useFetchMyMatches(); // must always run!
+  const { matches, pendingMatches } = useFetchMyMatches();
   const [openSignOut, setOpenSignOut] = useState(false);
 
   const {
