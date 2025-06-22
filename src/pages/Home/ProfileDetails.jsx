@@ -52,12 +52,7 @@ const ProfileDetails = ({
   }, [userId, currUser, travel]);
 
   return (
-    <div className="
-      relative flex flex-col bg-white shadow-lg text-black rounded-2xl
-      w-[90vw] max-w-md mx-auto my-8 border border-gray-200 p-0 transition-all duration-300
-      h-auto sm:h-[75vh] 
-      overflow-visible sm:overflow-hidden
-    ">
+    <div className='flex-1 overflow-y-auto bg-transparent rounded-2xl px-6 py-4 shadow-none text-black space-y-6'>
       {compatibilityScore && (
         <div className='flex items-center gap-2 bg-gray-100 text-[#00BFFF] px-3 py-2 rounded-xl w-max shadow font-semibold'>
           <Sparkles className='w-4 h-4 text-[#00BFFF]' />
