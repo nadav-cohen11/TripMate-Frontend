@@ -248,7 +248,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
         <DatePicker
           date={form.birthDate}
           handleInputChange={handleInputChange}
-          name={'birthDate'}
+          name={'Birth Date'}
           disabled={!formRegister}
         />
 
