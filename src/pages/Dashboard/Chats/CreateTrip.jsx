@@ -230,32 +230,20 @@ const CreateTrip = ({ userId, socket, setChats, matches }) => {
                   </div>
                   <div>
                     <Label htmlFor='startDate'>Start Date</Label>
-                    {/* <Input
-                      id='startDate'
-                      type='date'
-                      value={form.startDate}
-                      onChange={handleChange}
-                      required
-                    /> */}
+                    
                     <DatePicker
                       date={form.startDate}
                       handleInputChange={handleChange}
-                      name={'startDate'}
+                      name={'Start Date'}
                     />
                   </div>
                   <div>
                     <Label htmlFor='endDate'>End Date</Label>
-                    {/* <Input
-                      id='endDate'
-                      type='date'
-                      value={form.endDate}
-                      onChange={handleChange}
-                      required
-                    /> */}
+                    
                     <DatePicker
                       date={form.endDate}
                       handleInputChange={handleChange}
-                      name={'endDate'}
+                      name={'End Date'}
                     />
                   </div>
                   <div>

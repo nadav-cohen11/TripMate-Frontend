@@ -31,16 +31,18 @@ const ProfileCard = ({ user, swipeInfo }) => {
         photoCount={user.photos?.length || 1}
         setPhotoIndex={setPhotoIndex}
       />
-      <ProfileDetails
-        user={user}
-        birthDate={user.birthDate}
-        country={country}
-        city={city}
-        travel={travel}
-        distance={user.distance}
-        compatibilityScore={user.compatibilityScore}
-        aiSuggested={user.aiSuggested}
-      />
+      <div className='flex-1 overflow-y-auto'>
+        <ProfileDetails
+          user={user}
+          birthDate={user.birthDate}
+          country={country}
+          city={city}
+          travel={travel}
+          distance={user.distance}
+          compatibilityScore={user.compatibilityScore}
+          aiSuggested={user.aiSuggested}
+        />
+      </div>
     </div>
   );
 };

@@ -25,8 +25,8 @@ function Calendar({
 
   return (
     <DayPicker
-      fromYear={withFutureYears ? currentYear - 10 : null}
-      toYear={withFutureYears ? currentYear + 10 : null}
+      fromYear={withFutureYears ? currentYear : null}
+      toYear={withFutureYears ? currentYear + 20 : null}
       showOutsideDays={showOutsideDays}
       disabled={{ before: new Date() }}
       className={cn(

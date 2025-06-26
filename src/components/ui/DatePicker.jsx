@@ -17,6 +17,7 @@ export default function DatePicker({
   name,
   disabled = false,
 }) {
+  console.log(name)
   const [open, setOpen] = React.useState(false);
   let convertedDate;
   if(date){
@@ -55,7 +56,7 @@ export default function DatePicker({
               setOpen(false);
             }}
             disabled={disabled}
-            withFutureYears={name == "birthDate" ? false : true}  
+            withFutureYears={name == "Birth Date" ? false : true}  
           />
         </PopoverContent>
       </Popover>

@@ -5,9 +5,9 @@ const useChatSocket = (userId, setChats = undefined) => {
   const [socketInstance, setSocketInstance] = useState(null);
   useEffect(() => {
     if (userId) {
-      const socket = io(import.meta.env.VITE_BACKEND_URL, {
-        transports: ["websocket", "polling"],
-        withCredentials: true
+      const socket = io(import.meta.env.VITE_FRONTEND_URL, {
+        transports: ['websocket', 'polling'],
+        withCredentials: true,
       });
       setSocketInstance(socket);
 
