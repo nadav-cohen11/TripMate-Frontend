@@ -10,6 +10,7 @@ import {
 import { useState } from 'react';
 import { HomeFilterSelector } from './HomeFilterSelector';
 import { GiSettingsKnobs } from 'react-icons/gi';
+import { FilterIcon } from 'lucide-react';
 
 const HomeFilters = ({ isOpen, setIsOpen, handleApplyFilters }) => {
   const [filter, setFilter] = useState([]);
@@ -18,7 +19,7 @@ const HomeFilters = ({ isOpen, setIsOpen, handleApplyFilters }) => {
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
           <button className='flex items-center justify-center gap-2 px-6 py-3 text-black rounded-xl font-semibold mb-2 mx-auto'>
-            <GiSettingsKnobs size={27} />
+            <FilterIcon/>
           </button>
         </DialogTrigger>
         <DialogContent className='w-full max-w-sm p-2 rounded-2xl bg-white shadow-2xl border-0 z-[1000] pointer-events-auto'>

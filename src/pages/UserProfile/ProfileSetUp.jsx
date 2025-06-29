@@ -171,7 +171,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
     <div className='min-h-screen flex items-center justify-center bg-gradient-to-b from-[#eaf4ff] to-[#dbeeff] px-4 py-8 overflow-auto'>
       <form
         onSubmit={onSubmit}
-        className='bg-white rounded-3xl shadow-xl p-4 sm:p-6 w-full max-w-md flex flex-col gap-4 text-[#2D4A53] transition-all duration-300 max-h-[90vh] overflow-y-auto'
+        className='bg-white rounded-xl shadow-xl p-4 sm:p-6 w-full max-w-md flex flex-col gap-4 text-[#2D4A53] transition-all duration-300 max-h-[90vh] overflow-y-auto'
         style={{ minHeight: 'unset' }}
       >
         <div className='flex flex-col items-center gap-2'>
@@ -248,8 +248,10 @@ export default function ProfileSetup({ nextStep, formRegister }) {
         <DatePicker
           date={form.birthDate}
           handleInputChange={handleInputChange}
-          name={'Birth Date'}
+          name={"birthDate"}
+          placeHolder={'Birth Date'}
           disabled={!formRegister}
+          className='rounded-xl'
         />
 
         <Select
@@ -272,6 +274,16 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           isSearchable
           classNamePrefix='rs'
           className='rounded-xl text-sm'
+          styles={{
+            control: (base) => ({
+              ...base,
+              borderRadius: '0.75rem',
+            }),
+            menu: (base) => ({
+              ...base,
+              borderRadius: '0.75rem',
+            }),
+          }}
         />
 
         <Select
@@ -290,6 +302,16 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           isDisabled={!form.location?.country}
           classNamePrefix='rs'
           className='rounded-xl text-sm'
+          styles={{
+            control: (base) => ({
+              ...base,
+              borderRadius: '0.75rem',
+            }),
+            menu: (base) => ({
+              ...base,
+              borderRadius: '0.75rem',
+            }),
+          }}
         />
 
         <Select
@@ -304,6 +326,16 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           isSearchable
           classNamePrefix='rs'
           className='rounded-xl text-sm'
+          styles={{
+            control: (base) => ({
+              ...base,
+              borderRadius: '0.75rem',
+            }),
+            menu: (base) => ({
+              ...base,
+              borderRadius: '0.75rem',
+            }),
+          }}
         />
 
         <Select
@@ -315,6 +347,16 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           onChange={handleAdventureStyleChange}
           classNamePrefix='rs'
           className='rounded-xl text-sm'
+          styles={{
+            control: (base) => ({
+              ...base,
+              borderRadius: '0.75rem',
+            }),
+            menu: (base) => ({
+              ...base,
+              borderRadius: '0.75rem',
+            }),
+          }}
         />
 
         <textarea
@@ -335,7 +377,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
             value={form.socialLinks?.instagram}
             onChange={handleSocialChange}
             placeholder='your_username'
-            className='flex-1 bg-transparent outline-none text-xs'
+            className='flex-1 bg-transparent outline-none text-xs rounded-xl'
           />
         </div>
 
@@ -348,7 +390,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
             value={form.socialLinks?.facebook}
             onChange={handleSocialChange}
             placeholder='your.username'
-            className='flex-1 bg-transparent outline-none text-xs'
+            className='flex-1 bg-transparent outline-none text-xs rounded-xl'
           />
         </div>
 
