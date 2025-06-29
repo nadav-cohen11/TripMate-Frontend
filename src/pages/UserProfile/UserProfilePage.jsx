@@ -149,7 +149,7 @@ const UserProfilePage = () => {
   }
 
   return (
-    <div className='relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden flex flex-col items-center py-12'>
+    <div className='relative min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 overflow-hidden flex flex-col items-center py-12 pb-32 md:pb-40'>
       <TripMateTitle />
       {userId === user && (
         <div className='absolute top-6 right-6 flex items-center gap-3 z-50'>
