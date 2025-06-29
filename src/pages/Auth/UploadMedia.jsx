@@ -301,7 +301,7 @@ const UploadMediaPage = ({ register = false }) => {
   };
 
   return (
-    <div className='min-h-screen bg-[#f8faff] py-2 sm:py-4 md:py-8 px-1 sm:px-4 flex items-center justify-center pb-8 sm:pb-0'>
+    <div className='min-h-screen bg-[#f8faff] py-2 sm:py-4 md:py-8 px-1 sm:px-4 flex items-center justify-center pb-32 md:pb-40'>
       <TripMateTitle />
       <div className='w-full max-w-[420px] sm:max-w-[520px] bg-white/70 backdrop-blur-md rounded-[32px] shadow-[0_20px_70px_-10px_rgba(112,144,176,0.15)] relative border border-white mx-auto'>
         {!register && (
