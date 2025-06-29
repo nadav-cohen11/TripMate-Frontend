@@ -197,7 +197,7 @@ const UserProfilePage = () => {
         </div>
       )}
 
-      <div className='w-full max-w-sm space-y-6 mt-20 mb-8'>
+      <div className='w-full max-w-full sm:max-w-md md:max-w-lg lg:max-w-2xl space-y-6 mt-20 mb-8 px-2 sm:px-0'>
         <div className='bg-white rounded-3xl border border-blue-100 shadow-lg overflow-hidden relative'>
           {userId === user && (
             <button
@@ -221,7 +221,7 @@ const UserProfilePage = () => {
         {userId === user && myMatchesButton}
       </div>
 
-      <div className='w-full max-w-md bg-white rounded-3xl shadow-xl border border-blue-100 p-8 flex flex-col gap-8 relative'>
+      <div className='w-full max-w-full sm:max-w-md md:max-w-lg lg:max-w-2xl bg-white rounded-3xl shadow-xl border border-blue-100 p-4 sm:p-8 flex flex-col gap-8 relative'>
         {userId === user && (
           <div className='absolute top-4 right-4'>{userQRCodeComponent}</div>
         )}
