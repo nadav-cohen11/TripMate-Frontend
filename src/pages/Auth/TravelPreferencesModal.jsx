@@ -5,6 +5,18 @@ import { updateUser } from '@/api/userApi';
 import { toast } from 'react-toastify';
 import DatePicker from '@/components/ui/DatePicker';
 import { Spinner } from '@/components/ui/spinner';
+import { lookingOptions } from '../../constants/profile';
+import Select from '@/components/ui/Select';
+
+const travelInterestsOptions = lookingOptions.map(opt => ({ value: opt, label: opt }));
+
+const normalizeInterests = (arr) => {
+  if (!Array.isArray(arr)) return [];
+  return arr.map(i => {
+    const match = lookingOptions.find(opt => opt.toLowerCase() === i.trim().toLowerCase());
+    return match || i.trim();
+  });
+};
 
 const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences }) => {
   const queryClient = useQueryClient();
@@ -15,7 +27,9 @@ const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences })
     groupSize: '',
     travelDates: { start: '', end: '' },
     ageRange: { min: '', max: '' },
-    interests: '',
+    interests: normalizeInterests(Array.isArray(currentPreferences.interests)
+      ? currentPreferences.interests
+      : (currentPreferences.interests ? currentPreferences.interests.split(',') : [])),
   });
 
   useEffect(() => {
@@ -32,7 +46,9 @@ const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences })
           min: currentPreferences.ageRange?.min || '',
           max: currentPreferences.ageRange?.max || '',
         },
-        interests: currentPreferences.interests?.join(', ') || '',
+        interests: normalizeInterests(Array.isArray(currentPreferences.interests)
+          ? currentPreferences.interests
+          : (currentPreferences.interests ? currentPreferences.interests.split(',') : [])),
       });
     }
   }, [currentPreferences]);
@@ -77,7 +93,7 @@ const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences })
       min: Number(formData.ageRange.min),
       max: Number(formData.ageRange.max),
     },
-    interests: formData.interests.split(',').map((i) => i.trim().toLowerCase()),
+    interests: Array.isArray(formData.interests) ? Array.from(new Set(formData.interests)) : [],
   };
 
   const handleSubmit = () => {
@@ -204,13 +220,13 @@ const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences })
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700">Interests</label>
-                      <input
-                        type="text"
+                      <Select
                         name="interests"
                         value={formData.interests}
-                        onChange={handleChange}
-                        placeholder="e.g. hiking, museums"
-                        className="input w-full"
+                        onChange={vals => setFormData(prev => ({ ...prev, interests: Array.from(new Set(vals)) }))}
+                        options={travelInterestsOptions}
+                        isMulti
+                        placeholder="Select interests..."
                         disabled={mutation.isLoading}
                       />
                     </div>
