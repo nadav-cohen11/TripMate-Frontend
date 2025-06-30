@@ -147,15 +147,25 @@ const ChatWindow = ({
               e.preventDefault();
               handleHeaderClick();
             }
-          }}
-        >
-          <div className='flex items-center justify-center'>
+            }}
+          >
+            <div className='flex items-center justify-center'>
             {!isGroupChat && otherUser && (
-              <img
-                src={otherUser.photos?.[0].url}
+              <div className='w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-lg font-semibold text-gray-600 overflow-hidden mr-3'>
+              {otherUser.photos?.length > 0 ? (
+                <img
+                src={otherUser.photos[0].url}
+                className='rounded-full w-10 h-10 object-cover'
                 alt={chatTitle}
-                className='w-10 h-10 object-cover rounded-full mr-3'
-              />
+                />
+              ) : (
+                otherUser.fullName
+                .split(' ')
+                .map((n) => n[0])
+                .join('')
+                .toUpperCase()
+              )}
+              </div>
             )}
 
             <h2 className='text-base sm:text-lg font-bold text-gray-900 text-center flex-1 truncate'>
@@ -163,7 +173,7 @@ const ChatWindow = ({
             </h2>
             {!isGroupChat && otherUser && (
               <button
-                onClick={(e) => {
+              onClick={(e) => {
                   e.stopPropagation();
                   handleBlockUser();
                 }}
