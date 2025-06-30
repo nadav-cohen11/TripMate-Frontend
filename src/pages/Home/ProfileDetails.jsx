@@ -79,7 +79,7 @@ const ProfileDetails = ({
       
 
       {(user.socialLinks?.instagram || user.socialLinks?.facebook) && (
-        <div className='flex gap-4'>
+        <div className='flex gap-4 mt-4'>
           {user.socialLinks?.instagram && (
             <a
               href={user.socialLinks.instagram}
@@ -106,42 +106,44 @@ const ProfileDetails = ({
       )}
 
       {user.bio && (
-        <div className='flex items-center border-l-4 border-gray-200 pl-3 py-2 bg-gray-50 rounded-lg'>
+        <div className='flex items-center border-l-4 border-gray-200 pl-3 py-2 bg-gray-50 rounded-lg mt-4'>
           <span className='italic text-black/80 text-base leading-relaxed'>
             {user.bio}
           </span>
         </div>
       )}
+
       <div className='flex flex-col gap-2 border-t border-gray-100 pt-4'>
-        <p>
+        <p className='flex gap-1 items-center'>
           <span className='text-base font-semibold text-gray-700 align-middle'>
             Gender:
           </span>{' '}
-          <span className='font-normal text-gray-700'>
+          <span className='font-normal text-gray-700 capitalize'>
             {user.gender || 'Not specified'}
           </span>
         </p>
-        <p>
+        <p className='flex gap-1 items-center'>
           <span className='text-base font-semibold text-gray-700 align-middle'>
             Languages:
           </span>{' '}
-          <span className='font-normal text-gray-700'>
+          <span className='font-normal text-gray-700 capitalize'>
             {Array.isArray(user.languages) && user.languages.length > 0
               ? user.languages.join(', ')
               : 'Not specified'}
           </span>
         </p>
-        <p>
+        <p className='flex gap-1 items-center'>
           <span className='text-base font-semibold text-gray-700 align-middle'>
             Adventure Style:
           </span>{' '}
-          <span className='font-normal text-gray-700'>
+          <span className='font-normal text-gray-700 capitalize'>
             {user.adventureStyle || 'Not specified'}
           </span>
         </p>
       </div>
+
       {travel && (
-        <div className='relative bg-gray-50 p-4 rounded-xl shadow-sm space-y-2 text-sm mt-4 border border-gray-100'>
+        <div className='relative bg-gray-50 p-4 rounded-xl shadow-sm space-y-3 text-sm mt-6 border border-gray-100'>
           {userId === currUser && (
             <button
               onClick={() => setIsEditingPreferences(true)}
@@ -211,7 +213,8 @@ const ProfileDetails = ({
           />
         </div>
       )}
-      <div className='pt-4 border-t border-gray-100'>
+
+      <div className='pt-4 border-t border-gray-100 mt-6'>
         <ReviewList reviews={user.reviews} />
       </div>
 

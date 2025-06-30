@@ -12,6 +12,7 @@ import { useAuth } from '@/context/AuthContext';
 import { FaInstagram } from 'react-icons/fa';
 import { confirmToast } from '@/components/ui/ToastConfirm';
 import TripMateTitle from '@/components/ui/TripMateTitle';
+import { ButtonLoading } from '@/components/ui/ButtonLoading';
 
 const UploadMediaPage = ({ register = false }) => {
   const [mediaType, setMediaType] = useState('photos');
@@ -24,7 +25,7 @@ const UploadMediaPage = ({ register = false }) => {
   const [tripParticipants, setTripParticipants] = useState([]);
   const { user } = useAuth();
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     const fetchTrips = async () => {
       try {
@@ -43,9 +44,9 @@ const UploadMediaPage = ({ register = false }) => {
   const refetchUserMedia = async () => {
     try {
       if (!register) {
-      const userData = await getUserById(user);
-      if (mediaType === 'photos') {
-        setExistingMedia(userData.photos || []);
+        const userData = await getUserById(user);
+        if (mediaType === 'photos') {
+          setExistingMedia(userData.photos || []);
         } else {
           setExistingMedia(userData.reels || []);
         }
@@ -146,7 +147,6 @@ const UploadMediaPage = ({ register = false }) => {
           return prev;
         });
       }
-      
     },
     onSuccess: async () => {
       toast.success(
@@ -347,21 +347,21 @@ const UploadMediaPage = ({ register = false }) => {
                 Photos
               </button>
               {!register && (
-              <button
-                className={`flex-1 px-4 py-3 rounded-xl flex items-center justify-center gap-2.5 text-sm font-medium transition-all duration-300 ${
-                  mediaType === 'reels'
-                    ? 'bg-white text-[#4a90e2] shadow-sm border border-[#4a90e2]/20'
-                    : 'bg-white/80 text-[#4a90e2]/70 hover:bg-white hover:text-[#4a90e2]'
-                }`}
-                onClick={() => {
-                  setMediaType('reels');
-                  setSelectedFiles([]);
-                  setPreviewURLs([]);
-                  setSelectedTrip(null);
-                  refetchUserMedia();
-                }}
-              >
-                <Film size={18} />
+                <button
+                  className={`flex-1 px-4 py-3 rounded-xl flex items-center justify-center gap-2.5 text-sm font-medium transition-all duration-300 ${
+                    mediaType === 'reels'
+                      ? 'bg-white text-[#4a90e2] shadow-sm border border-[#4a90e2]/20'
+                      : 'bg-white/80 text-[#4a90e2]/70 hover:bg-white hover:text-[#4a90e2]'
+                  }`}
+                  onClick={() => {
+                    setMediaType('reels');
+                    setSelectedFiles([]);
+                    setPreviewURLs([]);
+                    setSelectedTrip(null);
+                    refetchUserMedia();
+                  }}
+                >
+                  <Film size={18} />
                   Reels
                 </button>
               )}
@@ -462,30 +462,39 @@ const UploadMediaPage = ({ register = false }) => {
             )}
 
             <div className='flex justify-center pt-2 sm:pt-4 mb-16'>
-              <button
-                onClick={() => uploadMutation.mutate()}
-                disabled={
-                  selectedFiles.length === 0 ||
-                  uploadMutation.isLoading ||
-                  (mediaType === 'reels' && !selectedTrip)
-                }
-                className='w-full max-w-[240px] px-4 sm:px-6 py-2.5 sm:py-3.5 bg-white text-blue-500 border border-gray-100 text-xs sm:text-sm font-medium rounded-2xl hover:bg-blue-50/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 shadow-sm hover:shadow group'
-              >
-                {uploadMutation.isLoading ? (
-                  <>
-                    <Spinner size={20} color='text-blue-500' />
-                    <span>Uploading...</span>
-                  </>
-                ) : (
-                  <>
-                    <Upload
-                      size={20}
-                      className='text-blue-500 group-hover:scale-110 transition-transform duration-300'
-                    />
-                    <span>Upload {mediaType}</span>
-                  </>
-                )}
-              </button>
+              {uploadMutation.isPending ? (
+                <ButtonLoading
+                  style={
+                    'w-full max-w-[240px] px-4 sm:px-6 py-2.5 sm:py-3.5 bg-white text-blue-500 border border-gray-100 text-xs sm:text-sm font-medium rounded-2xl hover:bg-blue-50/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 shadow-sm hover:shadow group'
+                  }
+                />
+              ) : (
+                <button
+                  onClick={() => uploadMutation.mutate()}
+                  disabled={
+                    selectedFiles.length === 0 ||
+                    uploadMutation.isLoading ||
+                    (mediaType === 'reels' && !selectedTrip) ||
+                    uploadMutation.isPending
+                  }
+                  className='w-full max-w-[240px] px-4 sm:px-6 py-2.5 sm:py-3.5 bg-white text-blue-500 border border-gray-100 text-xs sm:text-sm font-medium rounded-2xl hover:bg-blue-50/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 shadow-sm hover:shadow group'
+                >
+                  {uploadMutation.isLoading ? (
+                    <>
+                      <Spinner size={20} color='text-blue-500' />
+                      <span>Uploading...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Upload
+                        size={20}
+                        className='text-blue-500 group-hover:scale-110 transition-transform duration-300'
+                      />
+                      <span>Upload {mediaType}</span>
+                    </>
+                  )}
+                </button>
+              )}
             </div>
           </div>
         </div>
