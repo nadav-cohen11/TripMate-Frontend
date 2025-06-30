@@ -21,8 +21,8 @@ const fetchEvents = async ({ queryKey }) => {
 };
 
 export const EventList = ({ lat, lon, keyword: externalKeyword }) => {
-  const [selectedFilter, setSelectedFilter] = useState('');
-  const [debouncedKeyword, setDebouncedKeyword] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState('Music');
+  const [debouncedKeyword, setDebouncedKeyword] = useState('Music');
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -45,7 +45,7 @@ export const EventList = ({ lat, lon, keyword: externalKeyword }) => {
 
   return (
     <motion.div
-      className='mt-10 bg-white/90 backdrop-blur-md p-8 rounded-3xl shadow-2xl border border-[#00BFFF]/10'
+      className="mt-10 bg-white/90 backdrop-blur-md p-8 rounded-3xl shadow-2xl border border-[#00BFFF]/10 max-w-6xl mx-auto px-4 lg:px-12"
       initial='hidden'
       animate='show'
       variants={containerVariants}
@@ -92,7 +92,7 @@ export const EventList = ({ lat, lon, keyword: externalKeyword }) => {
         <p className='text-center text-gray-500'>No events found nearby.</p>
       )}
 
-      <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-3'>
+      <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-3 justify-items-center'>
         {events?.map((event) => (
           <motion.div key={event.id} whileHover={{ scale: 1.02 }}>
             <EventCard event={event} />

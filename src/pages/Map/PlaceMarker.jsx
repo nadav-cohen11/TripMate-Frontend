@@ -49,6 +49,9 @@ export const PlaceMarker = ({ place, filter }) => {
   if (!lat || !lon) return null;
 
   const { tags = {} } = place;
+  const placeName = tags.name || tags['name:en'] || tags['name:he'];
+
+  if (!placeName) return null;
 
   return (
     <Marker
@@ -66,7 +69,7 @@ export const PlaceMarker = ({ place, filter }) => {
           className='text-center max-w-[250px] p-2'
         >
           <h4 className='font-semibold text-indigo-700 text-lg mb-2'>
-            {tags.name || tags['name:en'] || tags['name:he'] || 'Unknown Place'}
+            {placeName}
           </h4>
           <div className='space-y-2'>
             {tags['addr:street'] && tags['addr:housenumber'] && (
