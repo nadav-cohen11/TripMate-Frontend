@@ -24,4 +24,4 @@ const TripMateTitle = () => {
   );
 };
 
-export default TripMateTitle; 
+export default TripMateTitle;

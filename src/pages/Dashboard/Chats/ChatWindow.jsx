@@ -138,7 +138,7 @@ const ChatWindow = ({
           onClick={handleHeaderClick}
           tabIndex={0}
           role='button'
-          className='mb-4 border-b pb-3 relative cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-blue-500 rounded'
+          className='mb-4 border-b pb-3 relative cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-[#4a90e2]/50 rounded'
           aria-label={
             isGroupChat ? 'Open group details' : `Chat with ${chatTitle}`
           }
@@ -147,19 +147,37 @@ const ChatWindow = ({
               e.preventDefault();
               handleHeaderClick();
             }
-          }}
-        >
-          <div className='flex items-center justify-center'>
+            }}
+          >
+            <div className='flex items-center justify-center'>
+            {!isGroupChat && otherUser && (
+              <div className='w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-lg font-semibold text-gray-600 overflow-hidden mr-3'>
+              {otherUser.photos?.length > 0 ? (
+                <img
+                src={otherUser.photos[0].url}
+                className='rounded-full w-10 h-10 object-cover'
+                alt={chatTitle}
+                />
+              ) : (
+                otherUser.fullName
+                .split(' ')
+                .map((n) => n[0])
+                .join('')
+                .toUpperCase()
+              )}
+              </div>
+            )}
+
             <h2 className='text-base sm:text-lg font-bold text-gray-900 text-center flex-1 truncate'>
               {chatTitle}
             </h2>
             {!isGroupChat && otherUser && (
               <button
-                onClick={(e) => {
+              onClick={(e) => {
                   e.stopPropagation();
                   handleBlockUser();
                 }}
-                className='absolute right-0 top-0 flex items-center px-3 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 transition'
+                className='flex items-center px-3 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 transition'
                 title={`Block ${otherUser.fullName}`}
                 type='button'
                 aria-label={`Block ${otherUser.fullName}`}
@@ -209,57 +227,57 @@ const ChatWindow = ({
                       })
                     : '';
 
-                    const translated = translatedMsgs[msg._id];
-                    return (
+                  const translated = translatedMsgs[msg._id];
+                  return (
+                    <div
+                      key={idx}
+                      className={`my-2 ${
+                        isSender ? 'text-right' : 'text-left'
+                      }`}
+                    >
                       <div
-                        key={idx}
-                        className={`my-2 ${
-                          isSender ? 'text-right' : 'text-left'
+                        className={`inline-block px-3 py-2 rounded-2xl min-w-[40px] max-w-[80vw] sm:max-w-[70%] break-words relative ${
+                          isSender ? 'bg-green-100' : 'bg-gray-100'
                         }`}
+                        aria-label={`${msg.sender?.fullName} says: ${msg.content}`}
                       >
-                        <div
-                          className={`inline-block px-3 py-2 rounded-2xl min-w-[40px] max-w-[80vw] sm:max-w-[70%] break-words relative ${
-                            isSender ? 'bg-green-100' : 'bg-gray-100'
-                          }`}
-                          aria-label={`${msg.sender?.fullName} says: ${msg.content}`}
-                        >
-                          {isGroupChat && !isSender && (
-                            <div className='text-xs font-semibold text-blue-700 mb-1 select-text'>
-                              {msg.sender?.fullName || 'System Suggestion'}
+                        {isGroupChat && !isSender && (
+                          <div className='text-xs font-semibold text-blue-700 mb-1 select-text'>
+                            {msg.sender?.fullName || 'System Suggestion'}
+                          </div>
+                        )}
+                        <span>{msg.content}</span>
+                        <div className='flex justify-between mt-2 items-end gap-2'>
+                          {!translated && (
+                            <button
+                              className='flex text-xs cursor-pointer text-[#4a90e2] hover:underline'
+                              onClick={async () => {
+                                const result = await translate(msg.content);
+                                setTranslatedMsgs((prev) => ({
+                                  ...prev,
+                                  [msg._id]: result,
+                                }));
+                              }}
+                              type='button'
+                            >
+                              Translate
+                            </button>
+                          )}
+
+                          {translated && (
+                            <span className='text-xs text-gray-700 italic ml-2'>
+                              {translated}
+                            </span>
+                          )}
+                          {time && (
+                            <div className='text-xs text-gray-500 mt-1 text-right select-none ml-auto'>
+                              {time}
                             </div>
                           )}
-                          <span>{msg.content}</span>
-                          <div className='flex justify-between mt-2 items-end gap-2'>
-                            {!translated && (
-                              <button
-                                className='flex text-xs cursor-pointer text-blue-600 hover:underline'
-                                onClick={async () => {
-                                  const result = await translate(msg.content);
-                                  setTranslatedMsgs((prev) => ({
-                                    ...prev,
-                                    [msg._id]: result,
-                                  }));
-                                }}
-                                type='button'
-                              >
-                                Translate
-                              </button>
-                            )}
-
-                            {translated && (
-                              <span className='text-xs text-gray-700 italic ml-2'>
-                                {translated}
-                              </span>
-                            )}
-                            {time && (
-                              <div className='text-xs text-gray-500 mt-1 text-right select-none ml-auto'>
-                                {time}
-                              </div>
-                            )}
-                          </div>
                         </div>
                       </div>
-                    );
+                    </div>
+                  );
                 })}
               </section>
             ),
@@ -279,12 +297,12 @@ const ChatWindow = ({
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder='Type a message...'
-            className='flex-1 px-3 py-2 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base'
+            className='flex-1 px-3 py-2 rounded-2xl border border-[#4a90e2]/20 focus:outline-none focus:ring-2 focus:ring-[#4a90e2]/50 text-sm sm:text-base'
             aria-label='Type your message'
           />
           <button
             type='submit'
-            className='px-4 py-2 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base transition'
+            className='px-4 py-2 rounded-2xl bg-[#4a90e2] hover:bg-[#4a90e2]/90 text-white text-sm sm:text-base transition'
             aria-label='Send message'
           >
             Send

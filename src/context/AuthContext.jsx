@@ -1,10 +1,19 @@
 import { createContext, useContext, useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import api from '../api/axios';
 
 const fetchAuthStatus = async () => {
   const res = await api.get('/users/auth/check');
   return res.data;
+};
+
+const signOut = async (refetch) => {
+  try {
+    await api.post('/users/logout');
+    refetch();
+  } catch (err) {
+    refetch();
+  }
 };
 
 export const AuthContext = createContext();
@@ -24,6 +33,7 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated: !!data?.userId,
     user: data?.userId || null,
     checkAuth: refetch,
+    signOut: () => signOut(refetch),
   }), [data, isLoading, refetch]);
 
   return (

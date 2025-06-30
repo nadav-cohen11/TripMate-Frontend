@@ -85,8 +85,8 @@ const MyMatches = () => {
             <Button
               className={`flex items-center gap-2 px-4 py-2 rounded-full shadow transition ${
                 filter === 'allMatches'
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-white text-blue-500 border border-blue-200'
+                  ? 'bg-white text-[#4a90e2] border border-[#4a90e2]/20'
+                  : 'bg-white text-gray-500 border border-gray-200 hover:text-[#4a90e2] hover:border-[#4a90e2]/20'
               }`}
               onClick={() => setFilter('allMatches')}
             >
@@ -95,8 +95,8 @@ const MyMatches = () => {
             <Button
               className={`flex items-center gap-2 px-4 py-2 rounded-full shadow transition ${
                 filter === 'pending'
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-white text-blue-500 border border-blue-200'
+                  ? 'bg-white text-[#4a90e2] border border-[#4a90e2]/20'
+                  : 'bg-white text-gray-500 border border-gray-200 hover:text-[#4a90e2] hover:border-[#4a90e2]/20'
               }`}
               onClick={() => setFilter('pending')}
             >

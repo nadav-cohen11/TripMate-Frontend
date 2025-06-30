@@ -1,22 +1,50 @@
-export const getCurrentLocation = () => {
-  return new Promise((resolve, reject) => {
+export const getCurrentLocation = (options = {}) => {
+  const defaultOptions = {
+    enableHighAccuracy: true,
+    timeout: 10000,
+    maximumAge: 60000, 
+  };
+
+  return new Promise((resolve) => {
     if (!navigator.geolocation) {
-      return reject(new Error("Geolocation is not supported"));
+      console.warn("Geolocation is not supported by this browser.");
+      resolve(null);
+      return;
     }
+
+    const mergedOptions = { ...defaultOptions, ...options };
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        resolve([position.coords.latitude, position.coords.longitude]);
+        const { latitude, longitude } = position.coords;
+
+        if (typeof latitude !== 'number' || typeof longitude !== 'number') {
+          console.warn("Invalid coordinates received.");
+          resolve(null);
+        } else {
+          resolve({ latitude, longitude });
+        }
       },
       (error) => {
-        console.warn("Geolocation error:", error.message);
-        resolve(null); 
+        let errorMessage = '';
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            errorMessage = "Permission denied by the user.";
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorMessage = "Position unavailable.";
+            break;
+          case error.TIMEOUT:
+            errorMessage = "Geolocation request timed out.";
+            break;
+          default:
+            errorMessage = `Unknown geolocation error: ${error.message}`;
+        }
+        
+        console.warn(`Location error: ${errorMessage}`);
+        resolve(null);
       },
-      {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0,
-      }
+      mergedOptions
     );
   });
 };

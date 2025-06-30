@@ -15,6 +15,7 @@ export default function DatePicker({
   date,
   handleInputChange,
   name,
+  placeHolder,
   disabled = false,
 }) {
   const [open, setOpen] = React.useState(false);
@@ -35,9 +36,7 @@ export default function DatePicker({
             disabled={disabled}
             tabIndex={disabled ? -1 : 0}
           >
-            {convertedDate
-              ? convertedDate?.toLocaleDateString()
-              : 'Select date'}
+            {convertedDate ? convertedDate?.toLocaleDateString() : placeHolder}
             <ChevronDownIcon />
           </Button>
         </PopoverTrigger>
@@ -55,7 +54,7 @@ export default function DatePicker({
               setOpen(false);
             }}
             disabled={disabled}
-            withFutureYears={name == "birthDate" ? false : true}
+            withFutureYears={placeHolder == 'Birth Date' ? false : true}
           />
         </PopoverContent>
       </Popover>

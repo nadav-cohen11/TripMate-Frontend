@@ -43,8 +43,8 @@ const Navbar = () => {
               p-2 rounded-xl
               transition-all duration-300 ease-in-out
               ${isActive 
-                ? 'bg-blue-100/50' 
-                : 'hover:bg-blue-50/50'
+                ? 'bg-[#4a90e2]/10' 
+                : 'hover:bg-[#4a90e2]/5'
               }
             `}>
               <Icon
@@ -52,8 +52,8 @@ const Navbar = () => {
                   h-6 w-6
                   transition-all duration-300 ease-in-out
                   ${isActive 
-                    ? 'text-blue-500 fill-blue-500' 
-                    : 'text-blue-400/70 group-hover:text-blue-400'
+                    ? 'text-[#4a90e2] fill-[#4a90e2]' 
+                    : 'text-[#4a90e2]/70 group-hover:text-[#4a90e2]'
                   }
                   group-hover:scale-110
                 `}

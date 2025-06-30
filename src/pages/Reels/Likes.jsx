@@ -26,34 +26,17 @@ const Likes = ({ reel }) => {
 
   return (
     <div className="flex items-center justify-between w-full">
-      <div className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur bg-white/10">
-        {reel.userProfilePhotoUrl ? (
-          <img
-            src={reel.userProfilePhotoUrl}
-            alt="Profile"
-            className="w-8 h-8 rounded-full object-cover border border-white"
-          />
-        ) : (
-          <div className="w-8 h-8 rounded-full bg-gray-300 border border-white" />
-        )}
-        <a
-          href={`/profile/${reel.userId}`}
-          className="text-white font-semibold text-sm truncate max-w-[10rem]"
-        >
-          {reel.userFullName}
-        </a>
-      </div>
       <button
         onClick={handleLike}
-        className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur bg-white/10 hover:bg-white/20 transition"
+        className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur bg-white/10 hover:bg-white/20 transition text-white"
         aria-label="Like reel"
       >
         <Heart
           className="w-5 h-5"
-          color={hasLiked ? "#FF0000" : "rgba(255,255,255,0.7)"}
+          color={hasLiked ? "#FF0000" : "white"}
           fill={hasLiked ? "#FF0000" : "none"}
         />
-        <span className="text-sm text-white font-medium">{likesCount}</span>
+        <span className=" text-sm font-medium" style={{ color: hasLiked ? '#FF0000' : 'white' }}>{likesCount}</span>
       </button>
     </div>
   );

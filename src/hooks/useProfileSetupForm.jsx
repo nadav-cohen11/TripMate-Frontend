@@ -28,19 +28,30 @@ const useProfileSetupForm = (formRegister) => {
 
   useEffect(() => {
     const getLocations = async () => {
-      const loc = await getCurrentLocation();
-      setForm((prevForm) => ({
-        ...prevForm,
-        location: {
-          ...prevForm.location,
-          coordinates: loc,
-        },
-      }));
+      try {
+        const loc = await getCurrentLocation();
+        setForm((prevForm) => ({
+          ...prevForm,
+          location: {
+            ...prevForm.location,
+            coordinates: loc,
+          },
+        }));
+      } catch (error) {
+        console.warn("Could not get location:", error);
+        setForm((prevForm) => ({
+          ...prevForm,
+          location: {
+            ...prevForm.location,
+            coordinates: [],
+          },
+        }));
+      }
     };
     getLocations();
   }, []);
 
-  const { data: user } = useQuery({
+  const { data: user, refetch: reftechUser } = useQuery({
     queryKey: ['user'],
     queryFn: () => getUser(),
     staleTime: 5 * 60 * 1000,
@@ -55,11 +66,11 @@ const useProfileSetupForm = (formRegister) => {
         gender: user.gender || '',
         location: {
           country: {
-        name: user.location?.country || '',
-        code:
-          Country.getAllCountries().find(
-            (c) => c.name === user.location?.country,
-          )?.isoCode || '',
+            name: user.location?.country || '',
+            code:
+              Country.getAllCountries().find(
+                (c) => c.name === user.location?.country,
+              )?.isoCode || '',
           },
           city: user.location?.city || '',
         },
@@ -72,11 +83,15 @@ const useProfileSetupForm = (formRegister) => {
         profilePhotoId: user.profilePhotoId || '',
         socialLinks: {
           instagram: user.socialLinks?.instagram
-        ? user.socialLinks.instagram.replace(/^https?:\/\/(www\.)?instagram\.com\//, '').replace(/\/$/, '')
-        : '',
+            ? user.socialLinks.instagram
+                .replace(/^https?:\/\/(www\.)?instagram\.com\//, '')
+                .replace(/\/$/, '')
+            : '',
           facebook: user.socialLinks?.facebook
-        ? user.socialLinks.facebook.replace(/^https?:\/\/(www\.)?facebook\.com\//, '').replace(/\/$/, '')
-        : '',
+            ? user.socialLinks.facebook
+                .replace(/^https?:\/\/(www\.)?facebook\.com\//, '')
+                .replace(/\/$/, '')
+            : '',
         },
       });
       if (user.photos) setImgURLs(user.photos);
@@ -144,6 +159,7 @@ const useProfileSetupForm = (formRegister) => {
     handleLanguagesChange,
     handleAdventureStyleChange,
     handleImageUpload,
+    reftechUser,
   };
 };
 
