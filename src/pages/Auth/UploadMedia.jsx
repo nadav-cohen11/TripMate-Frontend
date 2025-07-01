@@ -248,7 +248,7 @@ const UploadMediaPage = ({ register = false }) => {
         {isVideo ? (
           <video
             src={url}
-            className={`w-full h-48 object-cover ${
+            className={`w-full h-48 sm:h-56 md:h-64 lg:h-72 xl:h-80 2xl:h-96 object-cover ${
               isDeleting ? 'opacity-50' : 'group-hover:opacity-90'
             } transition-all duration-300`}
             controls
@@ -258,7 +258,7 @@ const UploadMediaPage = ({ register = false }) => {
           <img
             src={url}
             alt={`Preview ${index}`}
-            className={`w-full h-48 object-cover ${
+            className={`w-full h-48 sm:h-56 md:h-64 lg:h-72 xl:h-80 2xl:h-96 object-cover ${
               isDeleting ? 'opacity-50' : 'group-hover:opacity-90'
             } transition-all duration-300`}
           />
@@ -301,9 +301,9 @@ const UploadMediaPage = ({ register = false }) => {
   };
 
   return (
-    <div className='min-h-screen bg-[#f8faff] py-2 sm:py-4 md:py-8 px-1 sm:px-4 flex items-center justify-center pb-8 sm:pb-0'>
+    <div className='min-h-screen bg-[#f8faff] py-2 sm:py-4 md:py-8 px-1 sm:px-4 flex items-center justify-center pb-32 md:pb-40'>
       <TripMateTitle />
-      <div className='w-full max-w-[420px] sm:max-w-[520px] bg-white/70 backdrop-blur-md rounded-[32px] shadow-[0_20px_70px_-10px_rgba(112,144,176,0.15)] relative border border-white mx-auto'>
+      <div className='w-full max-w-[420px] sm:max-w-[600px] md:max-w-[800px] lg:max-w-[1000px] xl:max-w-[1200px] 2xl:max-w-[1400px] bg-white/70 backdrop-blur-md rounded-[32px] shadow-[0_20px_70px_-10px_rgba(112,144,176,0.15)] relative border border-white mx-auto mt-32 sm:mt-40 p-1 sm:p-0'>
         {!register && (
           <button
             onClick={() => navigate(`/profile/${user}`)}
