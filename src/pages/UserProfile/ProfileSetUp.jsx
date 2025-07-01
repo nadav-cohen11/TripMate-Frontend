@@ -14,6 +14,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { useLocation } from 'react-router-dom';
 import DatePicker from '@/components/ui/DatePicker';
 import { useAuth } from '@/context/AuthContext';
+import { ButtonLoading } from '@/components/ui/ButtonLoading';
 
 export default function ProfileSetup({ nextStep, formRegister }) {
   const {
@@ -248,7 +249,7 @@ export default function ProfileSetup({ nextStep, formRegister }) {
         <DatePicker
           date={form.birthDate}
           handleInputChange={handleInputChange}
-          name={"birthDate"}
+          name={'birthDate'}
           placeHolder={'Birth Date'}
           disabled={!formRegister}
           className='rounded-xl'
@@ -394,12 +395,23 @@ export default function ProfileSetup({ nextStep, formRegister }) {
           />
         </div>
 
-        <button
-          type='submit'
-          className='bg-[#4a90e2] hover:bg-[#4a90e2]/90 text-white rounded-xl py-2 font-medium transition text-sm'
-        >
-          Submit
-        </button>
+        <div className='flex justify-center pt-2 sm:pt-4 mb-16 w-auto'>
+          {mutationUpdate.isPending || mutationRegister.isPending ? (
+            <ButtonLoading
+              style={
+                'bg-[#4a90e2] hover:bg-[#4a90e2]/90 text-white rounded-xl py-2 font-medium transition text-sm w-full'
+              }
+            />
+          ) : (
+            <button
+              type='submit'
+              disabled={mutationUpdate.isPending || mutationRegister.isPending}
+              className='bg-[#4a90e2] hover:bg-[#4a90e2]/90 text-white rounded-xl py-2 font-medium transition text-sm w-full'
+            >
+              Submit
+            </button>
+          )}
+        </div>
       </form>
     </div>
   );

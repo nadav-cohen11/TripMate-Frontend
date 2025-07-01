@@ -50,7 +50,7 @@ const UserProfilePage = () => {
   const country = userProfile?.location?.country || '';
   const city = userProfile?.location?.city || '';
   const cloudinaryBaseUrl =
-    'https://res.cloudinary.com/dnpsnkuyi/image/upload/';
+    `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload/`;
   const photo = userProfile?.profilePhotoId
     ? `${cloudinaryBaseUrl}${userProfile.profilePhotoId}`
     : userProfile?.photos?.[0]?.url || '/assets/images/Annonymos_picture.jpg';

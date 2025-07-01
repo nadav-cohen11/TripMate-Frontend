@@ -30,7 +30,7 @@ const ChatList = ({
       setChats((prevChats) => [...prevChats, chat]);
     });
 
-    return () => {
+    return () => {8
       socket.off('newTripCreated');
       socket.off('newChatCreated');
     };
@@ -58,6 +58,9 @@ const ChatList = ({
       });
     }
   }, [socket, chats]);
+
+  
+
 
   useEffect(() => {
     setDirectChats(chats.filter((c) => !c.isGroupChat));

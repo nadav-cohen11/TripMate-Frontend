@@ -23,15 +23,7 @@ const Match = ({
 
   const handleAddFriend = () => {
     if (!secondMatch) return;
-    socket.emit(
-      'addNewChat',
-      { user1Id: userId, user2Id: secondMatch._id },
-      () => {
-        socket.emit('getChats', { userId }, (chats) => {
-          setChats(chats);
-        });
-      },
-    );
+    socket.emit('addNewChat', { user1Id: userId, user2Id: secondMatch._id });
   };
 
   return (
@@ -58,7 +50,12 @@ const Match = ({
             <p className='text-xs text-gray-500'>{secondMatch.email}</p>
           </div>
           {buttonContent === 'Chat' ? (
-            <Button type='button' size='sm' variant='secondary' onClick={handleAddFriend}>
+            <Button
+              type='button'
+              size='sm'
+              variant='secondary'
+              onClick={handleAddFriend}
+            >
               {buttonContent}
             </Button>
           ) : added ? (

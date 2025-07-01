@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import * as utils from './utils';
 import GroupDetails from './GroupDetails';
 import { translate } from '@/api/userApi';
+import { confirmToast } from '@/components/ui/ToastConfirm';
 
 const ChatWindow = ({
   selectedChat,
@@ -86,24 +87,30 @@ const ChatWindow = ({
     }
   }
 
-  const handleBlockUser = () => {
+  const handleBlockUser = async () => {
     if (!otherUser) return;
     if (
-      !window.confirm(`Are you sure you want to block ${otherUser.fullName}?`)
+      !(await confirmToast(
+        `Are you sure you want to block ${otherUser.fullName}`,
+        'red',
+      ))
     )
       return;
-
-    socket.emit('blockUser', {
-      chatId: selectedChat._id,
-      user1Id: userId,
-      user2Id: otherUser._id,
-    });
-
-    setChats((prev) => {
-      const filtered = prev.filter((c) => c._id !== selectedChat._id);
-      setSelectedChatId(null);
-      return filtered;
-    });
+    socket.emit(
+      'blockUser',
+      {
+        chatId: selectedChat._id,
+        user1Id: userId,
+        user2Id: otherUser._id,
+      },
+      () => {
+        setChats((prev) => {
+          const filtered = prev.filter((c) => c._id !== selectedChat._id);
+          setSelectedChatId(null);
+          return filtered;
+        });
+      },
+    );
   };
 
   const handleHeaderClick = () => {
@@ -147,24 +154,24 @@ const ChatWindow = ({
               e.preventDefault();
               handleHeaderClick();
             }
-            }}
-          >
-            <div className='flex items-center justify-center'>
+          }}
+        >
+          <div className='flex items-center justify-center'>
             {!isGroupChat && otherUser && (
               <div className='w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-lg font-semibold text-gray-600 overflow-hidden mr-3'>
-              {otherUser.photos?.length > 0 ? (
-                <img
-                src={otherUser.photos[0].url}
-                className='rounded-full w-10 h-10 object-cover'
-                alt={chatTitle}
-                />
-              ) : (
-                otherUser.fullName
-                .split(' ')
-                .map((n) => n[0])
-                .join('')
-                .toUpperCase()
-              )}
+                {otherUser.photos?.length > 0 ? (
+                  <img
+                    src={otherUser.photos[0].url}
+                    className='rounded-full w-10 h-10 object-cover'
+                    alt={chatTitle}
+                  />
+                ) : (
+                  otherUser.fullName
+                    .split(' ')
+                    .map((n) => n[0])
+                    .join('')
+                    .toUpperCase()
+                )}
               </div>
             )}
 
@@ -173,7 +180,7 @@ const ChatWindow = ({
             </h2>
             {!isGroupChat && otherUser && (
               <button
-              onClick={(e) => {
+                onClick={(e) => {
                   e.stopPropagation();
                   handleBlockUser();
                 }}
