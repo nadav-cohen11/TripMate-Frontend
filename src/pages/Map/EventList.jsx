@@ -92,7 +92,7 @@ export const EventList = ({ lat, lon, keyword: externalKeyword }) => {
         <p className='text-center text-gray-500'>No events found nearby.</p>
       )}
 
-      <div className='flex flex-wrap justify-center gap-6'>
+      <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-3'>
         {events?.map((event) => (
           <motion.div key={event.id} whileHover={{ scale: 1.02 }}>
             <EventCard event={event} />
