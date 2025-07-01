@@ -198,7 +198,8 @@ const UserProfilePage = () => {
       )}
 
       <div className='w-full max-w-full sm:max-w-md md:max-w-lg lg:max-w-2xl space-y-6 mt-20 mb-8 px-2 sm:px-0'>
-        <div className='bg-white rounded-3xl border border-blue-100 shadow-lg overflow-hidden relative'>
+        {/* Combined Card: Profile Image + Details */}
+        <div className='bg-white rounded-3xl border border-blue-100 shadow-lg overflow-hidden relative mx-auto max-w-sm sm:max-w-md md:max-w-lg'>
           {userId === user && (
             <button
               onClick={() =>
@@ -214,31 +215,38 @@ const UserProfilePage = () => {
               <IoPencil className='text-black-600 text-lg' />
             </button>
           )}
-          <ProfileImage photo={photo} />
+          {/* Profile Image at the top */}
+          <div className='w-full'>
+            <ProfileImage photo={photo} />
+          </div>
+          {/* My Matches button in the middle for current user */}
+          {userId === user && (
+            <div className='w-full flex justify-center my-4'>
+              {myMatchesButton}
+            </div>
+          )}
+          {/* Profile Details below image (and My Matches if user) */}
+          <div className='w-full p-4 sm:p-8 flex flex-col gap-8 relative'>
+            {userId === user && (
+              <div className='absolute top-4 right-4'>{userQRCodeComponent}</div>
+            )}
+            <ProfileDetails
+              user={{
+                ...userProfile,
+                languages: userProfile.languagesSpoken || [],
+              }}
+              birthDate={userProfile.birthDate}
+              city={city}
+              country={country}
+              travel={travel}
+              distance={userProfile.distance}
+              compatibilityScore={userProfile.compatibilityScore}
+              gender={userProfile.gender}
+            />
+          </div>
         </div>
-
+        {/* Match me button below the card for other users */}
         {userId !== user && matchMeButton}
-        {userId === user && myMatchesButton}
-      </div>
-
-      <div className='w-full max-w-full sm:max-w-md md:max-w-lg lg:max-w-2xl bg-white rounded-3xl shadow-xl border border-blue-100 p-4 sm:p-8 flex flex-col gap-8 relative'>
-        {userId === user && (
-          <div className='absolute top-4 right-4'>{userQRCodeComponent}</div>
-        )}
-
-        <ProfileDetails
-          user={{
-            ...userProfile,
-            languages: userProfile.languagesSpoken || [],
-          }}
-          birthDate={userProfile.birthDate}
-          city={city}
-          country={country}
-          travel={travel}
-          distance={userProfile.distance}
-          compatibilityScore={userProfile.compatibilityScore}
-          gender={userProfile.gender}
-        />
       </div>
     </div>
   );
