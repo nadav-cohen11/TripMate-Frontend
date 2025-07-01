@@ -48,10 +48,10 @@ const EventCard = ({ event }) => {
       <div className='flex flex-col justify-between p-5 h-full'>
         <div>
           <h3 className='text-xl font-bold text-black mb-1'>{name}</h3>
-          <span className='inline-block bg-[#eaf4fd] text-[#4a90e2] text-xs font-semibold px-3 py-1 rounded-full mb-2'>
+          <span className='inline-block bg-[#eaf4fd] text-[#00BFFF] text-xs font-semibold px-3 py-1 rounded-full mb-2'>
             {date}
           </span>
-          <p className='text-[#4a90e2] text-sm font-medium mb-1'>{location}</p>
+          <p className='text-[#00BFFF] text-sm font-medium mb-1'>{location}</p>
           {description && (
             <p className='mt-2 text-gray-700 text-sm line-clamp-3'>
               {description}
@@ -63,7 +63,8 @@ const EventCard = ({ event }) => {
             href={url}
             target='_blank'
             rel='noopener noreferrer'
-            className='flex-1 inline-block bg-[#4a90e2] text-white px-4 py-2 rounded-xl font-semibold shadow hover:bg-[#4a90e2] transition text-center'>
+            className='flex-1 inline-block bg-[#00BFFF] text-white px-4 py-2 rounded-xl font-semibold shadow hover:bg-[#00BFFF] transition text-center'
+          >
             View on Ticketmaster →
           </a>
           <GroupList event={event} msg={msg} />
@@ -71,7 +72,7 @@ const EventCard = ({ event }) => {
       </div>
       <button
         onClick={handleShare}
-        className='absolute bottom-24 right-4 text-[#4a90e2] bg-white/80 p-2 rounded-full shadow border border-[#4a90e2]/20 hover:bg-[#eaf4fd] transition'
+        className='absolute bottom-24 right-4 text-[#00BFFF] bg-white/80 p-2 rounded-full shadow border border-[#00BFFF]/20 hover:bg-[#eaf4fd] transition'
       >
         <ShareIcon />
       </button>
