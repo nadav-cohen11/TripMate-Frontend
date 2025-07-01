@@ -2,13 +2,23 @@ import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
 const useChatSocket = (userId, setChats = undefined) => {
+  console.log(
+    import.meta.env.VITE_DEPLOY === 'true'
+      ? import.meta.env.VITE_FRONTEND_URL
+      : import.meta.env.VITE_BACKEND_URL,
+  );
   const [socketInstance, setSocketInstance] = useState(null);
   useEffect(() => {
     if (userId) {
-      const socket = io(import.meta.env.VITE_FRONTEND_URL, {
-        transports: ['websocket', 'polling'],
-        withCredentials: true,
-      });
+      const socket = io(
+        import.meta.env.VITE_DEPLOY === 'true'
+          ? import.meta.env.VITE_FRONTEND_URL
+          : import.meta.env.VITE_BACKEND_URL,
+        {
+          transports: ['websocket', 'polling'],
+          withCredentials: true,
+        }
+      );
       setSocketInstance(socket);
 
       socket.on('connect', () => {
