@@ -147,19 +147,37 @@ const ChatWindow = ({
               e.preventDefault();
               handleHeaderClick();
             }
-          }}
-        >
-          <div className='flex items-center justify-center'>
-            <h2 className='text-base sm:text-lg font-bold text-[#4a90e2] text-center flex-1 truncate'>
+            }}
+          >
+            <div className='flex items-center justify-center'>
+            {!isGroupChat && otherUser && (
+              <div className='w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-lg font-semibold text-gray-600 overflow-hidden mr-3'>
+              {otherUser.photos?.length > 0 ? (
+                <img
+                src={otherUser.photos[0].url}
+                className='rounded-full w-10 h-10 object-cover'
+                alt={chatTitle}
+                />
+              ) : (
+                otherUser.fullName
+                .split(' ')
+                .map((n) => n[0])
+                .join('')
+                .toUpperCase()
+              )}
+              </div>
+            )}
+
+            <h2 className='text-base sm:text-lg font-bold text-gray-900 text-center flex-1 truncate'>
               {chatTitle}
             </h2>
             {!isGroupChat && otherUser && (
               <button
-                onClick={(e) => {
+              onClick={(e) => {
                   e.stopPropagation();
                   handleBlockUser();
                 }}
-                className='absolute right-0 top-0 flex items-center px-3 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 transition'
+                className='flex items-center px-3 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 transition'
                 title={`Block ${otherUser.fullName}`}
                 type='button'
                 aria-label={`Block ${otherUser.fullName}`}
@@ -220,6 +238,7 @@ const ChatWindow = ({
                       <div
                         className={`inline-block px-3 py-2 rounded-2xl min-w-[40px] max-w-[80vw] sm:max-w-[70%] break-words relative ${
                           isSender ? 'bg-[#4a90e2]/10' : 'bg-gray-100'
+
                         }`}
                         aria-label={`${msg.sender?.fullName} says: ${msg.content}`}
                       >
@@ -231,6 +250,7 @@ const ChatWindow = ({
                         <span className={isSender ? 'text-[#4a90e2]' : 'text-gray-800'}>
                           {msg.content}
                         </span>
+
                         <div className='flex justify-between mt-2 items-end gap-2'>
                           {!translated && (
                             <button
@@ -256,6 +276,7 @@ const ChatWindow = ({
                           <time className='text-xs text-[#4a90e2]/50 select-none'>
                             {time}
                           </time>
+
                         </div>
                       </div>
                     </div>
