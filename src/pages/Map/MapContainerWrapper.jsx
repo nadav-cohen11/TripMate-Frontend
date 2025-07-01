@@ -24,7 +24,7 @@ export const MapContainerWrapper = ({
           center={hasValidLocation ? userLocation : defaultCenter}
           zoom={14}
           scrollWheelZoom
-          className='h-[70vh] w-full rounded-2xl shadow-2xl border-2 border-[#00BFFF]/30 overflow-hidden'
+          className='h-[70vh] w-full rounded-2xl shadow-2xl border-2 border-[#4a90e2]/30 overflow-hidden'
           zoomControl={false}
         >
           <TileLayer
@@ -43,7 +43,7 @@ export const MapContainerWrapper = ({
         </MapContainer>
 
         <div className='absolute bottom-4 left-4 z-[1000] flex flex-col gap-2'>
-          <div className='bg-white/90 backdrop-blur-md rounded-xl shadow-lg p-2 flex flex-col gap-2 border border-[#00BFFF]/20'>
+          <div className='bg-white/90 backdrop-blur-md rounded-xl shadow-lg p-2 flex flex-col gap-2 border border-[#4a90e2]/20'>
             <button
               onClick={() => {
                 const map =
@@ -52,7 +52,7 @@ export const MapContainerWrapper = ({
                   map.setView(userLocation, 14);
                 }
               }}
-              className='p-2 bg-[#eaf4fd] text-[#00BFFF] rounded-lg hover:bg-[#d2eafd] transition-colors border border-[#00BFFF]/20'
+              className='p-2 bg-[#eaf4fd] text-[#4a90e2] rounded-lg hover:bg-[#d2eafd] transition-colors border border-[#4a90e2]/20'
               title='Center on my location'
             >
               <svg
@@ -71,12 +71,12 @@ export const MapContainerWrapper = ({
           </div>
         </div>
 
-        <div className='absolute top-4 right-3 z-[1000] bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-3 border border-[#00BFFF]/20'>
+        <div className='absolute top-4 right-3 z-[1000] bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-3 border border-[#4a90e2]/20'>
           <div className='flex items-center gap-4'>
-            <div className='h-8 w-px bg-[#00BFFF]/30' />
+            <div className='h-8 w-px bg-[#4a90e2]/30' />
             <div className='text-center'>
-              <div className='text-sm font-medium text-[#00BFFF]'>Places</div>
-              <div className='text-lg font-bold text-[#00BFFF]'>
+              <div className='text-sm font-medium text-[#4a90e2]'>Places</div>
+              <div className='text-lg font-bold text-[#4a90e2]'>
                 {places.length}
               </div>
             </div>
