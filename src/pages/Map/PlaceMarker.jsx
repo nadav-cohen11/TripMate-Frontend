@@ -10,18 +10,18 @@ const createDivIcon = (Icon, isHovered = false) => {
     <div
       style={{
         background: isHovered
-          ? 'linear-gradient(135deg, #4a90e2 70%, #6cb6f5 100%)'
-          : 'linear-gradient(135deg, #4a90e2 70%, #b3d8fa 100%)',
+          ? 'linear-gradient(135deg, #1d4ed8 70%, #3b82f6 100%)'
+          : 'linear-gradient(135deg, #2563eb 70%, #60a5fa 100%)',
         borderRadius: '50%',
         boxShadow: isHovered
-          ? '0 4px 20px rgba(74,144,226,0.6)'
-          : '0 2px 12px rgba(74,144,226,0.4)',
+          ? '0 4px 20px rgba(37,99,235,0.6)'
+          : '0 2px 12px rgba(37,99,235,0.4)',
         width: 40,
         height: 40,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        border: '2.5px solid #4a90e2',
+        border: '2.5px solid #1e40af',
         transform: isHovered ? 'scale(1.1)' : 'scale(1)',
         transition: 'all 0.2s ease-in-out',
       }}

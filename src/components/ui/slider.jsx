@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 export const RadiusSlider = ({ radius, setRadius }) => {
   return (
     <motion.div
-      className='mb-6 p-4 bg-white/90 backdrop-blur-md rounded-xl shadow-lg border border-[#4a90e2]/10 max-w-md mx-auto'
+      className='mb-6 p-4 bg-white/90 backdrop-blur-md rounded-xl shadow-lg border border-[#00BFFF]/10 max-w-md mx-auto'
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -12,10 +12,10 @@ export const RadiusSlider = ({ radius, setRadius }) => {
         htmlFor='radius'
         className='block text-gray-700 font-semibold mb-2 text-center'
       >
-        <span className='text-base font-bold text-[#4a90e2]'>
+        <span className='text-base font-bold text-[#00BFFF]'>
           Search Radius:
         </span>{' '}
-        <span className='text-base text-[#4a90e2] font-semibold tracking-wide'>
+        <span className='text-base text-[#00BFFF] font-semibold tracking-wide'>
           {radius} meters
         </span>
       </label>
@@ -26,7 +26,7 @@ export const RadiusSlider = ({ radius, setRadius }) => {
         step='100'
         value={radius}
         onChange={(e) => setRadius(parseInt(e.target.value))}
-        className='w-full h-2 rounded-full bg-[#eaf4fd] appearance-none cursor-pointer accent-[#4a90e2]'
+        className='w-full h-2 rounded-full bg-[#d2eafd] appearance-none cursor-pointer accent-[#00BFFF]'
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
       />
