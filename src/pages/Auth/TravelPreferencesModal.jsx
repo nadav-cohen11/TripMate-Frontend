@@ -5,7 +5,7 @@ import { updateUser } from '@/api/userApi';
 import { toast } from 'react-toastify';
 import DatePicker from '@/components/ui/DatePicker';
 import { Spinner } from '@/components/ui/spinner';
-import { lookingOptions } from '../../constants/profile';
+import { lookingOptions, adventureStyles } from '../../constants/profile';
 import Select from '@/components/ui/Select';
 
 const travelInterestsOptions = lookingOptions.map(opt => ({ value: opt, label: opt }));
@@ -261,12 +261,9 @@ const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences })
                         disabled={mutation.isLoading}
                       >
                         <option value=''>Select</option>
-                        <option value='budget'>Budget</option>
-                        <option value='luxury'>Luxury</option>
-                        <option value='adventure'>Adventure</option>
-                        <option value='cultural'>Cultural</option>
-                        <option value='nature'>Nature</option>
-                        <option value='social'>Social</option>
+                        {adventureStyles.map(opt => (
+                          <option key={opt.value} value={opt.value}>{opt.label}</option>
+                        ))}
                       </select>
                     </div>
                   </div>
