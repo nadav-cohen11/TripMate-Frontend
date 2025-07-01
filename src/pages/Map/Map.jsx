@@ -56,22 +56,22 @@ export const Map = () => {
       <TripMateTitle />
 
       <div className='z-10 relative flex flex-col gap-2 pt-28 px-4 md:px-12 max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl mx-auto'>
-        <h2 className='text-3xl font-bold mb-2 text-[#00BFFF] text-center tracking-wide'>
+        <h2 className='text-3xl font-bold mb-2 text-[#4a90e2] text-center tracking-wide'>
           Find Near You
         </h2>
         <Dialog open={isFilterDialogOpen} onOpenChange={setIsFilterDialogOpen}>
           <DialogTrigger asChild>
-            <button className='flex items-center justify-center gap-2 px-6 py-3 bg-[#00BFFF] text-white rounded-xl font-semibold shadow-lg transition-colors mb-2 mx-auto'>
+            <button className='flex items-center justify-center gap-2 px-6 py-3 bg-[#4a90e2] text-white rounded-xl font-semibold shadow-lg transition-colors mb-2 mx-auto'>
               <SlidersHorizontal size={20} />
               <span>Open Filters</span>
             </button>
           </DialogTrigger>
           <DialogContent className='w-full max-w-sm p-2 rounded-2xl bg-white shadow-2xl border-0 z-[1000] pointer-events-auto'>
             <DialogHeader className='mb-2'>
-              <DialogTitle className='text-xl font-bold text-gray-900'>
+              <DialogTitle className='text-xl font-bold text-gray-900 text-center'>
                 Filter Search
               </DialogTitle>
-              <DialogDescription className='text-sm text-gray-500'>
+              <DialogDescription className='text-sm text-gray-500 text-center'>
                 Adjust your search criteria for places and events.
               </DialogDescription>
             </DialogHeader>
@@ -83,7 +83,7 @@ export const Map = () => {
             <RadiusSlider radius={radius} setRadius={setRadius} />
             <button
               onClick={handleApplyFilters}
-              className='w-full px-6 py-3 mt-2 bg-[#00BFFF] text-white rounded-xl font-semibold shadow-lg hover:bg-[#357abd] transition-colors'
+              className='w-full px-6 py-3 mt-2 bg-[#4a90e2] text-white rounded-xl font-semibold shadow-lg hover:bg-[#357abd] transition-colors'
             >
               Apply Filters
             </button>
