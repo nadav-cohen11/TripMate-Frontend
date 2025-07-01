@@ -56,6 +56,8 @@ const UserProfilePage = () => {
     : userProfile?.photos?.[0]?.url || '/assets/images/Annonymos_picture.jpg';
 
   const handleSignOut = async () => {
+    const confirm = await confirmToast("Are you sure you want to sign out?",'red')
+    if(!confirm) return
     await signOut();
     navigate('/');
   };
@@ -162,38 +164,14 @@ const UserProfilePage = () => {
               Edit Profile
             </span>
           </button>
-          <Dialog open={openSignOut} onOpenChange={setOpenSignOut}>
-            <DialogTrigger asChild>
-              <button className='group relative flex items-center justify-center gap-2 w-12 h-12 rounded-full bg-gradient-to-r from-red-400 via-red-500 to-pink-500 shadow-lg hover:from-red-500 hover:to-pink-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-300'>
-                <LogOut className='text-white text-2xl' />
-                <span className='sr-only'>Log out</span>
-                <span className='absolute -top-9 left-1/2 -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap'>
-                  Log out of your account
-                </span>
-              </button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Sign Out</DialogTitle>
-                <DialogDescription>
-                  Are you sure you want to sign out?
-                </DialogDescription>
-              </DialogHeader>
-              <DialogFooter>
-                <DialogClose asChild>
-                  <button className='px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium'>
-                    Cancel
-                  </button>
-                </DialogClose>
-                <button
-                  className='px-4 py-2 rounded-lg bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-semibold shadow'
-                  onClick={handleSignOut}
-                >
-                  Yes, Sign Out
-                </button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+          <button onClick={handleSignOut} className='group relative flex items-center justify-center gap-2 w-12 h-12 rounded-full bg-gradient-to-r from-red-400 via-red-500 to-pink-500 shadow-lg hover:from-red-500 hover:to-pink-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-300'>
+            <LogOut className='text-white text-2xl' />
+            <span className='sr-only'>Log out</span>
+            <span className='absolute -top-9 left-1/2 -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap'>
+              Log out of your account
+            </span>
+            
+          </button>
         </div>
       )}
 

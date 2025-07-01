@@ -49,7 +49,7 @@ const ProfileDetails = ({
     if (userId === currUser && travel && hasMissingTravelData(travel)) {
       setShowUpdatePrompt(true);
     }
-  }, [userId, currUser, travel]);
+  }, [userId, currUser, travel]); 
 
   return (
     <div className='flex-1 overflow-y-auto bg-transparent rounded-2xl px-6 py-4 shadow-none text-black space-y-6'>
