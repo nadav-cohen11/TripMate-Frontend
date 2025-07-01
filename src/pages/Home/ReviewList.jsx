@@ -1,7 +1,11 @@
 import React from 'react';
 
 const ReviewList = ({ reviews }) => {
-  if (!reviews || reviews.length === 0) {
+  if (
+    !reviews ||
+    reviews.length === 0 ||
+    Object.keys(reviews[0].reviewer).length == 0
+  ) {
     return (
       <div className='mt-6 text-sm text-gray-400 italic'>No reviews yet.</div>
     );

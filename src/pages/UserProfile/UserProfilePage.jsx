@@ -223,7 +223,7 @@ const UserProfilePage = () => {
 
       <div className='w-full max-w-md bg-white rounded-3xl shadow-xl border border-blue-100 p-8 flex flex-col gap-8 relative'>
         {userId === user && (
-          <div className='absolute top-4 right-4'>{userQRCodeComponent}</div>
+          <div className='absolute top-13 right-8'>{userQRCodeComponent}</div>
         )}
 
         <ProfileDetails
