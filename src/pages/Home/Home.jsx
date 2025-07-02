@@ -16,7 +16,6 @@ const SWIPE_ANIMATION_DURATION = 1000;
 const COMPATIBILITY_THRESHOLD = 70;
 
 const fetchUsers = async () => {
-  
   try {
     const [displayUsers, currentUserLocation] = await Promise.all([
       getNonMatchedNearbyUsersWithReviews(),
