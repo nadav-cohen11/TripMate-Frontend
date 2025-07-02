@@ -16,9 +16,9 @@ export const travelStyle = [
 ];
 
 export const adventureStyles = [
-  { value: 'relaxed', label: 'Relaxed' },
-  { value: 'exploratory', label: 'Exploratory' },
-  { value: 'extreme', label: 'Extreme' },
-  { value: 'photography', label: 'Photography' },
-  { value: 'cultural', label: 'Cultural' }
+  { value: 'Relaxed', label: 'Relaxed' },
+  { value: 'Exploratory', label: 'Exploratory' },
+  { value: 'Extreme', label: 'Extreme' },
+  { value: 'Photography', label: 'Photography' },
+  { value: 'Cultural', label: 'Cultural' }
 ];
