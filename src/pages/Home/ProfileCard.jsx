@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useDrag } from '@use-gesture/react';
-import PhotoNavigation from './PhotoNavigation';
 import ProfileImage from './ProfileImage';
 import ProfileDetails from './ProfileDetails';
 import SwipeStatus from './SwipeStatus';
@@ -24,12 +23,10 @@ const ProfileCard = ({ user, swipeInfo, onSwipe }) => {
   const photo =
     user.photos?.[photoIndex]?.url || '/assets/images/Annonymos_picture.jpg';
 
-  // Prevent drag on scrollable area
   const preventDrag = (e) => {
     e.stopPropagation();
   };
 
-  // Drag handling with react-use-gesture
   const bind = useDrag(
     ({
       down,
@@ -39,9 +36,8 @@ const ProfileCard = ({ user, swipeInfo, onSwipe }) => {
       offset: [ox],
     }) => {
       if (!down) {
-        // When drag ends, check if swipe threshold is met
-        const swipeThreshold = window.innerWidth * 0.3; // 30% of screen width
-        const velocityThreshold = 0.5; // Minimum velocity for swipe
+        const swipeThreshold = window.innerWidth * 0.3;
+        const velocityThreshold = 0.5; 
         if (Math.abs(mx) > swipeThreshold || Math.abs(vx) > velocityThreshold) {
           const direction = dx > 0 ? 'right' : 'left';
           setPosition({
@@ -54,24 +50,23 @@ const ProfileCard = ({ user, swipeInfo, onSwipe }) => {
             setPosition({ x: 0, y: 0 });
             setRotation(0);
             setOpacity(1);
-          }, 300); // Match animation duration
+          }, 300); 
         } else {
-          // Reset position if swipe threshold not met
+      
           setPosition({ x: 0, y: 0 });
           setRotation(0);
           setOpacity(1);
         }
       } else {
-        // Update position and rotation during drag
         setPosition({ x: mx, y: 0 });
-        setRotation(mx / 10); // Rotate based on drag distance
-        setOpacity(Math.max(1 - Math.abs(mx) / window.innerWidth, 0.3)); // Fade out as dragged
+        setRotation(mx / 10);
+        setOpacity(Math.max(1 - Math.abs(mx) / window.innerWidth, 0.3)); 
       }
     },
     {
-      axis: 'x', // Restrict dragging to horizontal axis
-      bounds: { top: 0, bottom: 0 }, // Prevent vertical dragging
-      filterTaps: true, // Prevent taps from triggering drag
+      axis: 'x', 
+      bounds: { top: 0, bottom: 0 }, 
+      filterTaps: true, 
     },
   );
 
@@ -82,7 +77,7 @@ const ProfileCard = ({ user, swipeInfo, onSwipe }) => {
       style={{
         transform: `translate(${position.x}px, ${position.y}px) rotate(${rotation}deg)`,
         opacity,
-        touchAction: 'pan-y', // Allow vertical scrolling
+        touchAction: 'pan-y',
       }}
     >
       <SwipeStatus swipeInfo={swipeInfo} userId={user._id} />

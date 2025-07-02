@@ -219,25 +219,6 @@ const UserProfilePage = () => {
 
       </div>
 
-      <div className='w-full max-w-md bg-white rounded-3xl shadow-xl border border-blue-100 p-8 flex flex-col gap-8 relative'>
-        {userId === user && (
-          <div className='absolute top-13 right-8'>{userQRCodeComponent}</div>
-        )}
-
-        <ProfileDetails
-          user={{
-            ...userProfile,
-            languages,
-          }}
-          birthDate={userProfile.birthDate}
-          city={city}
-          country={country}
-          travel={travel}
-          distance={userProfile.distance}
-          compatibilityScore={userProfile.compatibilityScore}
-          gender={userProfile.gender}
-        />
-      </div>
     </div>
   );
 };
