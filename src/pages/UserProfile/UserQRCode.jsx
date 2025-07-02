@@ -26,9 +26,7 @@ const UserQRCode = () => {
         >
           <QrCode className="w-5 h-5" />
         </button>
-        <span className="absolute -top-9 left-1/2 -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          Show QR Code
-        </span>
+        
       </div>
       {isPopupOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 bg-opacity-95 z-50">
