@@ -8,17 +8,27 @@ import { Spinner } from '@/components/ui/spinner';
 import { lookingOptions, adventureStyles } from '../../constants/profile';
 import Select from '@/components/ui/Select';
 
-const travelInterestsOptions = lookingOptions.map(opt => ({ value: opt, label: opt }));
+const travelInterestsOptions = lookingOptions.map((opt) => ({
+  value: opt,
+  label: opt,
+}));
 
 const normalizeInterests = (arr) => {
   if (!Array.isArray(arr)) return [];
-  return arr.map(i => {
-    const match = lookingOptions.find(opt => opt.toLowerCase() === i.trim().toLowerCase());
+  return arr.map((i) => {
+    const match = lookingOptions.find(
+      (opt) => opt.toLowerCase() === i.trim().toLowerCase(),
+    );
     return match || i.trim();
   });
 };
 
-const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences }) => {
+const TravelPreferencesModal = ({
+  isOpen,
+  onClose,
+  userId,
+  currentPreferences,
+}) => {
   const queryClient = useQueryClient();
 
   const [formData, setFormData] = useState({
@@ -27,28 +37,47 @@ const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences })
     groupSize: '',
     travelDates: { start: '', end: '' },
     ageRange: { min: '', max: '' },
-    interests: normalizeInterests(Array.isArray(currentPreferences.interests)
-      ? currentPreferences.interests
-      : (currentPreferences.interests ? currentPreferences.interests.split(',') : [])),
+    interests: normalizeInterests(
+      Array.isArray(currentPreferences.interests)
+        ? currentPreferences.interests
+        : currentPreferences.interests
+        ? currentPreferences.interests.split(',')
+        : [],
+    ),
   });
 
   useEffect(() => {
+    console.log('current', currentPreferences);
     if (currentPreferences) {
       setFormData({
-        destinations: currentPreferences.destinations?.join(', ') || '',
+        destinations: Array.isArray(currentPreferences.destinations)
+          ? currentPreferences.destinations.join(', ')
+          : currentPreferences.destinations || '',
         travelStyle: currentPreferences.travelStyle || '',
         groupSize: currentPreferences.groupSize || '',
         travelDates: {
-          start: currentPreferences.travelDates?.start?.slice(0, 10) || '',
-          end: currentPreferences.travelDates?.end?.slice(0, 10) || '',
+          start: currentPreferences.travelDates?.start
+            ? new Date(currentPreferences.travelDates.start).toLocaleDateString(
+                'en-CA',
+              )
+            : '',
+          end: currentPreferences.travelDates?.end
+            ? new Date(currentPreferences.travelDates.end).toLocaleDateString(
+                'en-CA',
+              )
+            : '',
         },
         ageRange: {
           min: currentPreferences.ageRange?.min || '',
           max: currentPreferences.ageRange?.max || '',
         },
-        interests: normalizeInterests(Array.isArray(currentPreferences.interests)
-          ? currentPreferences.interests
-          : (currentPreferences.interests ? currentPreferences.interests.split(',') : [])),
+        interests: normalizeInterests(
+          Array.isArray(currentPreferences.interests)
+            ? currentPreferences.interests
+            : currentPreferences.interests
+            ? currentPreferences.interests.split(',')
+            : [],
+        ),
       });
     }
   }, [currentPreferences]);
@@ -81,22 +110,61 @@ const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences })
     }
   };
 
-  const formatted = {
-    destinations: formData.destinations.split(',').map((d) => d.trim()),
-    travelStyle: formData.travelStyle,
-    groupSize: Number(formData.groupSize),
-    travelDates: {
-      start: new Date(formData.travelDates.start),
-      end: new Date(formData.travelDates.end),
-    },
-    ageRange: {
-      min: Number(formData.ageRange.min),
-      max: Number(formData.ageRange.max),
-    },
-    interests: Array.isArray(formData.interests) ? Array.from(new Set(formData.interests)) : [],
-  };
+  const formatted = {};
+  if (formData.destinations.trim()) {
+    formatted.destinations = formData.destinations
+      .split(',')
+      .map((d) => d.trim())
+      .filter(Boolean);
+  }
+  if (formData.travelStyle) {
+    formatted.travelStyle = formData.travelStyle;
+  }
+  if (formData.groupSize) {
+    formatted.groupSize = Number(formData.groupSize);
+  }
+  if (formData.travelDates.start || formData.travelDates.end) {
+    formatted.travelDates = {};
+    if (formData.travelDates.start) {
+      formatted.travelDates.start = new Date(formData.travelDates.start);
+    }
+    if (formData.travelDates.end) {
+      formatted.travelDates.end = new Date(formData.travelDates.end);
+    }
+  }
+  if (formData.ageRange.min || formData.ageRange.max) {
+    formatted.ageRange = {};
+    if (formData.ageRange.min) {
+      formatted.ageRange.min = Number(formData.ageRange.min);
+    }
+    if (formData.ageRange.max) {
+      formatted.ageRange.max = Number(formData.ageRange.max);
+    }
+  }
+  if (Array.isArray(formData.interests) && formData.interests.length > 0) {
+    formatted.interests = Array.from(new Set(formData.interests));
+  }
 
   const handleSubmit = () => {
+    console.log(formatted);
+    if (
+      formatted.travelDates &&
+      (formatted.travelDates.start || formatted.travelDates.end)
+    ) {
+      if (!formatted.travelDates.start || !formatted.travelDates.end) {
+        toast.error('Please provide both start and end dates.');
+        return;
+      }
+      const now = new Date();
+      if (formatted.travelDates.start < now) {
+        toast.error('Start date must be in the future.');
+        return;
+      }
+      if (formatted.travelDates.end <= formatted.travelDates.start) {
+        toast.error('End date must be after start date.');
+        return;
+      }
+    }
     mutation.mutate(formatted);
   };
 
@@ -238,14 +306,21 @@ const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences })
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Interests</label>
+                      <label className='block text-sm font-medium text-gray-700'>
+                        Interests
+                      </label>
                       <Select
-                        name="interests"
+                        name='interests'
                         value={formData.interests}
-                        onChange={vals => setFormData(prev => ({ ...prev, interests: Array.from(new Set(vals)) }))}
+                        onChange={(vals) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            interests: Array.from(new Set(vals)),
+                          }))
+                        }
                         options={travelInterestsOptions}
                         isMulti
-                        placeholder="Select interests..."
+                        placeholder='Select interests...'
                         disabled={mutation.isLoading}
                       />
                     </div>
@@ -261,8 +336,10 @@ const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences })
                         disabled={mutation.isLoading}
                       >
                         <option value=''>Select</option>
-                        {adventureStyles.map(opt => (
-                          <option key={opt.value} value={opt.value}>{opt.label}</option>
+                        {adventureStyles.map((opt) => (
+                          <option key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </option>
                         ))}
                       </select>
                     </div>

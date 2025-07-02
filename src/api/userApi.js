@@ -30,6 +30,7 @@ export const getUser = async () => {
 
 export const updateUser = async (userData) => {
     try {
+        console.log(userData)
         const response = await api.put("/users/updateUser", { userData });
         return response.data
     } catch (error) {
