@@ -30,7 +30,6 @@ export const getUser = async () => {
 
 export const updateUser = async (userData) => {
     try {
-        console.log(userData)
         const response = await api.put("/users/updateUser", { userData });
         return response.data
     } catch (error) {
@@ -60,6 +59,15 @@ export const getUsersLocations = async () => {
 export const getUserById = async (userId) => {
     try {
         const response = await api.get(`/users/${userId}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const getUserWithReviews = async () => {
+    try {
+        const response = await api.get(`/users/getUserWithReviews`);
         return response.data;
     } catch (error) {
         throw error;
@@ -125,7 +133,7 @@ export const translate = async (prompt) => {
             }
         });
 
-        
+
         return response.data.responseData.translatedText;
     } catch (error) {
         throw error;

@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import * as utils from './utils';
 import { getWeather } from '../../../api/aiApi';
 import { Sparkles } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 
 const GroupDetails = ({ handleLeaveTrip, group, onBack, socket }) => {
   const [trip, setTrip] = useState(null);
   const [weather, setWeather] = useState(null);
   const [showItinerary, setShowItinerary] = useState(false);
+  const {user} = useAuth()
+
 
   useEffect(() => {
     socket.emit('getTrip', { tripId: group.tripId }, (trip) => {
@@ -57,20 +60,22 @@ const GroupDetails = ({ handleLeaveTrip, group, onBack, socket }) => {
   return (
     <>
       {weather && (
-  <div className='mt-4 flex items-center gap-4 p-3 bg-blue-50 rounded-lg border border-blue-200 shadow-sm'>
-    <img
-      src={`https://openweathermap.org/img/wn/${weather.weather?.[0]?.icon}@2x.png`}
-      alt={weather.weather?.[0]?.description || 'weather icon'}
-      className='w-12 h-12'
-    />
-    <div>
-      <div className='text-md font-semibold text-blue-800'>Current Weather</div>
-      <div className='text-gray-700'>
-      {weather.weather?.[0]?.main} — {weather.main?.temp.toFixed(1)}°C
-      </div>
-    </div>
-  </div>
-)}
+        <div className='mt-4 flex items-center gap-4 p-3 bg-blue-50 rounded-lg border border-blue-200 shadow-sm'>
+          <img
+            src={`https://openweathermap.org/img/wn/${weather.weather?.[0]?.icon}@2x.png`}
+            alt={weather.weather?.[0]?.description || 'weather icon'}
+            className='w-12 h-12'
+          />
+          <div>
+            <div className='text-md font-semibold text-blue-800'>
+              Current Weather
+            </div>
+            <div className='text-gray-700'>
+              {weather.weather?.[0]?.main} — {weather.main?.temp.toFixed(1)}°C
+            </div>
+          </div>
+        </div>
+      )}
       <div className='whitespace-pre-wrap text-gray-800 text-sm'>
         {trip?.ai && (
           <div className='mt-6'>
@@ -89,12 +94,18 @@ const GroupDetails = ({ handleLeaveTrip, group, onBack, socket }) => {
                     key={dayIndex}
                     className='p-4 bg-yellow-50 rounded-xl border border-yellow-200 shadow-sm'
                   >
-                    <h4 className='text-lg font-bold text-yellow-800 mb-3'>{day.dayTitle}</h4>
+                    <h4 className='text-lg font-bold text-yellow-800 mb-3'>
+                      {day.dayTitle}
+                    </h4>
                     <ul className='space-y-4'>
                       {day.items.map((item, idx) => (
                         <li key={idx} className='border-b pb-2'>
-                          <p className='font-semibold text-gray-900'>{item.title}</p>
-                          <p className='text-gray-700 text-sm'>{item.description}</p>
+                          <p className='font-semibold text-gray-900'>
+                            {item.title}
+                          </p>
+                          <p className='text-gray-700 text-sm'>
+                            {item.description}
+                          </p>
                           {item.link && (
                             <a
                               href={item.link}
@@ -177,7 +188,9 @@ const GroupDetails = ({ handleLeaveTrip, group, onBack, socket }) => {
                         {p.userId?.fullName?.charAt(0) || '?'}
                       </div>
                       <span className='ml-3 text-gray-800'>
-                        {p.userId?.fullName || p.userId?.email || 'Unknown'}
+                        {p.userId?._id === user
+                          ? `${p.userId?.fullName} (You)` || p.userId?.email || 'Unknown'
+                          : p.userId?.fullName || p.userId?.email || 'Unknown'}
                       </span>
                     </li>
                   ))}

@@ -47,7 +47,6 @@ const TravelPreferencesModal = ({
   });
 
   useEffect(() => {
-    console.log('current', currentPreferences);
     if (currentPreferences) {
       setFormData({
         destinations: Array.isArray(currentPreferences.destinations)
@@ -146,7 +145,6 @@ const TravelPreferencesModal = ({
   }
 
   const handleSubmit = () => {
-    console.log(formatted);
     if (
       formatted.travelDates &&
       (formatted.travelDates.start || formatted.travelDates.end)
