@@ -161,7 +161,7 @@ const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences })
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="block text-sm font-medium text-gray-700">
                     <div>
                       <label className="block text-sm font-medium text-gray-700">Start Date</label>
                       <DatePicker
@@ -202,7 +202,7 @@ const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences })
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Group Size</label>
+                      <label className="grid gap-4 col-span-2">Group Size</label>
                       <input
                         type="number"
                         name="groupSize"
@@ -253,7 +253,7 @@ const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences })
                       options={travelInterestsOptions}
                       isMulti
                       placeholder="Select interests..."
-                      classNamePrefix="react-select" // ensure border styles from our CSS
+                      classNamePrefix="react-select" 
                       className="react-select-container"
                       disabled={mutation.isLoading}
                     />
