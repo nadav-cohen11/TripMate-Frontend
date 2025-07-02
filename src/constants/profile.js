@@ -6,10 +6,19 @@ export const lookingOptions = [
 
 export const genders = ["Male","Female"];
 
+export const travelStyle = [
+  { value: 'budget', label: 'Budget' },
+  { value: 'luxury', label: 'Luxury' },
+  { value: 'adventure', label: 'Adventure' },
+  { value: 'cultural', label: 'Cultural' },
+  { value: 'nature', label: 'Nature' },
+  { value: 'social', label: 'Social' },
+];
+
 export const adventureStyles = [
   { value: 'Relaxed', label: 'Relaxed' },
   { value: 'Exploratory', label: 'Exploratory' },
   { value: 'Extreme', label: 'Extreme' },
   { value: 'Photography', label: 'Photography' },
-  { value: 'Cultural', label: 'Cultural' },
+  { value: 'Cultural', label: 'Cultural' }
 ];

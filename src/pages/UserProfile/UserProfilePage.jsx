@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { IoSettingsOutline, IoPencil } from 'react-icons/io5';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { getUserById } from '../../api/userApi';
-import { createOrAcceptMatch} from '../../api/matchApi'
+import { getUserById, getUserWithReviews } from '../../api/userApi';
+import { createOrAcceptMatch } from '../../api/matchApi';
 import { toast } from 'react-toastify';
 import ProfileImage from '../Home/ProfileImage';
 import ProfileDetails from '../Home/ProfileDetails';
@@ -14,16 +14,6 @@ import { useAuth } from '../../context/AuthContext';
 import { LogOut, Users } from 'lucide-react';
 import useFetchMyMatches from '@/hooks/useFetchMyMatches';
 
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  DialogClose,
-} from '@/components/ui/dialog';
 import { confirmToast } from '@/components/ui/ToastConfirm';
 
 const UserProfilePage = () => {
@@ -31,7 +21,6 @@ const UserProfilePage = () => {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const { matches, pendingMatches } = useFetchMyMatches();
-  const [openSignOut, setOpenSignOut] = useState(false);
 
   const {
     data: userProfile,
@@ -39,23 +28,29 @@ const UserProfilePage = () => {
     isError,
   } = useQuery({
     queryKey: ['user', userId],
-    queryFn: () => getUserById(userId),
+    queryFn: () => getUserWithReviews(),
     enabled: !!userId,
     retry: 1,
     onError: () => toast.error('Failed to load user profile.'),
   });
 
   const travel = userProfile?.travelPreferences || {};
-  const languages = userProfile?.languagesSpoken?.join(', ') || '';
+  const languages = userProfile?.languages || [];
   const country = userProfile?.location?.country || '';
   const city = userProfile?.location?.city || '';
-  const cloudinaryBaseUrl =
-    `https://res.cloudinary.com/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload/`;
+  const cloudinaryBaseUrl = `https://res.cloudinary.com/${
+    import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+  }/image/upload/`;
   const photo = userProfile?.profilePhotoId
     ? `${cloudinaryBaseUrl}${userProfile.profilePhotoId}`
     : userProfile?.photos?.[0]?.url || '/assets/images/Annonymos_picture.jpg';
 
   const handleSignOut = async () => {
+    const confirm = await confirmToast(
+      'Are you sure you want to sign out?',
+      'red',
+    );
+    if (!confirm) return;
     await signOut();
     navigate('/');
   };
@@ -162,38 +157,16 @@ const UserProfilePage = () => {
               Edit Profile
             </span>
           </button>
-          <Dialog open={openSignOut} onOpenChange={setOpenSignOut}>
-            <DialogTrigger asChild>
-              <button className='group relative flex items-center justify-center gap-2 w-12 h-12 rounded-full bg-gradient-to-r from-red-400 via-red-500 to-pink-500 shadow-lg hover:from-red-500 hover:to-pink-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-300'>
-                <LogOut className='text-white text-2xl' />
-                <span className='sr-only'>Log out</span>
-                <span className='absolute -top-9 left-1/2 -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap'>
-                  Log out of your account
-                </span>
-              </button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Sign Out</DialogTitle>
-                <DialogDescription>
-                  Are you sure you want to sign out?
-                </DialogDescription>
-              </DialogHeader>
-              <DialogFooter>
-                <DialogClose asChild>
-                  <button className='px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium'>
-                    Cancel
-                  </button>
-                </DialogClose>
-                <button
-                  className='px-4 py-2 rounded-lg bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-semibold shadow'
-                  onClick={handleSignOut}
-                >
-                  Yes, Sign Out
-                </button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+          <button
+            onClick={handleSignOut}
+            className='group relative flex items-center justify-center gap-2 w-12 h-12 rounded-full bg-gradient-to-r from-red-400 via-red-500 to-pink-500 shadow-lg hover:from-red-500 hover:to-pink-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-300'
+          >
+            <LogOut className='text-white text-2xl' />
+            <span className='sr-only'>Log out</span>
+            <span className='absolute -top-9 left-1/2 -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap'>
+              Log out of your account
+            </span>
+          </button>
         </div>
       )}
 
@@ -244,7 +217,26 @@ const UserProfilePage = () => {
           </div>
         </div>
 
-        {userId !== user && matchMeButton}
+      </div>
+
+      <div className='w-full max-w-md bg-white rounded-3xl shadow-xl border border-blue-100 p-8 flex flex-col gap-8 relative'>
+        {userId === user && (
+          <div className='absolute top-13 right-8'>{userQRCodeComponent}</div>
+        )}
+
+        <ProfileDetails
+          user={{
+            ...userProfile,
+            languages,
+          }}
+          birthDate={userProfile.birthDate}
+          city={city}
+          country={country}
+          travel={travel}
+          distance={userProfile.distance}
+          compatibilityScore={userProfile.compatibilityScore}
+          gender={userProfile.gender}
+        />
       </div>
     </div>
   );

@@ -65,6 +65,15 @@ export const getUserById = async (userId) => {
     }
 }
 
+export const getUserWithReviews = async () => {
+    try {
+        const response = await api.get(`/users/getUserWithReviews`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export const getAllTripsForUser = async () => {
     try {
         const response = await api.get('/trips/getAllTripsForUser')
@@ -124,7 +133,7 @@ export const translate = async (prompt) => {
             }
         });
 
-        
+
         return response.data.responseData.translatedText;
     } catch (error) {
         throw error;

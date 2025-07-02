@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -20,6 +20,7 @@
     "@react-spring/web": "^9.7.5",
     "@tailwindcss/vite": "^4.1.4",
     "@tanstack/react-query": "^5.79.0",
+    "@use-gesture/react": "^10.3.1",
     "axios": "^1.8.4",
     "bootstrap": "^5.3.5",
     "bootstrap-icons": "^1.11.3",
