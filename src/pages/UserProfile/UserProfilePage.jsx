@@ -204,7 +204,7 @@ const UserProfilePage = () => {
             <ProfileDetails
               user={{
                 ...userProfile,
-                languages: userProfile.languagesSpoken || [],
+                languages 
               }}
               birthDate={userProfile.birthDate}
               city={city}
