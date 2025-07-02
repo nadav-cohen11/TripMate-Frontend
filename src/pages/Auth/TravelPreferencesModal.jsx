@@ -214,7 +214,7 @@ const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences })
                       />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4 col-span-2">
                       <div>
                         <label className="block text-sm font-medium text-gray-700">Age Min</label>
                         <input
@@ -240,42 +240,42 @@ const TravelPreferencesModal = ({ isOpen, onClose, userId, currentPreferences })
                         />
                       </div>
                     </div>
+                  </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Interests</label>
-                      <Select
-                        name="interests"
-                        value={formData.interests}
-                        onChange={(vals) =>
-                          setFormData((prev) => ({ ...prev, interests: Array.from(new Set(vals)) }))
-                        }
-                        options={travelInterestsOptions}
-                        isMulti
-                        placeholder="Select interests..."
-                        classNamePrefix="react-select" // ensure border styles from our CSS
-                        className="react-select-container"
-                        disabled={mutation.isLoading}
-                      />
-                    </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Interests</label>
+                    <Select
+                      name="interests"
+                      value={formData.interests}
+                      onChange={(vals) =>
+                        setFormData((prev) => ({ ...prev, interests: Array.from(new Set(vals)) }))
+                      }
+                      options={travelInterestsOptions}
+                      isMulti
+                      placeholder="Select interests..."
+                      classNamePrefix="react-select" // ensure border styles from our CSS
+                      className="react-select-container"
+                      disabled={mutation.isLoading}
+                    />
+                  </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Travel Style</label>
-                      <select
-                        name="travelStyle"
-                        value={formData.travelStyle}
-                        onChange={handleChange}
-                        className={inputStyle}
-                        disabled={mutation.isLoading}
-                      >
-                        <option value="">Select</option>
-                        <option value="budget">Budget</option>
-                        <option value="luxury">Luxury</option>
-                        <option value="adventure">Adventure</option>
-                        <option value="cultural">Cultural</option>
-                        <option value="nature">Nature</option>
-                        <option value="social">Social</option>
-                      </select>
-                    </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Travel Style</label>
+                    <select
+                      name="travelStyle"
+                      value={formData.travelStyle}
+                      onChange={handleChange}
+                      className={inputStyle}
+                      disabled={mutation.isLoading}
+                    >
+                      <option value="">Select</option>
+                      <option value="budget">Budget</option>
+                      <option value="luxury">Luxury</option>
+                      <option value="adventure">Adventure</option>
+                      <option value="cultural">Cultural</option>
+                      <option value="nature">Nature</option>
+                      <option value="social">Social</option>
+                    </select>
                   </div>
 
                   <div className="flex justify-end gap-3 pt-6">
