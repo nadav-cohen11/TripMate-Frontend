@@ -31,31 +31,40 @@ const GroupDetails = ({ handleLeaveTrip, group, onBack, socket }) => {
     fetchWeather();
   }, [trip]);
 
-  const parseItineraryByDay = (text) => {
+  function formatItineraryText(text) {
+    if (!text) return '';
     const daySections = text.split(/(?=Day \d+:)/g);
-    return daySections.map((dayText) => {
-      const lines = dayText.trim().split('\n');
+    return daySections.map((section) => {
+      const lines = section.trim().split('\n');
       const title = lines[0];
-      const items = [];
-
-      let currentItem = { title: '', description: '', link: '' };
+      let html = `<h3 style='font-size:1.2em;font-weight:bold;margin-top:1.5em;'>${title}</h3>`;
+      let currentSection = '';
+      let inList = false;
       lines.slice(1).forEach((line) => {
-        if (line.startsWith('Day')) return;
-        if (line.startsWith('Description:')) {
-          currentItem.description = line.replace('Description:', '').trim();
-        } else if (line.startsWith('Link:')) {
-          currentItem.link = line.replace('Link:', '').trim();
-          items.push(currentItem);
-          currentItem = { title: '', description: '', link: '' };
-        } else if (line.trim()) {
-          currentItem.title = line.trim();
+        const trimmed = line.trim();
+        if (!trimmed) return;
+        if (/^(Morning|Afternoon|Evening|Midday|Pro Tip|Mission|Online Resources|Why |Want a different itinerary|Capping|Protect|Ends|Lastly|How to implement|\- )/i.test(trimmed)) {
+          if (inList) { html += '</ul>'; inList = false; }
+          if (/^Pro Tip/i.test(trimmed)) {
+            html += `<p style='color:#7c3aed;font-weight:500;margin:0.5em 0;'>${trimmed}</p>`;
+          } else if (/^\- /.test(trimmed)) {
+            if (!inList) { html += '<ul>'; inList = true; }
+            html += `<li>${trimmed.replace(/^\- /, '')}</li>`;
+          } else {
+            html += `<h4 style='font-size:1em;font-weight:600;margin-top:1em;'>${trimmed.replace(/:$/, '')}</h4>`;
+          }
+        } else if (/^\- /.test(trimmed)) {
+          if (!inList) { html += '<ul>'; inList = true; }
+          html += `<li>${trimmed.replace(/^\- /, '')}</li>`;
+        } else {
+          if (inList) { html += '</ul>'; inList = false; }
+          html += `<p>${trimmed}</p>`;
         }
       });
-
-      return { dayTitle: title, items };
-    });
-  };
-
+      if (inList) html += '</ul>';
+      return html;
+    }).join('');
+  }
 
   return (
     <>
@@ -121,6 +130,7 @@ const GroupDetails = ({ handleLeaveTrip, group, onBack, socket }) => {
                     </ul>
                   </div>
                 ))}
+
               </div>
             )}
           </div>
