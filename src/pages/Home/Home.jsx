@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import TinderCard from 'react-tinder-card';
 import ProfileCard from './ProfileCard';
 import { getNonMatchedNearbyUsersWithReviews } from '../../api/matchApi';
 import { extractBackendError } from '../../utils/errorUtils';
@@ -11,6 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 import TripMateTitle from '@/components/ui/TripMateTitle';
 import { Spinner } from '@/components/ui/spinner';
 import HomeFilters from './HomeFilters';
+
 const STALE_TIME = 1000 * 60 * 5;
 const SWIPE_ANIMATION_DURATION = 1000;
 const COMPATIBILITY_THRESHOLD = 70;
@@ -57,6 +57,7 @@ const Home = () => {
   const [displayedUsers, setDisplayedUsers] = useState([]);
   const [originalUsers, setOriginalUsers] = useState([]);
   const [filters, setFilters] = useState();
+
   const {
     data: users = [],
     isLoading,
@@ -91,9 +92,8 @@ const Home = () => {
   }, [users]);
 
   const handleSwipe = useCallback((dir, userId) => {
-    setDisplayedUsers((prev) => prev.filter((u) => u._id != userId));
-    setOriginalUsers((prev) => prev.filter((u) => u._id != userId));
-
+    setDisplayedUsers((prev) => prev.filter((u) => u._id !== userId));
+    setOriginalUsers((prev) => prev.filter((u) => u._id !== userId));
     handleCardSwipe(dir, userId);
     setSwipeInfo({ id: userId, direction: dir });
     setTimeout(
@@ -109,7 +109,7 @@ const Home = () => {
 
   if (isLoading) {
     return (
-      <div className=' bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200  flex items-center justify-center min-h-screen bg-white'>
+      <div className='bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 flex items-center justify-center min-h-screen bg-white'>
         <Spinner />
       </div>
     );
@@ -117,7 +117,7 @@ const Home = () => {
 
   if (error) {
     return (
-      <div className='bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200  flex flex-col items-center justify-center min-h-screen bg-white text-center text-black'>
+      <div className='bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 flex flex-col items-center justify-center min-h-screen bg-white text-center text-black'>
         <h1 className='text-2xl font-semibold'>Something went wrong</h1>
         <p className='mt-2'>Please try again later</p>
       </div>
@@ -126,7 +126,7 @@ const Home = () => {
 
   if (!originalUsers.length || !displayedUsers.length) {
     return (
-      <div className=' bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200  flex flex-col items-center justify-center min-h-screen bg-white text-center text-black'>
+      <div className='bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 flex flex-col items-center justify-center min-h-screen bg-white text-center text-black'>
         <h1 className='text-2xl font-semibold'>
           No more matches at the moment!
         </h1>
@@ -156,7 +156,7 @@ const Home = () => {
   });
 
   return (
-    <div className='relative min-h-screen bg-white overflow-hidden bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200 '>
+    <div className='relative min-h-screen bg-white overflow-hidden bg-gradient-to-br from-sky-100 via-blue-50 to-blue-200'>
       <TripMateTitle />
       <div className='absolute top-6 right-4 z-50'>
         <HomeFilters
@@ -176,19 +176,17 @@ const Home = () => {
           </div>
         ) : (
           filteredUsers.map((user, index) => (
-            <TinderCard
+            <div
               key={user._id}
-              preventSwipe={['up', 'down']}
-              className='absolute w-full h-full'
-              onSwipe={(dir) => handleSwipe(dir, user._id)}
+              className='absolute w-full h-full flex justify-center items-center px-4'
+              style={{ zIndex: filteredUsers.length - index }}
             >
-              <div
-                className='tinder-card-wrapper w-full h-full flex justify-center items-center px-4'
-                style={{ zIndex: filteredUsers.length - index }}
-              >
-                <ProfileCard user={user} swipeInfo={swipeInfo} />
-              </div>
-            </TinderCard>
+              <ProfileCard
+                user={user}
+                swipeInfo={swipeInfo}
+                onSwipe={handleSwipe}
+              />
+            </div>
           ))
         )}
       </div>
