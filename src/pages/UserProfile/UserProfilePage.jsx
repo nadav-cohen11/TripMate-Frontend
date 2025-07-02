@@ -171,7 +171,7 @@ const UserProfilePage = () => {
       )}
 
       <div className='w-full max-w-sm space-y-6 mt-20 mb-8'>
-        <div className='bg-white rounded-3xl border border-blue-100 shadow-lg overflow-hidden relative'>
+        <div className='bg-white rounded-3xl border border-blue-100 shadow-lg overflow-hidden relative mx-auto max-w-sm sm:max-w-md md:max-w-lg'>
           {userId === user && (
             <button
               onClick={() =>
@@ -187,11 +187,36 @@ const UserProfilePage = () => {
               <IoPencil className='text-black-600 text-lg' />
             </button>
           )}
-          <ProfileImage photo={photo} />
+         
+
+          <div className='w-full'>
+            <ProfileImage photo={photo} />
+          </div>
+          {userId === user && (
+            <div className='w-full flex justify-center my-4'>
+              {myMatchesButton}
+            </div>
+          )}
+          <div className='w-full p-4 sm:p-8 flex flex-col gap-8 relative'>
+            {userId === user && (
+              <div className='absolute top-13 right-8'>{userQRCodeComponent}</div>
+            )}
+            <ProfileDetails
+              user={{
+                ...userProfile,
+                languages: userProfile.languagesSpoken || [],
+              }}
+              birthDate={userProfile.birthDate}
+              city={city}
+              country={country}
+              travel={travel}
+              distance={userProfile.distance}
+              compatibilityScore={userProfile.compatibilityScore}
+              gender={userProfile.gender}
+            />
+          </div>
         </div>
 
-        {userId !== user && matchMeButton}
-        {userId === user && myMatchesButton}
       </div>
 
       <div className='w-full max-w-md bg-white rounded-3xl shadow-xl border border-blue-100 p-8 flex flex-col gap-8 relative'>

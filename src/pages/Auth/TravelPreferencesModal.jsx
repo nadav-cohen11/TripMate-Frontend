@@ -8,17 +8,18 @@ import { Spinner } from '@/components/ui/spinner';
 import { lookingOptions, travelStyle } from '../../constants/profile';
 import Select from '@/components/ui/Select';
 
-const travelInterestsOptions = lookingOptions.map((opt) => ({
-  value: opt,
-  label: opt,
-}));
+
+const inputStyle =
+  'w-full border border-gray-300 rounded-md px-3 py-2 bg-transparent placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50';
+
+const travelInterestsOptions = lookingOptions.map((opt) => ({ value: opt, label: opt }));
+
 
 const normalizeInterests = (arr) => {
   if (!Array.isArray(arr)) return [];
   return arr.map((i) => {
-    const match = lookingOptions.find(
-      (opt) => opt.toLowerCase() === i.trim().toLowerCase(),
-    );
+    const match = lookingOptions.find((opt) => opt.toLowerCase() === i.trim().toLowerCase());
+
     return match || i.trim();
   });
 };
@@ -42,7 +43,8 @@ const TravelPreferencesModal = ({
         ? currentPreferences.interests
         : currentPreferences.interests
         ? currentPreferences.interests.split(',')
-        : [],
+        : []
+
     ),
   });
 
@@ -75,7 +77,7 @@ const TravelPreferencesModal = ({
             ? currentPreferences.interests
             : currentPreferences.interests
             ? currentPreferences.interests.split(',')
-            : [],
+            : []
         ),
       });
     }
@@ -168,61 +170,56 @@ const TravelPreferencesModal = ({
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as='div' className='relative z-50' onClose={onClose}>
+      <Dialog as="div" className="relative z-50" onClose={onClose}>
         <Transition.Child
           as={Fragment}
-          enter='ease-out duration-200'
-          enterFrom='opacity-0'
-          enterTo='opacity-100'
-          leave='ease-in duration-150'
-          leaveFrom='opacity-100'
-          leaveTo='opacity-0'
+          enter="ease-out duration-200"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-150"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
         >
-          <div className='fixed inset-0 bg-black/30 backdrop-blur-sm' />
+          <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
         </Transition.Child>
 
-        <div className='fixed inset-0 overflow-y-auto'>
-          <div className='flex min-h-full items-center justify-center p-4 text-center'>
+        <div className="fixed inset-0 overflow-y-auto">
+          <div className="flex min-h-full items-center justify-center p-4 text-center">
             <Transition.Child
               as={Fragment}
-              enter='ease-out duration-300'
-              enterFrom='opacity-0 scale-95'
-              enterTo='opacity-100 scale-100'
-              leave='ease-in duration-200'
-              leaveFrom='opacity-100 scale-100'
-              leaveTo='opacity-0 scale-95'
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className='w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all space-y-4 relative'>
+              <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all space-y-4 relative">
                 {mutation.isLoading && (
-                  <div className='absolute inset-0 bg-white bg-opacity-70 flex items-center justify-center rounded-2xl z-20'>
-                    <Spinner size={64} color='text-blue-500' />
+                  <div className="absolute inset-0 bg-white bg-opacity-70 flex items-center justify-center rounded-2xl z-20">
+                    <Spinner size={64} color="text-blue-500" />
                   </div>
                 )}
 
-                <Dialog.Title className='text-xl font-semibold text-blue-700'>
-                  ✈️ Edit Travel Preferences
-                </Dialog.Title>
+                <Dialog.Title className="text-xl font-semibold text-blue-700">✈️ Edit Travel Preferences</Dialog.Title>
 
-                <div className='space-y-4'>
+                <div className="space-y-4">
                   <div>
-                    <label className='block text-sm font-medium text-gray-700'>
-                      Destinations
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700">Destinations</label>
                     <input
-                      type='text'
-                      name='destinations'
+                      type="text"
+                      name="destinations"
                       value={formData.destinations}
                       onChange={handleChange}
-                      placeholder='e.g. Paris, Rome'
-                      className='input w-full'
+                      placeholder="e.g. Paris, Rome"
+                      className={inputStyle}
                       disabled={mutation.isLoading}
                     />
                   </div>
-                  <div className='grid grid-cols-2 gap-4'>
+
+                  <div className="block text-sm font-medium text-gray-700">
                     <div>
-                      <label className='block text-sm font-medium text-gray-700'>
-                        Start Date
-                      </label>
+                      <label className="block text-sm font-medium text-gray-700">Start Date</label>
                       <DatePicker
                         date={formData.travelDates.start}
                         handleInputChange={(e) =>
@@ -234,14 +231,13 @@ const TravelPreferencesModal = ({
                             },
                           }))
                         }
-                        name='start'
-                        placeHolder='Start'
+                        name="start"
+                        placeHolder="Start"
+                        inputClassName={inputStyle}
                         disabled={mutation.isLoading}
                       />
-                      <div>
-                        <label className='block text-sm font-medium text-gray-700'>
-                          End Date
-                        </label>
+                      <div className="mt-3">
+                        <label className="block text-sm font-medium text-gray-700">End Date</label>
                         <DatePicker
                           date={formData.travelDates.end}
                           handleInputChange={(e) =>
@@ -253,56 +249,54 @@ const TravelPreferencesModal = ({
                               },
                             }))
                           }
-                          name='end'
-                          placeHolder='End'
+                          name="end"
+                          placeHolder="End"
+                          inputClassName={inputStyle}
                           disabled={mutation.isLoading}
                         />
                       </div>
                     </div>
+
                     <div>
-                      <label className='block text-sm font-medium text-gray-700'>
-                        Group Size
-                      </label>
+                      <label className="grid gap-4 col-span-2">Group Size</label>
                       <input
-                        type='number'
-                        name='groupSize'
+                        type="number"
+                        name="groupSize"
                         value={formData.groupSize}
                         onChange={handleChange}
-                        className='input w-full'
+                        className={inputStyle}
                         min={1}
                         disabled={mutation.isLoading}
                       />
                     </div>
-                    <div className='grid grid-cols-2 gap-4'>
+
+                    <div className="grid grid-cols-2 gap-4 col-span-2">
                       <div>
-                        <label className='block text-sm font-medium text-gray-700'>
-                          Age Min
-                        </label>
+                        <label className="block text-sm font-medium text-gray-700">Age Min</label>
                         <input
-                          type='number'
-                          name='min'
+                          type="number"
+                          name="min"
                           value={formData.ageRange.min}
                           onChange={handleChange}
-                          className='input w-full'
+                          className={inputStyle}
                           min={0}
                           disabled={mutation.isLoading}
                         />
                       </div>
                       <div>
-                        <label className='block text-sm font-medium text-gray-700'>
-                          Age Max
-                        </label>
+                        <label className="block text-sm font-medium text-gray-700">Age Max</label>
                         <input
-                          type='number'
-                          name='max'
+                          type="number"
+                          name="max"
                           value={formData.ageRange.max}
                           onChange={handleChange}
-                          className='input w-full'
+                          className={inputStyle}
                           min={0}
                           disabled={mutation.isLoading}
                         />
                       </div>
                     </div>
+
                     <div>
                       <label className='block text-sm font-medium text-gray-700'>
                         Interests
@@ -343,20 +337,56 @@ const TravelPreferencesModal = ({
                     </div>
                   </div>
 
-                  <div className='flex justify-end gap-3 pt-6'>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Interests</label>
+                    <Select
+                      name="interests"
+                      value={formData.interests}
+                      onChange={(vals) =>
+                        setFormData((prev) => ({ ...prev, interests: Array.from(new Set(vals)) }))
+                      }
+                      options={travelInterestsOptions}
+                      isMulti
+                      placeholder="Select interests..."
+                      classNamePrefix="react-select" 
+                      className="react-select-container"
+                      disabled={mutation.isLoading}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Travel Style</label>
+                    <select
+                      name="travelStyle"
+                      value={formData.travelStyle}
+                      onChange={handleChange}
+                      className={inputStyle}
+                      disabled={mutation.isLoading}
+                    >
+                      <option value="">Select</option>
+                      <option value="budget">Budget</option>
+                      <option value="luxury">Luxury</option>
+                      <option value="adventure">Adventure</option>
+                      <option value="cultural">Cultural</option>
+                      <option value="nature">Nature</option>
+                      <option value="social">Social</option>
+                    </select>
+                  </div>
+
+                  <div className="flex justify-end gap-3 pt-6">
                     <button
-                      type='button'
+                      type="button"
                       onClick={onClose}
-                      className='px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200 text-sm font-medium text-gray-700'
+                      className="px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200 text-sm font-medium text-gray-700 disabled:opacity-50"
                       disabled={mutation.isLoading}
                     >
                       Cancel
                     </button>
                     <button
-                      type='button'
+                      type="button"
                       onClick={handleSubmit}
                       disabled={mutation.isLoading}
-                      className='px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold disabled:opacity-50'
+                      className="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold disabled:opacity-50"
                     >
                       {mutation.isLoading ? 'Saving...' : 'Save'}
                     </button>
