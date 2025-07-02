@@ -229,7 +229,7 @@ const UserProfilePage = () => {
           {/* Profile Details below image (and My Matches if user) */}
           <div className='w-full p-4 sm:p-8 flex flex-col gap-8 relative'>
             {userId === user && (
-              <div className='absolute top-4 right-4'>{userQRCodeComponent}</div>
+              <div className='absolute top-13 right-8'>{userQRCodeComponent}</div>
             )}
             <ProfileDetails
               user={{
