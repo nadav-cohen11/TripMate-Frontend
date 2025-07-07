@@ -32,6 +32,6 @@ This is the **frontend** of the TripMate project, built with **React** and **Tai
 
 ```bash
 git clone https://github.com/nadav-cohen11/TripMate-Frontend.git
-cd tripmate-fronten
+cd tripmate-frontend
 npm install
 npm run dev
