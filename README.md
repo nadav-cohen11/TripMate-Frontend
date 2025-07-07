@@ -26,12 +26,4 @@ This is the **frontend** of the TripMate project, built with **React** and **Tai
 - **WebSocket** (for chat)
 - **Map Integration** (e.g., Google Maps or Leaflet)
 
----
 
-## 📦 Installation
-
-```bash
-git clone https://github.com/nadav-cohen11/TripMate-Frontend.git
-cd tripmate-frontend
-npm install
-npm run dev
