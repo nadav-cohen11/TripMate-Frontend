@@ -66,6 +66,34 @@ const GroupDetails = ({ handleLeaveTrip, group, onBack, socket }) => {
     }).join('');
   }
 
+  function parseItineraryByDay(aiText) {
+    if (!aiText) return [];
+    const days = aiText.split(/(?=Day \d+:)/g).filter(Boolean);
+    return days.map((daySection) => {
+      const lines = daySection.trim().split('\n');
+      const dayTitle = lines[0] || '';
+      const items = [];
+      let currentItem = { title: '', description: '', link: '' };
+      lines.slice(1).forEach((line) => {
+        const trimmed = line.trim();
+        if (!trimmed) return;
+        const match = trimmed.match(/^(.+?):\s*(.+?)(?:\s*\((https?:\/\/[^\s)]+)\))?$/);
+        if (match) {
+          if (currentItem.title) items.push(currentItem);
+          currentItem = {
+            title: match[1],
+            description: match[2],
+            link: match[3] || ''
+          };
+        } else {
+          currentItem.description += ' ' + trimmed;
+        }
+      });
+      if (currentItem.title) items.push(currentItem);
+      return { dayTitle, items };
+    });
+  }
+
   return (
     <>
       {weather && (

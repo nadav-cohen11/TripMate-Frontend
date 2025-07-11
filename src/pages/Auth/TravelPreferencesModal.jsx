@@ -297,44 +297,6 @@ const TravelPreferencesModal = ({
                       </div>
                     </div>
 
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700'>
-                        Interests
-                      </label>
-                      <Select
-                        name='interests'
-                        value={formData.interests}
-                        onChange={(vals) =>
-                          setFormData((prev) => ({
-                            ...prev,
-                            interests: Array.from(new Set(vals)),
-                          }))
-                        }
-                        options={travelInterestsOptions}
-                        isMulti
-                        placeholder='Select interests...'
-                        disabled={mutation.isLoading}
-                      />
-                    </div>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700'>
-                        Travel Style
-                      </label>
-                      <select
-                        name='travelStyle'
-                        value={formData.travelStyle}
-                        onChange={handleChange}
-                        className='input w-full'
-                        disabled={mutation.isLoading}
-                      >
-                        <option value=''>Select</option>
-                        {travelStyle.map((opt) => (
-                          <option key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
                   </div>
 
                   <div>
