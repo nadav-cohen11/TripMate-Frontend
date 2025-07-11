@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import { IoSettingsOutline, IoPencil } from 'react-icons/io5';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { getUserById, getUserWithReviews } from '../../api/userApi';
+import {  getUserWithReviews } from '../../api/userApi';
 import { createOrAcceptMatch } from '../../api/matchApi';
 import { toast } from 'react-toastify';
 import ProfileImage from '../Home/ProfileImage';
@@ -28,11 +28,12 @@ const UserProfilePage = () => {
     isError,
   } = useQuery({
     queryKey: ['user', userId],
-    queryFn: () => getUserWithReviews(),
+    queryFn: () => getUserWithReviews(userId),
     enabled: !!userId,
     retry: 1,
     onError: () => toast.error('Failed to load user profile.'),
   });
+
 
   const travel = userProfile?.travelPreferences || {};
   const languages = userProfile?.languages || [];
@@ -187,7 +188,6 @@ const UserProfilePage = () => {
               <IoPencil className='text-black-600 text-lg' />
             </button>
           )}
-         
 
           <div className='w-full'>
             <ProfileImage photo={photo} />
@@ -197,14 +197,21 @@ const UserProfilePage = () => {
               {myMatchesButton}
             </div>
           )}
+
           <div className='w-full p-4 sm:p-8 flex flex-col gap-8 relative'>
             {userId === user && (
-              <div className='absolute top-13 right-8'>{userQRCodeComponent}</div>
+              <div className='absolute top-13 right-8'>
+                {userQRCodeComponent}
+              </div>
+            )}
+
+            {userId != user && (
+              <div>{matchMeButton}</div>
             )}
             <ProfileDetails
               user={{
                 ...userProfile,
-                languages 
+                languages,
               }}
               birthDate={userProfile.birthDate}
               city={city}
@@ -216,9 +223,7 @@ const UserProfilePage = () => {
             />
           </div>
         </div>
-
       </div>
-
     </div>
   );
 };

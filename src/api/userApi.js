@@ -65,9 +65,9 @@ export const getUserById = async (userId) => {
     }
 }
 
-export const getUserWithReviews = async () => {
+export const getUserWithReviews = async (userId) => {
     try {
-        const response = await api.get(`/users/getUserWithReviews`);
+        const response = await api.get(`/users/getUserWithReviews/${userId}`);
         return response.data;
     } catch (error) {
         throw error;
